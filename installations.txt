@@ -1,0 +1,17 @@
+
+	server
+	
+	- visual studio 2019 
+	- .net 5
+	  https://dotnet.microsoft.com/download/dotnet/thank-you/sdk-5.0.100-windows-x64-installer
+	- sql server management
+	
+	-	cli
+		-	dotnet tool install --global dotnet-ef
+
+
+
+	add migration - for changes in database 
+	-	run the script "Migration.bat {migration-name}" 
+	-	migration-name - the name for the migration 
+	

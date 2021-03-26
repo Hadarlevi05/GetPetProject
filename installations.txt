@@ -18,7 +18,8 @@
 	
 	-	node.js https://nodejs.org/en/download/
 	-	npm install -g @angular/cli
-
+	-	visual studio code 	https://code.visualstudio.com/
+	
 
 
 

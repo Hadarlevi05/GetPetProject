@@ -8,7 +8,7 @@ namespace GetPet.Data.Entities
         [Key]
         public int Id { get; set; }
 
-
+        public bool IsDeleted { get; set; }
         public DateTime UpdatedTimestamp { get; set; }
         public DateTime CreationTimestamp { get; set; }
     }

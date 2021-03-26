@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.WebApi", "GetPet.WebApi\GetPet.WebApi.csproj", "{E4CC17AF-4042-4069-9F27-096D492FC956}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.WebApi", "GetPet.WebApi\GetPet.WebApi.csproj", "{E4CC17AF-4042-4069-9F27-096D492FC956}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.BusinessLogic", "GetPet.BusinessLogic\GetPet.BusinessLogic.csproj", "{884F3BDD-329F-4897-9905-4CD4728CF0E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.BusinessLogic", "GetPet.BusinessLogic\GetPet.BusinessLogic.csproj", "{884F3BDD-329F-4897-9905-4CD4728CF0E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.Data", "GetPet.Data\GetPet.Data.csproj", "{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Data", "GetPet.Data\GetPet.Data.csproj", "{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.Common", "GetPet.Common\GetPet.Common.csproj", "{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Common", "GetPet.Common\GetPet.Common.csproj", "{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.Crawler", "GetPet.Crawler\GetPet.Crawler.csproj", "{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Crawler", "GetPet.Crawler\GetPet.Crawler.csproj", "{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetPet.Tests", "GetPet.Tests\GetPet.Tests.csproj", "{44D23D85-B5D0-434C-A793-9EECAAD244EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

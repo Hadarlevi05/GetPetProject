@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model;
-using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

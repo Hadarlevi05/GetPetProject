@@ -9,6 +9,11 @@ namespace GetPet.Crawler.Parsers
     {
         public HtmlDocument Document { get; set; }
 
-        public abstract IList<PetDto> Parse();       
+        public abstract IList<PetDto> Parse();
+
+        public abstract string ParseName(HtmlNode node);
+        public abstract string ParseAgeInMonths(HtmlNode node);
+        public abstract string ParseAgeInYear(HtmlNode node);
+        public abstract string ParseGender(HtmlNode node);        
     }
 }

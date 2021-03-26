@@ -1,10 +1,12 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.Crawler.Utils;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GetPet.Crawler.Parsers
-{
-    public class Yad2Parser : ParserBase
+{  
+     public class SpcaParser : ParserBase
     {
         public override IList<PetDto> Parse()
         {
@@ -21,38 +23,52 @@ namespace GetPet.Crawler.Parsers
 
         public HtmlNodeCollection GetNodes()
         {
-            var items = Document.DocumentNode.SelectNodes("//div[@class='feeditem table']");
-
+            var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
             return items;
         }
 
         public PetDto ParseSingleNode(HtmlNode node)
         {
+            string name = ParseName(node);
+            var year = ParseAgeInYear(node);
+            var month = ParseAgeInMonths(node);
+            var gender = ParseGender(node);
+
             var pet = new PetDto
             {
-                Name = node.SelectSingleNode("//div[@class='row-1']").InnerText
-            };            
+                Name = name,
+                Gender = gender,
+                AgeInYears = year,
+                AgeInMonths = month,
+            };
+
             return pet;
         }
 
         public override string ParseName(HtmlNode node)
         {
-            throw new System.NotImplementedException();
+            return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }
 
         public override string ParseAgeInMonths(HtmlNode node)
         {
-            throw new System.NotImplementedException();
+            return node.GetAttributeValue("data-type", "0");
         }
 
         public override string ParseAgeInYear(HtmlNode node)
         {
-            throw new System.NotImplementedException();
+            var year = node.GetAttributeValue("data-type", "none");
+
+            // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
+
+            return year;
         }
 
         public override string ParseGender(HtmlNode node)
         {
-            throw new System.NotImplementedException();
+            var gender = node.GetAttributeValue("data-tag", "none");
+
+            return ParserUtils.ConvertGender(gender);
         }
     }
 }

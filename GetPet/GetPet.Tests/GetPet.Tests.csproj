@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Files\Spca.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Files\Spca.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -14,6 +24,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GetPet.Crawler\GetPet.Crawler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Files\Spca.html" />
   </ItemGroup>
 
 </Project>

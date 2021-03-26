@@ -8,13 +8,13 @@ namespace GetPet.Crawler
 {
     public abstract class CrawlerBase<T> where T : IParser, new()
     {
-        private readonly HtmlDocument doc = new HtmlDocument();
-        private readonly WebClient client = new WebClient();
-        private readonly T parser = new T();
+        protected readonly HtmlDocument doc = new HtmlDocument();
+        protected readonly WebClient client = new WebClient();
+        protected readonly T parser = new T();
 
         public CrawlerBase() { }
 
-        public void Load(string url)
+        public virtual void Load(string url)
         {
             string html = client.DownloadString(url);
 

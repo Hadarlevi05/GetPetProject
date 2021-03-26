@@ -20,7 +20,7 @@ namespace GetPet.Crawler
 
             doc.LoadHtml(html);
 
-            parser.document = doc;
+            parser.Document = doc;
         }
 
         public virtual IList<PetDto> Parse()

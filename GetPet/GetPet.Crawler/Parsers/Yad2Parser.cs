@@ -21,17 +21,17 @@ namespace GetPet.Crawler.Parsers
 
         public HtmlNodeCollection GetNodes()
         {
-            var items = document.DocumentNode.SelectNodes("//div[@class='feeditem table']");
+            var items = Document.DocumentNode.SelectNodes("//div[@class='feeditem table']");
 
             return items;
         }
 
         public PetDto ParseSingleNode(HtmlNode node)
         {
-            var pet = new PetDto();
-
-            var text = node.SelectSingleNode("//div[@class='row-1']").InnerText;
-
+            var pet = new PetDto
+            {
+                Name = node.SelectSingleNode("//div[@class='row-1']").InnerText
+            };            
             return pet;
         }
     }

@@ -1,5 +1,7 @@
 
+	
 	server
+	======
 	
 	- visual studio 2019 
 	- .net 5
@@ -10,6 +12,18 @@
 		-	dotnet tool install --global dotnet-ef
 
 
+	
+	front
+	=====
+	
+	-	node.js https://nodejs.org/en/download/
+	-	npm install -g @angular/cli
+
+
+
+
+
+	-	to run angular type in cmd "ng serve --open"
 
 	add migration - for changes in database 
 	-	run the script "Migration.bat {migration-name}" 

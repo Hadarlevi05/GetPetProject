@@ -8,7 +8,7 @@ namespace GetPet.Crawler.Parsers.Abstractions
 {
     public interface IParser
     {
-        HtmlDocument document { get; set; }
+        HtmlDocument Document { get; set; }
 
         IList<PetDto> Parse();
     }

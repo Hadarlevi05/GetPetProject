@@ -7,7 +7,7 @@ namespace GetPet.Crawler.Parsers
 {
     public abstract class ParserBase : IParser
     {
-        public HtmlDocument document { get; set; }
+        public HtmlDocument Document { get; set; }
 
         public abstract IList<PetDto> Parse();       
     }

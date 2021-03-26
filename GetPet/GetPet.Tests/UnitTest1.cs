@@ -15,9 +15,9 @@ namespace GetPet.Tests
         public void Test1()
         {
             Yad2Crawler yad2 = new Yad2Crawler();
-            yad2.Load(@"https://www.yad2.co.il/pets/all?species=1");
+            yad2.Load(@"https://www.yad2.co.il/pets/all?species=1&page=2");
 
-            var pets= yad2.Parse();
+            var pets = yad2.Parse();
 
             Debugger.Break();
         }

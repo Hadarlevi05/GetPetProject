@@ -22,7 +22,7 @@ namespace PetAdoption.BusinessLogic.Repositories
             entities.Remove(existing);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> Search()
         {
             return await entities.ToListAsync();
         }

@@ -6,6 +6,7 @@ namespace GetPet.BusinessLogic.Model
 {
     public class PetDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string AgeInYears { get; set; }
         public string AgeInMonths { get; set; }

@@ -35,11 +35,22 @@ namespace GetPet.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GetPet.WebApi", Version = "v1" });
             });
 
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddAutoMapper(typeof(GetPetProfile));
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();           
+            services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)
@@ -50,6 +61,9 @@ namespace GetPet.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GetPet.WebApi v1"));
             }
+
+            app.UseCors("CorsPolicy");
+
 
             app.UseHttpsRedirection();
 

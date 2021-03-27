@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PetAdoption.BusinessLogic.Repositories;
@@ -14,24 +15,31 @@ namespace PetAdoption.WebApi.Controllers
     public class PetsController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly ILogger<PetsController> _logger;        
+        private readonly ILogger<PetsController> _logger;
         private readonly IPetRepository _petRepository;
 
         public PetsController(
-            ILogger<PetsController> logger,            
+            ILogger<PetsController> logger,
             IMapper mapper,
             IPetRepository petRepository)
         {
-            _logger = logger;            
+            _logger = logger;
             _mapper = mapper;
             _petRepository = petRepository;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<PetDto>> Get()
+        [HttpPost("search")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Search(PetFilter filter)
         {
-            var pets = await _petRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<PetDto>>(pets);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var pets = await _petRepository.Search(filter);
+
+            return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
 
         [HttpPost]

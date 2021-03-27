@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GetPet.BusinessLogic.Model;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Repositories
 {
-    public interface IUserRepository : IBaseRepository<User> { }
+    public interface IUserRepository : IBaseRepository<User> 
+    {
+        Task<IEnumerable<User>> Search(BaseFilter filter);        
+    }
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(
@@ -22,7 +26,7 @@ namespace GetPet.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public new async Task<IEnumerable<User>> GetAllAsync()
+        public new async Task<IEnumerable<User>> Search(BaseFilter filter)
         {
             return await entities
                 .Include(u => u.City)

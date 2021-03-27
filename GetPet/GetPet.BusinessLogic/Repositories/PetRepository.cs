@@ -1,12 +1,18 @@
 ﻿using AutoMapper;
+using GetPet.BusinessLogic.Model;
 using GetPet.Data;
 using GetPet.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PetAdoption.BusinessLogic.Repositories
 {
-    public interface IPetRepository : IBaseRepository<Pet> { }
+    public interface IPetRepository : IBaseRepository<Pet> 
+    {
+        Task<IEnumerable<Pet>> Search(PetFilter filter);
+    }
     public class PetRepository : BaseRepository<Pet>, IPetRepository
     {
         public PetRepository(
@@ -20,9 +26,20 @@ namespace PetAdoption.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public new async Task<IEnumerable<Pet>> GetAllAsync()
+        public async Task<IEnumerable<Pet>> Search(PetFilter filter)
         {
-            return await base.GetAllAsync();
+            var query = entities.AsQueryable();
+
+            if (filter.CreatedSince.HasValue)
+            {
+                query = query.Where(p => p.CreationTimestamp > filter.CreatedSince.Value);
+            }
+
+            query
+                .Skip(filter.PerPage * filter.Page - 1)
+                .Take(filter.PerPage);
+
+            return await query.ToListAsync();
         }
 
         public new async Task<Pet> GetByIdAsync(object id)

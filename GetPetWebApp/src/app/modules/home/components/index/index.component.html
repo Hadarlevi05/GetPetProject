@@ -1,4 +1,6 @@
 <section>
     <h2>כלבים חדשים לאימוץ</h2>
-    <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+    <div class="pets-container">
+        <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+    </div>
 </section>

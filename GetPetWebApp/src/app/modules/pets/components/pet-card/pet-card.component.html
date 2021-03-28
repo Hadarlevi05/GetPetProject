@@ -1,6 +1,6 @@
-<mat-card class="example-card">
+<mat-card class="pet-card" fxFlexAlign="stretch">
     <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
+        <div mat-card-avatar class="pet-header-image"></div>
         <mat-card-title>{{ pet.name }}</mat-card-title>
         <mat-card-subtitle>{{ pet.animalType }}</mat-card-subtitle>
     </mat-card-header>
@@ -10,8 +10,8 @@
             {{ pet.description }} <br>
             איש קשר: {{ pet.user.name }}
 
-            <mat-chip-list class="example-chip" cdkDropList cdkDropListOrientation="horizontal">
-                <mat-chip class="example-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
+            <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">
+                <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
                     {{ trait.key }}
                     {{ trait.value }}
                 </mat-chip>

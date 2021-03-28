@@ -1,6 +1,20 @@
 <section>
-    <h2>כלבים חדשים לאימוץ</h2>
-    <div class="pets-container">
-        <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
-    </div>
+    <h2>בעלי-חיים חדשים לאימוץ</h2>
+    <mat-tab-group mat-align-tabs="start" mat-stretch-tabs>
+        <mat-tab label="כלבים">
+            <div class="pets-container">
+                <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="חתולים">
+            <div class="pets-container">
+                <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="מכרסמים">
+            <div class="pets-container">
+                <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 </section>

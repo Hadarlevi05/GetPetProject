@@ -1,4 +1,4 @@
-<p>index works!</p>
-<div *ngFor="let pet of pets; index as i;">
-    {{ pet.name }}
-</div>
+<section>
+    <h2>כלבים חדשים לאימוץ</h2>
+    <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+</section>

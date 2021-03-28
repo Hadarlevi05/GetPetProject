@@ -29,7 +29,8 @@ namespace GetPet.WebApi.Controllers
         [HttpGet]
         public async Task<IEnumerable<UserDto>> Get(BaseFilter filter)
         {
-            var users = await _userRepository.Search(filter);
+            var users = await _userRepository.SearchAsync(filter);
+
             return _mapper.Map<IEnumerable<UserDto>>(users);
         }
     }

@@ -1,0 +1,27 @@
+<mat-card class="example-card">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>{{ pet.name }}</mat-card-title>
+        <mat-card-subtitle>{{ pet.animalType }}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="pet.images[0]" alt="Photo of a Shiba Inu">
+    <mat-card-content>
+        <p>
+            {{ pet.description }} <br>
+            איש קשר: {{ pet.user.name }}
+
+            <mat-chip-list class="example-chip" cdkDropList cdkDropListOrientation="horizontal">
+                <mat-chip class="example-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
+                    {{ trait.key }}
+                    {{ trait.value }}
+                </mat-chip>
+            </mat-chip-list>
+
+        </p>
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button mat-mini-fab>❤</button>
+        <button mat-button mat-raised-button>שיתוף</button>
+        <button mat-button mat-raised-button>אימוץ</button>
+    </mat-card-actions>
+</mat-card>

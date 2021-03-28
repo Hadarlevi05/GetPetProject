@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Http;
@@ -17,15 +18,19 @@ namespace PetAdoption.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<PetsController> _logger;
         private readonly IPetRepository _petRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
 
         public PetsController(
             ILogger<PetsController> logger,
             IMapper mapper,
-            IPetRepository petRepository)
+            IPetRepository petRepository,
+            IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _mapper = mapper;
             _petRepository = petRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("search")]
@@ -37,7 +42,7 @@ namespace PetAdoption.WebApi.Controllers
             {
                 return BadRequest();
             }
-            var pets = await _petRepository.Search(filter);
+            var pets = await _petRepository.SearchAsync(filter);
 
             return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
@@ -47,8 +52,9 @@ namespace PetAdoption.WebApi.Controllers
         {
             var petToInsert = _mapper.Map<Pet>(pet);
 
-            await _petRepository.InsertAsync(petToInsert);
-            await _petRepository.SaveAsync();
+            await _petRepository.AddAsync(petToInsert);
+            
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

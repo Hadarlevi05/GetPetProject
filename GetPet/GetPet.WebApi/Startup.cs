@@ -1,5 +1,7 @@
+using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Common;
 using GetPet.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +19,13 @@ namespace GetPet.WebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            SetEnvironmentVariables();
+        }
+
+        private void SetEnvironmentVariables()
+        {
+            Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
         }
 
         public IConfiguration Configuration { get; }
@@ -49,8 +58,7 @@ namespace GetPet.WebApi
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
-
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)
@@ -63,7 +71,8 @@ namespace GetPet.WebApi
             }
 
             app.UseCors("CorsPolicy");
-
+            
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

@@ -10,17 +10,11 @@ using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Repositories
 {
-    public interface IUserRepository : IBaseRepository<User> 
-    {
-        Task<IEnumerable<User>> SearchAsync(BaseFilter filter);        
-    }
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(
-            GetPetDbContext getPetDbContext,
-            IMapper mapper) :
-            base(getPetDbContext)
-        { }
+        public UserRepository(GetPetDbContext getPetDbContext, IMapper mapper) : base(getPetDbContext)
+        { 
+        }
 
         public override IQueryable<User> LoadNavigationProperties(IQueryable<User> query)
         {

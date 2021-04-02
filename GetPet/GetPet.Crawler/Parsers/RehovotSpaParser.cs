@@ -1,12 +1,14 @@
 ﻿using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Utils;
 using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
-{  
-     public class SpcaParser : ParserBase
+{
+    public class RehovotSpaParser: ParserBase
     {
         public override IList<PetDto> Parse()
         {
@@ -23,8 +25,18 @@ namespace GetPet.Crawler.Parsers
 
         public HtmlNodeCollection GetNodes()
         {
-            var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
-            return items;
+            try
+            {
+                var items = Document.DocumentNode.SelectNodes("//div[starts-with(@class, 'av-masonry-container')]/a");
+
+                return items;
+            }
+            catch (Exception ex)
+            {
+               // throw ex;
+            }
+
+            return null;
         }
 
         public PetDto ParseSingleNode(HtmlNode node)
@@ -32,12 +44,14 @@ namespace GetPet.Crawler.Parsers
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node);
+            var description = node.GetAttributeValue("title", "");
 
             var pet = new PetDto
             {
                 Name = name,
                 Gender = gender,
                 AgeInYears = year,
+                Description = description
             };
 
             return pet;
@@ -45,21 +59,28 @@ namespace GetPet.Crawler.Parsers
 
         public override string ParseName(HtmlNode node)
         {
-            return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
+            var result = node.SelectNodes(".").FirstOrDefault().InnerText;
+            return result;
         }
 
         public override string ParseAgeInYear(HtmlNode node)
         {
-            var year = node.GetAttributeValue("data-type", "none");
+            var year = node.GetAttributeValue("title", "0");
+            var age = Regex.Match(year, @"(?<=בן)(.*?)(?=\.)");
 
-            // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
+            if (!age.Success)
+            {
+                age = Regex.Match(year, @"(?<=בת)(.*?)(?=\.)");
+            }
 
-            return year;
+            int y = ParserUtils.ConvertYear(age.Value);
+
+            return y.ToString();
         }
 
         public override string ParseGender(HtmlNode node)
         {
-            var gender = node.GetAttributeValue("data-tag", "none");
+            var gender = node.GetAttributeValue("title", "");
 
             return ParserUtils.ConvertGender(gender);
         }

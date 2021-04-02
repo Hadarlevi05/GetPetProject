@@ -32,13 +32,11 @@ namespace GetPet.Tests
             var firstPet = pets[0];
             Assert.AreEqual(firstPet.Name, "פרייה");
             Assert.AreEqual(firstPet.AgeInYears, "שנתיים וחודשיים");
-            Assert.AreEqual(firstPet.AgeInMonths, "שנתיים וחודשיים");
             Assert.AreEqual(firstPet.Gender, "נקבה");
 
             var lastPet = pets[1];
             Assert.AreEqual(lastPet.Name, "סקאי");
             Assert.AreEqual(lastPet.AgeInYears, "5 שנים");
-            Assert.AreEqual(lastPet.AgeInMonths, "5 שנים");
             Assert.AreEqual(lastPet.Gender, "זכר");
         }
 
@@ -53,6 +51,34 @@ namespace GetPet.Tests
 
             Debugger.Break();
         }
+
+        [Test]
+        [Ignore("Wix is doing troubles")]
+        public void SpcaRamatGanTest()
+        {
+            // ctrl r+t
+            SpcaRamatGanCrawler spca = new SpcaRamatGanCrawler();
+            spca.Load(@"https://www.spca.org.il/adopt-a-dog");
+
+            var pets = spca.Parse();
+
+            Debugger.Break();
+        }
+
+        [Test]
+        public void RehovotSpa()
+        {
+            // ctrl r+t
+            RehovotSpaCrawler spca = new RehovotSpaCrawler();
+            spca.Load(@"http://rehovotspa.org.il/our-dogs/");
+
+            var pets = spca.Parse();
+
+            Debugger.Break();
+        }
+
+
+
 
         [Test]
         [Ignore("Yad2 are evil")]

@@ -9,10 +9,9 @@ namespace GetPet.BusinessLogic.Handlers
 {
     public class PetHandler : IPetHandler
     {
-        private readonly IPetRepository _petRepository;
+        protected readonly IPetRepository _petRepository;
 
         public PetHandler(IPetRepository petRepository)
-
         {
             _petRepository = petRepository;
         }

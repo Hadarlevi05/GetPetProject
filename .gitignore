@@ -14,3 +14,6 @@
 /GetPet/GetPet.Tests/obj
 /GetPet/GetPet.WebApi/bin/Debug/net5.0
 /GetPet/GetPet.WebApi/obj
+/GetPet/.vs/GetPet/DesignTimeBuild/.dtbcache.v2
+/GetPet/.vs/GetPet/v16/TestStore/0/001.testlog
+/GetPet/.vs/GetPet/v16/TestStore/0/testlog.manifest

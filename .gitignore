@@ -19,3 +19,5 @@
 /GetPet/.vs/GetPet/config/applicationhost.config
 /GetPet/.vs/GetPet/v16/.suo
 /GetPet/.vs
+/GetPet/GetPet.CrawlerApp/bin/Debug/netcoreapp3.1
+/GetPet/GetPet.CrawlerApp/obj

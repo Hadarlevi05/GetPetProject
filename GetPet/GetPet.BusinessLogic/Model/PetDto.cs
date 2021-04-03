@@ -27,6 +27,9 @@ namespace GetPet.BusinessLogic.Model
 
         public string AgeInYears { get; set; }
 
-        public string AgeInMonths { get; set; }       
+        public override string ToString()
+        {
+            return $"{Name}";
+        }
     }
 }

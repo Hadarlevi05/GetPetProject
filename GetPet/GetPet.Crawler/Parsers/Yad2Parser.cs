@@ -40,11 +40,6 @@ namespace GetPet.Crawler.Parsers
             throw new System.NotImplementedException();
         }
 
-        public override string ParseAgeInMonths(HtmlNode node)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string ParseAgeInYear(HtmlNode node)
         {
             throw new System.NotImplementedException();

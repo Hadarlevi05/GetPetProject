@@ -31,7 +31,6 @@ namespace GetPet.Crawler.Parsers
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
-            var month = ParseAgeInMonths(node);
             var gender = ParseGender(node);
 
             var pet = new PetDto
@@ -39,7 +38,6 @@ namespace GetPet.Crawler.Parsers
                 Name = name,
                 Gender = gender,
                 AgeInYears = year,
-                AgeInMonths = month,
             };
 
             return pet;
@@ -48,11 +46,6 @@ namespace GetPet.Crawler.Parsers
         public override string ParseName(HtmlNode node)
         {
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
-        }
-
-        public override string ParseAgeInMonths(HtmlNode node)
-        {
-            return node.GetAttributeValue("data-type", "0");
         }
 
         public override string ParseAgeInYear(HtmlNode node)

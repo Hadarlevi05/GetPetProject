@@ -1,5 +1,7 @@
+using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Common;
 using GetPet.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +19,13 @@ namespace GetPet.WebApi
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            SetEnvironmentVariables();
+        }
+
+        private void SetEnvironmentVariables()
+        {
+            Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
         }
 
         public IConfiguration Configuration { get; }
@@ -35,11 +44,21 @@ namespace GetPet.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "GetPet.WebApi", Version = "v1" });
             });
 
+            services.AddRouting(options => options.LowercaseUrls = true);
+
+            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddAutoMapper(typeof(GetPetProfile));
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();           
+            services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)
@@ -50,6 +69,10 @@ namespace GetPet.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GetPet.WebApi v1"));
             }
+
+            app.UseCors("CorsPolicy");
+            
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

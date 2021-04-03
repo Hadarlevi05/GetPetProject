@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using GetPet.BusinessLogic.Model;
+using GetPet.Data.Entities;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PetAdoption.BusinessLogic.Repositories
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IBaseRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync(object id);
-        Task InsertAsync(T obj);
-        Task UpdateAsync(T obj);
-        Task DeleteAsync(object id);
-        Task SaveAsync();
+        IQueryable<T> SearchAsync(IQueryable<T> query, BaseFilter filter);
+        IQueryable<T> LoadNavigationProperties(IQueryable<T> query);
+        Task<T> GetByIdAsync(int id);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(int id);        
     }
 }

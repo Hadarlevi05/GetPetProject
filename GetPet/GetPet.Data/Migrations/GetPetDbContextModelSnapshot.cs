@@ -32,6 +32,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("TraitId")
                         .HasColumnType("int");
 
@@ -57,6 +60,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -78,6 +84,9 @@ namespace GetPet.Data.Migrations
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(18,2)");
@@ -110,6 +119,9 @@ namespace GetPet.Data.Migrations
                     b.Property<int>("CronCrawlTime")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Name")
                         .HasMaxLength(400)
                         .HasColumnType("int");
@@ -139,6 +151,9 @@ namespace GetPet.Data.Migrations
                     b.Property<int>("DataSourceId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LogText")
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
@@ -163,6 +178,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
@@ -185,6 +203,9 @@ namespace GetPet.Data.Migrations
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("MimeType")
                         .HasMaxLength(100)
@@ -223,6 +244,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
@@ -247,6 +271,9 @@ namespace GetPet.Data.Migrations
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("NotificationId")
                         .HasColumnType("int");
@@ -284,6 +311,9 @@ namespace GetPet.Data.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -312,8 +342,14 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Gender")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasMaxLength(400)
@@ -347,6 +383,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("PetId")
                         .HasColumnType("int");
 
@@ -376,6 +415,9 @@ namespace GetPet.Data.Migrations
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PetId")
                         .HasColumnType("int");
@@ -409,6 +451,9 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
@@ -439,6 +484,9 @@ namespace GetPet.Data.Migrations
                         .HasColumnType("nvarchar(400)");
 
                     b.Property<bool>("EmailSubscription")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("LastLoginDate")
@@ -514,7 +562,7 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.MetaFileLink", b =>
                 {
                     b.HasOne("GetPet.Data.Entities.Pet", "Pet")
-                        .WithMany()
+                        .WithMany("MetaFileLinks")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -593,7 +641,7 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.PetTrait", b =>
                 {
                     b.HasOne("GetPet.Data.Entities.Pet", "Pet")
-                        .WithMany()
+                        .WithMany("Traits")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -624,6 +672,13 @@ namespace GetPet.Data.Migrations
                     b.Navigation("City");
 
                     b.Navigation("Organization");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.Pet", b =>
+                {
+                    b.Navigation("MetaFileLinks");
+
+                    b.Navigation("Traits");
                 });
 #pragma warning restore 612, 618
         }

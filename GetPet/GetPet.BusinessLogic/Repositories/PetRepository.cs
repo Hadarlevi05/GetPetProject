@@ -1,12 +1,18 @@
 ﻿using AutoMapper;
+using GetPet.BusinessLogic.Model;
 using GetPet.Data;
 using GetPet.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PetAdoption.BusinessLogic.Repositories
 {
-    public interface IPetRepository : IBaseRepository<Pet> { }
+    public interface IPetRepository : IBaseRepository<Pet>
+    {
+        Task<IEnumerable<Pet>> SearchAsync(PetFilter filter);
+    }
     public class PetRepository : BaseRepository<Pet>, IPetRepository
     {
         public PetRepository(
@@ -15,34 +21,53 @@ namespace PetAdoption.BusinessLogic.Repositories
             base(petContext)
         { }
 
-        public new async Task DeleteAsync(object id)
+        public override IQueryable<Pet> LoadNavigationProperties(IQueryable<Pet> query)
+        {
+            query = query
+                .Include(q => q.MetaFileLinks)
+                .Include(q => q.AnimalType)
+                .Include(q => q.Traits)
+                    .ThenInclude(q => q.Trait)
+                .Include(q => q.User)
+                    .ThenInclude(q => q.Organization)
+                .Include(q => q.User)
+                    .ThenInclude(q => q.City);
+
+            return query;
+        }
+
+        public new async Task DeleteAsync(int id)
         {
             await base.DeleteAsync(id);
         }
 
-        public new async Task<IEnumerable<Pet>> GetAllAsync()
+        public async Task<IEnumerable<Pet>> SearchAsync(PetFilter filter)
         {
-            return await base.GetAllAsync();
+            var query = base.SearchAsync(entities.AsQueryable(), filter);
+
+            if (filter.CreatedSince.HasValue)
+            {
+                query = query.Where(p => p.CreationTimestamp > filter.CreatedSince.Value);
+            }
+
+            if (filter.AnimalTypes != null && filter.AnimalTypes.Count() > 0)
+            {
+                query = query.Where(p => filter.AnimalTypes.Contains(p.AnimalType));
+            }
+
+            return await query.ToListAsync();
         }
 
-        public new async Task<Pet> GetByIdAsync(object id)
+        public new async Task<Pet> GetByIdAsync(int id)
         {
             return await base.GetByIdAsync(id);
         }
 
-        public new async Task InsertAsync(Pet obj)
+
+        public new async Task UpdateAsync(Pet entity)
         {
-            await base.InsertAsync(obj);
+            await base.UpdateAsync(entity);
         }
 
-        public new async Task SaveAsync()
-        {
-            await base.SaveAsync();
-        }
-
-        public new async Task UpdateAsync(Pet obj)
-        {
-            await base.UpdateAsync(obj);
-        }
     }
 }

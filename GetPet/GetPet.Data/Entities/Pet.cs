@@ -20,7 +20,7 @@ namespace GetPet.Data.Entities
         public AnimalType AnimalType { get; set; }
                         
         [ForeignKey("User")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
         public User User { get; set; }
 
         public IList<MetaFileLink> MetaFileLinks { get; set; }

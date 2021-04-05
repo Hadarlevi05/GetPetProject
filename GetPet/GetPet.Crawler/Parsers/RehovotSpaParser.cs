@@ -1,5 +1,6 @@
 ﻿using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Utils;
+using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace GetPet.Crawler.Parsers
             return y.ToString();
         }
 
-        public override string ParseGender(HtmlNode node)
+        public override Gender ParseGender(HtmlNode node)
         {
             var gender = node.GetAttributeValue("title", "");
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GetPet.Data.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace GetPet.BusinessLogic.Model
@@ -11,7 +12,7 @@ namespace GetPet.BusinessLogic.Model
 
         public string Birthday { get; set; }
         
-        public string Gender { get; set; }
+        public Gender Gender { get; set; }
                 
         public string AnimalType { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,6 @@ namespace GetPet.Crawler.Parsers.Abstractions
 
         string ParseName(HtmlNode node);
         string ParseAgeInYear(HtmlNode node);
-        string ParseGender(HtmlNode node);
+        Gender ParseGender(HtmlNode node);
     }
 }

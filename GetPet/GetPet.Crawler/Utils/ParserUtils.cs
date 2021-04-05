@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GetPet.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,20 +11,20 @@ namespace GetPet.Crawler.Utils
         private static List<string> _male = new List<string>() { "זכר", "male", "Male" };
         private static List<string> _female = new List<string>() { "נקבה", "female", "Female" };
 
-        public static string ConvertGender(string input)
+        public static Gender ConvertGender(string input)
         {
             // TODO: enum
             if (_female.Any(x => input.Contains(x)))
             {
-                return "נקבה";
+                return Gender.Female;
             }
             else if (_male.Any(x => input.Contains(x)))
             {
-                return "זכר";
+                return Gender.Male;
             }
             else
             {
-                return ""; // Handle missing case
+                return Gender.Unknown; // Handle missing case
             }
         }
 

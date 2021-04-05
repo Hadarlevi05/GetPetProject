@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 
@@ -45,7 +46,7 @@ namespace GetPet.Crawler.Parsers
             throw new System.NotImplementedException();
         }
 
-        public override string ParseGender(HtmlNode node)
+        public override Gender ParseGender(HtmlNode node)
         {
             throw new System.NotImplementedException();
         }

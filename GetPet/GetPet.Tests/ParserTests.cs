@@ -1,5 +1,6 @@
 ﻿using GetPet.Crawler;
 using GetPet.Crawler.Parsers;
+using GetPet.Data.Enums;
 using GetPet.Tests.Mocks;
 using NUnit.Framework;
 using System;
@@ -32,12 +33,12 @@ namespace GetPet.Tests
             var firstPet = pets[0];
             Assert.AreEqual(firstPet.Name, "פרייה");
             Assert.AreEqual(firstPet.AgeInYears, "שנתיים וחודשיים");
-            Assert.AreEqual(firstPet.Gender, "נקבה");
+            Assert.AreEqual(firstPet.Gender, Gender.Female);
 
             var lastPet = pets[1];
             Assert.AreEqual(lastPet.Name, "סקאי");
             Assert.AreEqual(lastPet.AgeInYears, "5 שנים");
-            Assert.AreEqual(lastPet.Gender, "זכר");
+            Assert.AreEqual(lastPet.Gender, Gender.Male);
         }
 
         [Test]
@@ -76,9 +77,6 @@ namespace GetPet.Tests
 
             Debugger.Break();
         }
-
-
-
 
         [Test]
         [Ignore("Yad2 are evil")]

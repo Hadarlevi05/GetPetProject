@@ -32,7 +32,8 @@ namespace GetPet.Crawler.Parsers
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
-            var gender = ParseGender(node);
+            var gender = ParseGender(node, "data-tag");
+            // TODO: in all parsers: AnimalType, Description, SourceWebsite
 
             var pet = new PetDto
             {
@@ -42,6 +43,13 @@ namespace GetPet.Crawler.Parsers
             };
 
             return pet;
+        }
+
+        public override AnimalType ParseAnimalType(HtmlNode node)
+        {
+            var animalType = node.GetAttributeValue("data-tag", "none");
+
+            return ParserUtils.ConvertAnimalType(animalType);
         }
 
         public override string ParseName(HtmlNode node)
@@ -56,13 +64,6 @@ namespace GetPet.Crawler.Parsers
             // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
 
             return year;
-        }
-
-        public override Gender ParseGender(HtmlNode node)
-        {
-            var gender = node.GetAttributeValue("data-tag", "none");
-
-            return ParserUtils.ConvertGender(gender);
         }
     }
 }

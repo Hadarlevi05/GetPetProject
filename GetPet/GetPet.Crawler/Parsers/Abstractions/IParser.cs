@@ -16,5 +16,8 @@ namespace GetPet.Crawler.Parsers.Abstractions
         string ParseName(HtmlNode node);
         string ParseAgeInYear(HtmlNode node);
         Gender ParseGender(HtmlNode node);
+        Gender ParseGender(HtmlNode node, string name);
+        AnimalType ParseAnimalType(HtmlNode node);
+        AnimalType ParseAnimalType(HtmlNode node, string name);
     }
 }

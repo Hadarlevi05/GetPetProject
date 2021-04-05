@@ -13,7 +13,6 @@ namespace GetPet.Crawler.Utils
 
         public static Gender ConvertGender(string input)
         {
-            // TODO: enum
             if (_female.Any(x => input.Contains(x)))
             {
                 return Gender.Female;
@@ -47,6 +46,25 @@ namespace GetPet.Crawler.Utils
             else if (_oneYear.Any(x => input.Contains(x)))
                 return 1;
             return 0;
+        }
+
+        private static List<string> _dog = new List<string>() { "כלב", "dog" };
+        private static List<string> _cat = new List<string>() { "חתול", "cat" };
+
+        public static AnimalType ConvertAnimalType(string input)
+        {
+            if (_dog.Any(x => input.Contains(x)))
+            {
+                return AnimalType.Dog;
+            }
+            else if (_cat.Any(x => input.Contains(x)))
+            {
+                return AnimalType.Cat;
+            }
+            else
+            {
+                return AnimalType.Unknown; // Handle missing case
+            }
         }
     }
 }

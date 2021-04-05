@@ -33,8 +33,8 @@ namespace GetPet.BusinessLogic.Handlers
             try
             {
                 var petToInsert = _mapper.Map<Pet>(pet);
-                petToInsert.AnimalTypeId = 1;
-                petToInsert.UserId = 1;
+
+                petToInsert.AnimalTypeId = 1; // TODO: Remove hardcoded value
                 await _petRepository.AddAsync(petToInsert);
 
                 _unitOfWork.SaveChanges();

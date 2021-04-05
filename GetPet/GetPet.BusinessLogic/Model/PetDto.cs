@@ -14,7 +14,7 @@ namespace GetPet.BusinessLogic.Model
         
         public Gender Gender { get; set; }
                 
-        public string AnimalType { get; set; }
+        public AnimalType AnimalTypeEnum { get; set; } // TODO: Fix AnimalType in Mapper (PetProfile)
 
         public string Status { get; set; }
 

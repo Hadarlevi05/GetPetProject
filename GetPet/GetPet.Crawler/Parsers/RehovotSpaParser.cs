@@ -44,7 +44,7 @@ namespace GetPet.Crawler.Parsers
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
-            var gender = ParseGender(node);
+            var gender = ParseGender(node, "title");
             var description = node.GetAttributeValue("title", "");
 
             var pet = new PetDto
@@ -77,13 +77,6 @@ namespace GetPet.Crawler.Parsers
             int y = ParserUtils.ConvertYear(age.Value);
 
             return y.ToString();
-        }
-
-        public override Gender ParseGender(HtmlNode node)
-        {
-            var gender = node.GetAttributeValue("title", "");
-
-            return ParserUtils.ConvertGender(gender);
         }
     }
 }

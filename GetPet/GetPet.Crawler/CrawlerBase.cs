@@ -3,6 +3,7 @@ using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Parsers.Abstractions;
 using HtmlAgilityPack;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 
 namespace GetPet.Crawler
@@ -39,10 +40,21 @@ namespace GetPet.Crawler
 
         public virtual void InsertToDB(IPetHandler db, IList<PetDto> input)
         {
-            foreach (var pet in input)
+            var animals = input.Where(p => !IsPetExists(db, p));
+
+            foreach (var pet in animals)
             {
                 db.AddPet(pet);
             }
+        }
+
+        private bool IsPetExists(IPetHandler db, PetDto pet)
+        {
+            var allAnimals = new List<PetDto>(); // TODO: Get all animals from DB
+
+            // TODO: Add source (which website) to animals
+
+            return (allAnimals.Any(p => p.Name == pet.Name)); // TODO: Better comapring conditions. Consider using 'Equals'
         }
     }
 }

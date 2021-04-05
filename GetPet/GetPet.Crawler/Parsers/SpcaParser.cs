@@ -45,13 +45,6 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        public override AnimalType ParseAnimalType(HtmlNode node)
-        {
-            var animalType = node.GetAttributeValue("data-tag", "none");
-
-            return ParserUtils.ConvertAnimalType(animalType);
-        }
-
         public override string ParseName(HtmlNode node)
         {
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;

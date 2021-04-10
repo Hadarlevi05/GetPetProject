@@ -68,6 +68,5 @@ namespace PetAdoption.BusinessLogic.Repositories
         {
             await base.UpdateAsync(entity);
         }
-
     }
 }

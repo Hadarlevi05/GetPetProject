@@ -52,12 +52,5 @@ namespace GetPet.Common
             }
             return string.Empty;
         }
-
-        public static string GenderHumanize(this int gender) => gender switch
-        {
-            0 => "בן",
-            1 => "בת",
-            _ => string.Empty,
-        };
     }
 }

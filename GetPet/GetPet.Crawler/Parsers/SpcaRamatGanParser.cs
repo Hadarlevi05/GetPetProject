@@ -9,30 +9,18 @@ namespace GetPet.Crawler.Parsers
 {
     public class SpcaRamatGanParser: ParserBase
     {
-        public override IList<PetDto> Parse()
-        {
-            var results = new List<PetDto>();
-
-            var nodes = GetNodes();
-
-            foreach (var node in nodes)
-            {
-                results.Add(ParseSingleNode(node));
-            }
-            return results;
-        }
-
-        public HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes()
         {
             var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
             return items;
         }
 
-        public PetDto ParseSingleNode(HtmlNode node)
+        public override PetDto ParseSingleNode(HtmlNode node)
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "data-tag");
+            // var description = ParseDescription(node, "title");
 
             var pet = new PetDto
             {

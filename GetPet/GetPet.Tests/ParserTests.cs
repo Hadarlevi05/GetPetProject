@@ -1,4 +1,4 @@
-﻿using GetPet.Crawler;
+﻿using GetPet.Crawler.Crawlers;
 using GetPet.Crawler.Parsers;
 using GetPet.Data.Enums;
 using GetPet.Tests.Mocks;
@@ -78,16 +78,16 @@ namespace GetPet.Tests
             Debugger.Break();
         }
 
-        [Test]
-        [Ignore("Yad2 are evil")]
-        public void Yad2Test()
-        {
-            Yad2Crawler yad2 = new Yad2Crawler();
-            yad2.Load(@"https://www.yad2.co.il/pets/all?species=1&page=2");
+        //[Test]
+        //[Ignore("Yad2 are evil")]
+        //public void Yad2Test()
+        //{
+        //    Yad2Crawler yad2 = new Yad2Crawler();
+        //    yad2.Load(@"https://www.yad2.co.il/pets/all?species=1&page=2");
 
-            var pets = yad2.Parse();
+        //    var pets = yad2.Parse();
 
-            Debugger.Break();
-        }
+        //    Debugger.Break();
+        //}
     }
 }

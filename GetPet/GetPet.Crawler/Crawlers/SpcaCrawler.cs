@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace GetPet.Crawler
+namespace GetPet.Crawler.Crawlers
 {
     public class SpcaCrawler : CrawlerBase<SpcaParser>
     {

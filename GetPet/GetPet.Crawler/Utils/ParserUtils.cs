@@ -8,8 +8,8 @@ namespace GetPet.Crawler.Utils
 {
     public static class ParserUtils
     {
-        private static List<string> _male = new List<string>() { "זכר", "male", "Male" };
-        private static List<string> _female = new List<string>() { "נקבה", "female", "Female" };
+        private static List<string> _male = new List<string>() { "זכר", "male", "Male", "בן" };
+        private static List<string> _female = new List<string>() { "נקבה", "female", "Female", "בת" };
 
         public static Gender ConvertGender(string input)
         {

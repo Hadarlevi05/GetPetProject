@@ -12,14 +12,27 @@ namespace GetPet.Crawler.Parsers
     {
         public HtmlDocument Document { get; set; }
 
-        public abstract IList<PetDto> Parse();
+        public virtual IList<PetDto> Parse()
+        {
+            var results = new List<PetDto>();
+
+            var nodes = GetNodes();
+
+            foreach (var node in nodes)
+            {
+                var pet = ParseSingleNode(node);
+                pet.UserId = 1; // TODO: Find a better way to assign the default user
+                results.Add(pet);
+            }
+
+            return results;
+        }
+
+        public abstract HtmlNodeCollection GetNodes();
+        public abstract PetDto ParseSingleNode(HtmlNode node);
 
         public abstract string ParseName(HtmlNode node);
         public abstract string ParseAgeInYear(HtmlNode node);
-        public virtual Gender ParseGender(HtmlNode node)
-        {
-            throw new NotImplementedException();
-        }
 
         public Gender ParseGender(HtmlNode node, string name)
         {
@@ -28,16 +41,16 @@ namespace GetPet.Crawler.Parsers
             return ParserUtils.ConvertGender(gender);
         }
 
-        public virtual AnimalType ParseAnimalType(HtmlNode node)
-        {
-            throw new NotImplementedException();
-        }
-
         public AnimalType ParseAnimalType(HtmlNode node, string name)
         {
             var gender = node.GetAttributeValue(name, "unknown");
 
             return ParserUtils.ConvertAnimalType(gender);
+        }
+
+        public virtual string ParseDescription(HtmlNode node, string name)
+        {
+            return node.GetAttributeValue("title", "");
         }
     }
 }

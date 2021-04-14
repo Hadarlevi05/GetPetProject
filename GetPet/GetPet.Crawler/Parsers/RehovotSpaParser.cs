@@ -11,20 +11,7 @@ namespace GetPet.Crawler.Parsers
 {
     public class RehovotSpaParser: ParserBase
     {
-        public override IList<PetDto> Parse()
-        {
-            var results = new List<PetDto>();
-
-            var nodes = GetNodes();
-
-            foreach (var node in nodes)
-            {
-                results.Add(ParseSingleNode(node));
-            }
-            return results;
-        }
-
-        public HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes()
         {
             try
             {
@@ -40,12 +27,12 @@ namespace GetPet.Crawler.Parsers
             return null;
         }
 
-        public PetDto ParseSingleNode(HtmlNode node)
+        public override PetDto ParseSingleNode(HtmlNode node)
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "title");
-            var description = node.GetAttributeValue("title", "");
+            var description = ParseDescription(node, "title");
 
             var pet = new PetDto
             {

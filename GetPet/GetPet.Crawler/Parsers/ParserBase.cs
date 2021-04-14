@@ -22,6 +22,8 @@ namespace GetPet.Crawler.Parsers
             {
                 var pet = ParseSingleNode(node);
                 pet.UserId = 1; // TODO: Find a better way to assign the default user
+                pet.AnimalTypeId = 2;
+
                 results.Add(pet);
             }
 

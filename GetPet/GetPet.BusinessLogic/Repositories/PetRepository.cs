@@ -32,7 +32,7 @@ namespace PetAdoption.BusinessLogic.Repositories
                     .ThenInclude(q => q.Organization)
                 .Include(q => q.User)
                     .ThenInclude(q => q.City);
-
+             
             return query;
         }
 

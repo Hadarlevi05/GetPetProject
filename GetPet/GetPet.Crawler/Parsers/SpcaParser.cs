@@ -20,14 +20,16 @@ namespace GetPet.Crawler.Parsers
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "data-tag");
-            //var description = ParseDescription(node, "title");
-            // TODO: in all parsers: AnimalType, Description, SourceWebsite
+            var description = ParseDescription(node);
+
+            // TODO: in all parsers: AnimalType, SourceWebsite
 
             var pet = new PetDto
             {
                 Name = name,
                 Gender = gender,
                 AgeInYears = year,
+                Description = description,
             };
 
             return pet;
@@ -45,6 +47,11 @@ namespace GetPet.Crawler.Parsers
             // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
 
             return year;
+        }
+
+        public override string ParseDescription(HtmlNode node, string name = "")
+        {
+            return node.InnerText;
         }
     }
 }

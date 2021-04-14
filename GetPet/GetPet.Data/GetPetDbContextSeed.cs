@@ -53,7 +53,7 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-
+            context.Users.Add(new User { Id = 1, UserType = Enums.UserType.Organization });
             PasswordHashHelper hash = new PasswordHashHelper("password");
             var hashPassword = System.Text.Encoding.Default.GetString(hash.Hash);
 

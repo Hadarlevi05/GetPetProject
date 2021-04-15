@@ -4,10 +4,12 @@ using System.Text;
 
 namespace GetPet.Data.Enums
 {
-    public enum Gender
+    public enum AnimalType
     {
         Unknown = 0,
-        Male = 1,
-        Female = 2,
+        Cat = 1,
+        Dog = 2,
+        Bunny = 3,
+        Snake = 4,
     }
 }

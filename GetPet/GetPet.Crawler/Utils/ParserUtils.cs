@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GetPet.Data.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,23 +8,22 @@ namespace GetPet.Crawler.Utils
 {
     public static class ParserUtils
     {
-        private static List<string> _male = new List<string>() { "זכר", "male", "Male" };
-        private static List<string> _female = new List<string>() { "נקבה", "female", "Female" };
+        private static List<string> _male = new List<string>() { "זכר", "male", "Male", "בן" };
+        private static List<string> _female = new List<string>() { "נקבה", "female", "Female", "בת" };
 
-        public static string ConvertGender(string input)
+        public static Gender ConvertGender(string input)
         {
-            // TODO: enum
             if (_female.Any(x => input.Contains(x)))
             {
-                return "נקבה";
+                return Gender.Female;
             }
             else if (_male.Any(x => input.Contains(x)))
             {
-                return "זכר";
+                return Gender.Male;
             }
             else
             {
-                return ""; // Handle missing case
+                return Gender.Unknown; // Handle missing case
             }
         }
 
@@ -46,6 +46,25 @@ namespace GetPet.Crawler.Utils
             else if (_oneYear.Any(x => input.Contains(x)))
                 return 1;
             return 0;
+        }
+
+        private static List<string> _dog = new List<string>() { "כלב", "dog" };
+        private static List<string> _cat = new List<string>() { "חתול", "cat" };
+
+        public static AnimalType ConvertAnimalType(string input)
+        {
+            if (_dog.Any(x => input.Contains(x)))
+            {
+                return AnimalType.Dog;
+            }
+            else if (_cat.Any(x => input.Contains(x)))
+            {
+                return AnimalType.Cat;
+            }
+            else
+            {
+                return AnimalType.Unknown; // Handle missing case
+            }
         }
     }
 }

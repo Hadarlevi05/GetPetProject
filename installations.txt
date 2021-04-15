@@ -29,4 +29,4 @@
 	add migration - for changes in database 
 	-	run the script "Migration.bat {migration-name}" 
 	-	migration-name - the name for the migration 
-	
+	- dotnet ef database update

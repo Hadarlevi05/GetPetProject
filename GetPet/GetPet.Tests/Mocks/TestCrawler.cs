@@ -1,4 +1,5 @@
 ﻿using GetPet.Crawler;
+using GetPet.Crawler.Crawlers;
 using GetPet.Crawler.Parsers;
 using GetPet.Crawler.Parsers.Abstractions;
 using System;
@@ -10,6 +11,8 @@ namespace GetPet.Tests.Mocks
 {
     public class TestCrawler<T> : CrawlerBase<T> where T : IParser, new()
     {
+        protected override string url => throw new NotImplementedException();
+
         public override void Load(string url)
         {
             if (!File.Exists(url))

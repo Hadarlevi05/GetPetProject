@@ -1,5 +1,6 @@
 ﻿using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Utils;
+using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,37 +8,28 @@ using System.Linq;
 namespace GetPet.Crawler.Parsers
 {  
      public class SpcaParser : ParserBase
-    {
-        public override IList<PetDto> Parse()
-        {
-            var results = new List<PetDto>();
-
-            var nodes = GetNodes();
-
-            foreach (var node in nodes)
-            {
-                results.Add(ParseSingleNode(node));
-            }
-            return results;
-        }
-
-        public HtmlNodeCollection GetNodes()
+     {
+        public override HtmlNodeCollection GetNodes()
         {
             var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
             return items;
         }
 
-        public PetDto ParseSingleNode(HtmlNode node)
+        public override PetDto ParseSingleNode(HtmlNode node)
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
-            var gender = ParseGender(node);
+            var gender = ParseGender(node, "data-tag");
+            var description = ParseDescription(node);
+
+            // TODO: in all parsers: AnimalType, SourceWebsite
 
             var pet = new PetDto
             {
                 Name = name,
                 Gender = gender,
                 AgeInYears = year,
+                Description = description,
             };
 
             return pet;
@@ -57,11 +49,9 @@ namespace GetPet.Crawler.Parsers
             return year;
         }
 
-        public override string ParseGender(HtmlNode node)
+        public override string ParseDescription(HtmlNode node, string name = "")
         {
-            var gender = node.GetAttributeValue("data-tag", "none");
-
-            return ParserUtils.ConvertGender(gender);
+            return node.InnerText;
         }
     }
 }

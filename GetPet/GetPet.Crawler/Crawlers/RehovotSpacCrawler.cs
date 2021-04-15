@@ -4,7 +4,7 @@ using System.Text;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.Crawler.Parsers;
 
-namespace GetPet.Crawler
+namespace GetPet.Crawler.Crawlers
 {
     public class RehovotSpaCrawler : CrawlerBase<RehovotSpaParser>
     {

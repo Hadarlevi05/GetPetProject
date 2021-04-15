@@ -17,66 +17,66 @@ namespace GetPet.Tests
         {
         }
 
-        [Test]
-        public void MockTest()
-        {
-            // ctrl r+t
-            var crawler = new TestCrawler<SpcaParser>();
-            string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
+        //[Test]
+        //public void MockTest()
+        //{
+        //    // ctrl r+t
+        //    var crawler = new TestCrawler<SpcaParser>();
+        //    string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
-            crawler.Load(file);
+        //    crawler.Load(file);
 
-            var pets = crawler.Parse();
+        //    var pets = crawler.Parse();
 
-            Assert.AreEqual(pets.Count, 22);
+        //    Assert.AreEqual(pets.Count, 22);
 
-            var firstPet = pets[0];
-            Assert.AreEqual(firstPet.Name, "פרייה");
-            Assert.AreEqual(firstPet.AgeInYears, "שנתיים וחודשיים");
-            Assert.AreEqual(firstPet.Gender, Gender.Female);
+        //    var firstPet = pets[0];
+        //    Assert.AreEqual(firstPet.Name, "פרייה");
+        //    Assert.AreEqual(firstPet.AgeInYears, "שנתיים וחודשיים");
+        //    Assert.AreEqual(firstPet.Gender, Gender.Female);
 
-            var lastPet = pets[1];
-            Assert.AreEqual(lastPet.Name, "סקאי");
-            Assert.AreEqual(lastPet.AgeInYears, "5 שנים");
-            Assert.AreEqual(lastPet.Gender, Gender.Male);
-        }
+        //    var lastPet = pets[1];
+        //    Assert.AreEqual(lastPet.Name, "סקאי");
+        //    Assert.AreEqual(lastPet.AgeInYears, "5 שנים");
+        //    Assert.AreEqual(lastPet.Gender, Gender.Male);
+        //}
 
-        [Test]
-        public void SpcaTest()
-        {
-            // ctrl r+t
-            SpcaCrawler spca = new SpcaCrawler();
-            spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
+        //[Test]
+        //public void SpcaTest()
+        //{
+        //    // ctrl r+t
+        //    SpcaCrawler spca = new SpcaCrawler();
+        //    spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
 
-            var pets = spca.Parse();
+        //    var pets = spca.Parse();
 
-            Debugger.Break();
-        }
+        //    Debugger.Break();
+        //}
 
-        [Test]
-        [Ignore("Wix is doing troubles")]
-        public void SpcaRamatGanTest()
-        {
-            // ctrl r+t
-            SpcaRamatGanCrawler spca = new SpcaRamatGanCrawler();
-            spca.Load(@"https://www.spca.org.il/adopt-a-dog");
+        //[Test]
+        //[Ignore("Wix is doing troubles")]
+        //public void SpcaRamatGanTest()
+        //{
+        //    // ctrl r+t
+        //    SpcaRamatGanCrawler spca = new SpcaRamatGanCrawler();
+        //    spca.Load(@"https://www.spca.org.il/adopt-a-dog");
 
-            var pets = spca.Parse();
+        //    var pets = spca.Parse();
 
-            Debugger.Break();
-        }
+        //    Debugger.Break();
+        //}
 
-        [Test]
-        public void RehovotSpa()
-        {
-            // ctrl r+t
-            RehovotSpaCrawler spca = new RehovotSpaCrawler();
-            spca.Load(@"http://rehovotspa.org.il/our-dogs/");
+        //[Test]
+        //public void RehovotSpa()
+        //{
+        //    // ctrl r+t
+        //    RehovotSpaCrawler spca = new RehovotSpaCrawler();
+        //    spca.Load(@"http://rehovotspa.org.il/our-dogs/");
 
-            var pets = spca.Parse();
+        //    var pets = spca.Parse();
 
-            Debugger.Break();
-        }
+        //    Debugger.Break();
+        //}
 
         //[Test]
         //[Ignore("Yad2 are evil")]

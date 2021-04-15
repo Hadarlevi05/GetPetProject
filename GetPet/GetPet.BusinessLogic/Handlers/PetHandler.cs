@@ -6,6 +6,7 @@ using GetPet.Data.Enums;
 using PetAdoption.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Handlers
@@ -24,19 +25,32 @@ namespace GetPet.BusinessLogic.Handlers
         }
 
         public async Task SetPetStatus(int petId, PetStatus petStatus)
-        { 
-        
+        {
+
         }
 
-        public async Task AddPet(PetDto pet)         
+        public async Task AddPet(PetDto pet)
         {
             try
             {
+                var images = pet.Images ?? new List<string>();
+
                 var petToInsert = _mapper.Map<Pet>(pet);
 
-                await _petRepository.AddAsync(petToInsert);
+                petToInsert.MetaFileLinks = new List<MetaFileLink>();
 
-                _unitOfWork.SaveChanges();
+                foreach (var imageSource in images)
+                {
+                    petToInsert.MetaFileLinks.Add(
+                        new MetaFileLink
+                        {
+                            Path = imageSource,
+                            MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
+                            Size = 1000
+                        });
+
+                    await _petRepository.AddAsync(petToInsert);
+                }
             }
             catch (Exception ex)
             {
@@ -45,8 +59,8 @@ namespace GetPet.BusinessLogic.Handlers
         }
 
         public async Task RemovePet(int petId, int userId)
-        { 
-        
+        {
+
         }
 
         public async Task<IList<PetDto>> Search(PetFilter filter)

@@ -57,11 +57,9 @@ namespace GetPet.CrawlerApp
 
             foreach (var crawler in crawlers)
             {
-                var db = serviceProvider.GetService<IPetHandler>();
-
                 crawler.Load();
                 var result = crawler.Parse();
-                crawler.InsertToDB(db, result);
+                crawler.InsertToDB(result);
             }
         }
     }

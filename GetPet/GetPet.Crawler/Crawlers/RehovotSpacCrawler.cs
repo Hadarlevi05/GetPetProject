@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GetPet.BusinessLogic.Handlers;
+﻿using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.Crawler.Parsers;
+using PetAdoption.BusinessLogic.Repositories;
 
 namespace GetPet.Crawler.Crawlers
 {
@@ -10,9 +9,11 @@ namespace GetPet.Crawler.Crawlers
     {
         protected override string url => @"http://rehovotspa.org.il/our-dogs/";
 
-        public RehovotSpaCrawler()
-        {
-
-        }
+        public RehovotSpaCrawler(
+            IPetHandler petHandler,
+            IPetRepository petRepository,
+            IUnitOfWork unitOfWork) :
+            base(petHandler, petRepository, unitOfWork)
+        { }
     }
 }

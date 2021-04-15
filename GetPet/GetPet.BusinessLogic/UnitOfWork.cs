@@ -5,8 +5,7 @@ namespace GetPet.BusinessLogic
 {
     public interface IUnitOfWork
     {
-        Task<int> SaveChangesAsync();
-        int SaveChanges();
+        Task<int> SaveChangesAsync();        
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -21,16 +20,6 @@ namespace GetPet.BusinessLogic
         public async Task<int> SaveChangesAsync()
         {
             return await _getPetDbContext.SaveChangesAsync();
-        }
-
-        /// <summary>
-        /// Added because SaveChangesAsync loses the exception info. 
-        /// Need to investigate why
-        /// </summary>
-        /// <returns></returns>
-        public int SaveChanges() 
-        {
-            return _getPetDbContext.SaveChanges();
         }
     }
 }

@@ -34,14 +34,19 @@ namespace GetPet.Crawler.Parsers
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
 
+            var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
+            var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
+
             var pet = new PetDto
             {
                 Name = name,
                 Gender = gender,
                 AgeInYears = year,
-                Description = description
+                Description = description,
+                Images = new List<string> {
+                    image
+                }
             };
-
             return pet;
         }
 

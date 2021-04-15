@@ -52,17 +52,16 @@ namespace GetPet.Data
             context.AnimalTraits.Add(new AnimalTrait { Trait = size.Entity, AnimalType = cat.Entity, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
             await context.SaveChangesAsync();
-
-            context.Users.Add(new User { Id = 1, UserType = Enums.UserType.Organization });
+            
             PasswordHashHelper hash = new PasswordHashHelper("password");
             var hashPassword = System.Text.Encoding.Default.GetString(hash.Hash);
 
             var hadar = context.Users.Add(new User
             {
                 CityId = city1.Entity.Id,
-                Name = "הדר",
+                Name = "מערכת",
                 Email = "hadar@getpet.co.il",
-                UserType = Enums.UserType.Regular,
+                UserType = Enums.UserType.Admin,
                 EmailSubscription = true,
                 PasswordHash = hashPassword,
                 CreationTimestamp = DateTime.UtcNow,

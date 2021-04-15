@@ -36,9 +36,9 @@ namespace PetAdoption.BusinessLogic.Repositories
         public IQueryable<T> SearchAsync(IQueryable<T> query, BaseFilter filter)
         {
             query = LoadNavigationProperties(query);
-            
-            query
-                .Skip(filter.PerPage * filter.Page - 1)
+
+            query = query
+                .Skip(filter.PerPage * (filter.Page - 1))
                 .Take(filter.PerPage);
 
             return query;

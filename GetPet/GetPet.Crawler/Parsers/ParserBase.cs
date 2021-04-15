@@ -3,7 +3,6 @@ using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 
 namespace GetPet.Crawler.Parsers

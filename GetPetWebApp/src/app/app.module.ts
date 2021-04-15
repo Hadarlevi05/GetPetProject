@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { LoaderComponent } from './shared/components/loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MatTabsModule } from '@angular/material/tabs';
     IndexComponent,
     LoginComponent,
     RegisterComponent,
-    PetCardComponent
+    PetCardComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

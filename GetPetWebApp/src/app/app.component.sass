@@ -29,30 +29,33 @@ p
 
         a
             color: #fff
-            margin: 0 15px
+            margin: 10px 15px
+
+            &:hover
+                text-decoration: underline
 
 .toolbar
     display: flex
     align-items: center
-    background-color: #1976d2
+    background-color: #51ab5a
     color: white
     font-weight: 600
 
     & img
         margin: 0 16px
 
-    & #twitter-logo
-        height: 40px
-        margin: 0 8px
+        display: flex
+        align-items: center
+        background-color: #51ab5a
+        color: white
+        font-weight: 600
 
-    & #youtube-logo
-        height: 40px
-        margin: 0 16px
+    a
+        margin: 5px
+        color: #fff
 
-    & #twitter-logo:hover,
-
-    & #youtube-logo:hover
-        opacity: 0.8
+        &:last-child
+            margin-left: 30px
 
 .content
     display: flex

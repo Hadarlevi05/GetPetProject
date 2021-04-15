@@ -22,6 +22,7 @@ namespace GetPet.BusinessLogic.Model
         public string Description { get; set; }
 
         public UserDto User { get; set; } // TODO: How to convert it between Pet and PetDTO?
+
         public int UserId { get; set; }
 
         public IList<string> Images { get; set; }

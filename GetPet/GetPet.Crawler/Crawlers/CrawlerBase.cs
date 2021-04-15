@@ -1,11 +1,15 @@
-﻿using GetPet.BusinessLogic.Handlers.Abstractions;
+﻿using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
+using GetPet.Data.Entities;
 using HtmlAgilityPack;
+using PetAdoption.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Crawlers
 {
@@ -14,10 +18,22 @@ namespace GetPet.Crawler.Crawlers
         protected readonly HtmlDocument doc = new HtmlDocument();
         protected readonly WebClient client = new WebClient();
         protected readonly T parser = new T();
+
+        protected readonly IPetHandler _petHandler;
+        protected readonly IPetRepository _petRepository;
+        protected readonly IUnitOfWork _unitOfWork;
+
+        private List<Pet> pets;
         protected abstract string url { get; }
 
-        public CrawlerBase() 
+        public CrawlerBase(
+            IPetHandler petHandler,
+            IPetRepository petRepository,
+            IUnitOfWork unitOfWork)
         {
+            _petHandler = petHandler;
+            _petRepository = petRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public virtual void Load(string url)
@@ -27,6 +43,8 @@ namespace GetPet.Crawler.Crawlers
             doc.LoadHtml(html);
 
             parser.Document = doc;
+
+            pets = _petRepository.SearchAsync(new PetFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
         }
 
         public virtual void Load()
@@ -39,23 +57,22 @@ namespace GetPet.Crawler.Crawlers
             return parser.Parse();
         }
 
-        public virtual async void InsertToDB(IPetHandler db, IList<PetDto> input)
-        {
-            var animals = input.Where(p => !IsPetExists(db, p));
+        public virtual async void InsertToDB(IList<PetDto> animals)
+        {            
+            var tasks = animals
+                .Where(p => !IsPetExists(p))
+                .Select(pet => _petHandler.AddPet(pet));
 
-            foreach (var pet in animals)
-            {
-                await db.AddPet(pet);
-            }
+            await Task.WhenAll(tasks);
+
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        private bool IsPetExists(IPetHandler db, PetDto pet)
+        private bool IsPetExists(PetDto pet)
         {
-            var allAnimals = new List<PetDto>(); // TODO: Get all animals from DB
-
             // TODO: Add source (which website) to animals
 
-            return (allAnimals.Any(p => p.Name == pet.Name)); // TODO: Better comapring conditions. Consider using 'Equals'
+            return pets.Any(p => p.Name == pet.Name); // TODO: Better comapring conditions. Consider using 'Equals'
         }
     }
 }

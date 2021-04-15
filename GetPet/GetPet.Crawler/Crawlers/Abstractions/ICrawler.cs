@@ -14,6 +14,6 @@ namespace GetPet.Crawler.Crawlers.Abstractions
 
         IList<PetDto> Parse();
 
-        void InsertToDB(IPetHandler db, IList<PetDto> input);
+        void InsertToDB(IList<PetDto> input);
     }
 }

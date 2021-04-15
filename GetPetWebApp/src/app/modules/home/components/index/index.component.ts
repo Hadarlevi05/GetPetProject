@@ -10,6 +10,7 @@ import { PetsService } from 'src/app/modules/pets/services/pets.service';
 })
 export class IndexComponent implements OnInit {
 
+  loading = true;
   pets: IPet[] = [];
 
   constructor(private petsService: PetsService) { }
@@ -23,10 +24,12 @@ export class IndexComponent implements OnInit {
 
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new PetFilter(1, 20, date);
+    let filter = new PetFilter(1, 5, date);
 
     this.petsService.Search(filter).subscribe(pets => {
       this.pets = pets;
-    })
+
+      this.loading = false;
+    });
   }
 }

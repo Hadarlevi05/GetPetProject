@@ -57,6 +57,11 @@ namespace GetPet.WebApi
 
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IAnimalTypeRepository, AnimalTypeRepository>();
+            services.AddScoped<ITraitRepository, TraitRepository>();
+            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<IPetTraitRepository, PetTraitRepository>();
             services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }

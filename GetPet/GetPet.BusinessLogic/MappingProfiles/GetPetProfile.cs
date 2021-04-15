@@ -14,7 +14,25 @@ namespace GetPet.BusinessLogic.MappingProfiles
         {
             PetMapping();
 
-            UserMapping();                
+            UserMapping();
+
+            CityMapping();
+
+            AnimalTypeMapping();
+
+            TraitMapping();
+
+            OrganizationMapping();
+
+            PetTraitMapping();
+        }
+
+        private void PetTraitMapping()
+        {
+            CreateMap<PetTrait, PetTraitDto>()
+                .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
+                .ForMember(dest => dest.TraitName, opt => opt.MapFrom(src => src.Trait.Name))
+                .ForMember(dest => dest.TraitValue, opt => opt.MapFrom(src => src.Value));
         }
 
         private void UserMapping()
@@ -33,6 +51,26 @@ namespace GetPet.BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.DateHumanize()));
 
             CreateMap<PetDto, Pet>();
+        }
+
+        private void CityMapping()
+        {
+            CreateMap<City, CityDto>();
+        }
+
+        private void AnimalTypeMapping()
+        {
+            CreateMap<AnimalType, AnimalTypeDto>();
+        }
+
+        private void TraitMapping()
+        {
+            CreateMap<Trait, TraitDto>();
+        }
+
+        private void OrganizationMapping()
+        {
+            CreateMap<Organization, OrganizationDto>();
         }
     }
 }

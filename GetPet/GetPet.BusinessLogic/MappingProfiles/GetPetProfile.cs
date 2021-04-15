@@ -60,7 +60,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void AnimalTypeMapping()
         {
-            CreateMap<AnimalType, AnimalTypeDto>();
+            CreateMap<Data.Entities.AnimalType, AnimalTypeDto>();
         }
 
         private void TraitMapping()

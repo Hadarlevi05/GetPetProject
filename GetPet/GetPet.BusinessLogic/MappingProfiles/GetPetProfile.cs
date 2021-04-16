@@ -33,12 +33,20 @@ namespace GetPet.BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
                 .ForMember(dest => dest.TraitName, opt => opt.MapFrom(src => src.Trait.Name))
                 .ForMember(dest => dest.TraitValue, opt => opt.MapFrom(src => src.Value));
+
+            CreateMap<PetTraitDto, PetTrait>()
+                .ForMember(dest => dest.PetId, opt => opt.MapFrom(src => src.PetName))
+                .ForMember(dest => dest.TraitId, opt => opt.MapFrom(src => src.TraitName))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.TraitValue));
         }
 
         private void UserMapping()
         {
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.Name));
+
+            CreateMap<UserDto, User>()
+                .ForPath(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId));
         }
 
         private void PetMapping()
@@ -55,7 +63,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void CityMapping()
         {
-            CreateMap<City, CityDto>();
+            CreateMap<City, CityDto>().ReverseMap();
         }
 
         private void AnimalTypeMapping()
@@ -70,7 +78,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void OrganizationMapping()
         {
-            CreateMap<Organization, OrganizationDto>();
+            CreateMap<Organization, OrganizationDto>().ReverseMap();
         }
     }
 }

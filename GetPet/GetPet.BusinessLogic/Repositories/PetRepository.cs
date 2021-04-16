@@ -52,8 +52,13 @@ namespace PetAdoption.BusinessLogic.Repositories
 
             if (filter.AnimalTypes != null && filter.AnimalTypes.Count() > 0)
             {
-                query = query.Where(p => filter.AnimalTypes.Contains(p.AnimalType));
+                query = query.Where(p => filter.AnimalTypes.ToString().Contains(p.AnimalType.ToString()));
             }
+
+            //if (filter.Gender.HasValue)
+            //{
+            //    query = query.Where(p => p.Gender == filter.Gender);
+            //}
 
             return await query.ToListAsync();
         }

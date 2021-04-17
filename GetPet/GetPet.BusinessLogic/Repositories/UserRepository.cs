@@ -13,10 +13,12 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IUserRepository : IBaseRepository<User>
     {
         Task<IEnumerable<User>> SearchAsync(UserFilter filter);
+        Task<User> GetByEmailAsync(string email);
     }
-    
+
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
+
         public UserRepository(GetPetDbContext getPetDbContext, IMapper mapper) : base(getPetDbContext)
         { 
         }
@@ -81,5 +83,12 @@ namespace GetPet.BusinessLogic.Repositories
         {
             await base.UpdateAsync(obj);
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await entities.SingleOrDefaultAsync(u => u.Email.Equals(email, System.StringComparison.OrdinalIgnoreCase));
+
+        }
+
     }
 }

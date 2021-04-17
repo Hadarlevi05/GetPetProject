@@ -13,6 +13,7 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IPetTraitRepository : IBaseRepository<PetTrait>
     {
         Task<IEnumerable<PetTrait>> SearchAsync(BaseFilter filter);
+
     }
     public class PetTraitRepository : BaseRepository<PetTrait>, IPetTraitRepository
     {

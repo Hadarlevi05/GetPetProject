@@ -8,6 +8,7 @@ namespace GetPet.BusinessLogic.Handlers.Abstractions
     {
         Task<UserDto> Login(string email, string password);
         Task<UserDto> Register(UserDto user, Organization organization = null);
-        Task SetEmailSubscription(bool subscribed);
+        Task SetEmailSubscription(UserDto userDto, bool subscribed);
+        Task SetOrganization(UserDto user, Organization organization);
     }
 }

@@ -26,13 +26,15 @@ namespace GetPet.WebApi.Controllers
             _mapper = mapper;
             _traitRepository = traitRepository;
         }
-
         [HttpGet]
-        public async Task<IEnumerable<TraitDto>> Get([FromQuery] BaseFilter filter)
+        public async Task<IActionResult> Get([FromQuery] BaseFilter filter)
         {
-            var traits = await _traitRepository.SearchAsync(filter);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            return _mapper.Map<IEnumerable<TraitDto>>(traits);
+            return Ok(await _traitRepository.SearchAsync(filter));
         }
     }
 }

@@ -25,15 +25,6 @@ namespace GetPet.BusinessLogic.MappingProfiles
             OrganizationMapping();
 
             PetTraitMapping();
-
-            AnimalTraitMapping();
-        }
-
-        private void AnimalTraitMapping()
-        {
-            CreateMap<AnimalTrait, AnimalTraitDto>()
-                .ForMember(dest => dest.AnimalTraitName, opt => opt.MapFrom(src => src.Trait.Name))
-                .ForMember(dest => dest.AnimalTypeName, opt => opt.MapFrom(src => src.AnimalType.Name));
         }
 
         private void PetTraitMapping()

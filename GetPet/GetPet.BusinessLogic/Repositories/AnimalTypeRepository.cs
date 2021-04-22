@@ -12,7 +12,7 @@ namespace GetPet.BusinessLogic.Repositories
 {
     public interface IAnimalTypeRepository : IBaseRepository<AnimalType>
     {
-        Task<IEnumerable<AnimalType>> SearchAsync(AnimalTypeFilter filter);
+        Task<IEnumerable<AnimalType>> SearchAsync(BaseFilter filter);
     }
     public class AnimalTypeRepository : BaseRepository<AnimalType>, IAnimalTypeRepository
     {
@@ -32,14 +32,9 @@ namespace GetPet.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<AnimalType>> SearchAsync(AnimalTypeFilter filter)
+        public async Task<IEnumerable<AnimalType>> SearchAsync(BaseFilter filter)
         {
             var query = base.SearchAsync(entities.AsQueryable(), filter);
-
-            if (!string.IsNullOrWhiteSpace(filter.Name))
-            {
-                query = query.Where(c => c.Name.StartsWith(filter.Name));
-            }
 
             return await query.ToListAsync();
         }

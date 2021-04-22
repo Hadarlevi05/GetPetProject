@@ -62,7 +62,6 @@ namespace GetPet.WebApi
             services.AddScoped<ITraitRepository, TraitRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
             services.AddScoped<IPetTraitRepository, PetTraitRepository>();
-            services.AddScoped<IAnimalTraitRepository, AnimalTraitRepository>();
             services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }

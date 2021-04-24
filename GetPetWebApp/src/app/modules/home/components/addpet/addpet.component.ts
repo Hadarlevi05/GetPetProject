@@ -35,6 +35,24 @@ export class AddpetComponent implements OnInit {
     description:['', [Validators.required]],
   })
 
+  afuConfig = {
+    multiple: false,
+    formatsAllowed: ".jpg, .jpeg, .png",
+    maxSize: 10,    //in MB
+    uploadAPI: {
+      url:"https://example-file-upload-api" //TODO: change this url
+    },
+    hideProgressBar: false,
+    hideResetBtn: true,
+    replaceTexts: {
+      selectFileBtn: 'בחר קובץ',
+      uploadBtn: 'שלח',
+      afterUploadMsg_success: 'העלאה הצליחה',
+      afterUploadMsg_error: 'העלאת הקובץ נכשלה',
+      sizeLimit: 'גודל מירבי'
+    }
+};
+
   get animalTypeName() {
     return this.addPetForm.get('animalType')
   }

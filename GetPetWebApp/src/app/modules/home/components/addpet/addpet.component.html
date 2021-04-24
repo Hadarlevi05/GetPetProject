@@ -1,6 +1,6 @@
 <!--Add pet form starts-->
 <form [formGroup]="addPetForm" #ngForm="ngForm" class="form-container" dir="rtl">
-  <div style="width: 50%;">
+  <div style="width: 50%; height: 80%;">
   <mat-card>
     <mat-card-header>
       <mat-card-title>
@@ -77,13 +77,20 @@
         </div>
       </div>
 
-    </mat-card-content>
-<!-- Submit Button -->
-    <mat-card-actions>
-      <button (click)="saveForm()" mat-raised-button color="primary">Save</button>
-    </mat-card-actions>
+      <!--Image upload-->
+      <angular-file-uploader
+      [config]="afuConfig">
+      </angular-file-uploader>
 
-</mat-card>
+      <!-- Submit Button -->
+      <mat-card-actions>
+        <button (click)="saveForm()" mat-raised-button color="primary">Save</button>
+      </mat-card-actions>
+      
+      
+    </mat-card-content>
+
+  </mat-card>
 </div>
 </form>
 <!--Add pet form ends-->

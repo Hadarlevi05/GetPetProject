@@ -1,4 +1,4 @@
-import { PetFilter } from './../../../../pets/models/pet-filter';
+import { AnimalTypeFilter } from './../models/animalTypeFilter';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -16,7 +16,7 @@ export class AnimalTypeService extends BaseService {
     super(http);
   }
 
-  Get(filter: PetFilter): Observable<IAnimalType[]> {
+  Get(filter: AnimalTypeFilter): Observable<IAnimalType[]> {
     return this.http.get<IAnimalType[]>(`${this.entPointUrl}animaltypes`);
   }
 }

@@ -1,0 +1,89 @@
+<!--Add pet form starts-->
+<form [formGroup]="addPetForm" #ngForm="ngForm" class="form-container" dir="rtl">
+  <div style="width: 50%;">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        הוסף בעל חיים <span *ngIf="ngForm.submitted && !addPetForm.valid" class="small-font"
+          [ngClass]="{'invalid': ngForm.submitted }">* required</span>
+      </mat-card-title>
+    </mat-card-header>
+    
+    <!--Insert pet name-->
+    <mat-card-content>
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="petName" matInput placeholder="שם">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Select gender-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-radio-group
+            formControlName="gender" class="margin-left">
+            <mat-radio-button value="male"> זכר </mat-radio-button>
+            <mat-radio-button value="female"> נקבה </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <!--Select animal type-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>סוג</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
+                {{type.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Select date of birth-->
+      <div class="col-md-6 top-padding">
+        <mat-form-field appearance="fill">
+          <mat-label>תאריך לידה</mat-label>
+          <input formControlName="dob" matInput [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!--Select city-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>עיר</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let city of city_arr" [value]="city.id">
+                {{city.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Some more details about the pet-->
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field>
+            <textarea formControlName="description" matInput placeholder="תיאור נוסף"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </mat-card-content>
+<!-- Submit Button -->
+    <mat-card-actions>
+      <button (click)="saveForm()" mat-raised-button color="primary">Save</button>
+    </mat-card-actions>
+
+</mat-card>
+</div>
+</form>
+<!--Add pet form ends-->

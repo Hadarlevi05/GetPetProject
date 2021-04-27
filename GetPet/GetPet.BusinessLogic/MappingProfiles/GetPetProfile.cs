@@ -25,6 +25,8 @@ namespace GetPet.BusinessLogic.MappingProfiles
             OrganizationMapping();
 
             PetTraitMapping();
+
+            AnimalTraitMapping();
         }
 
         private void PetTraitMapping()
@@ -79,6 +81,14 @@ namespace GetPet.BusinessLogic.MappingProfiles
         private void OrganizationMapping()
         {
             CreateMap<Organization, OrganizationDto>().ReverseMap();
+        }
+
+        private void AnimalTraitMapping()
+        {
+            CreateMap<AnimalTrait, AnimalTraitDto>()
+                .ForMember(dest => dest.TraitName, opt => opt.MapFrom(src => (src.Trait.Name)))
+                .ForMember(dest => dest.AnimalTypeName, opt => opt.MapFrom(src => (src.AnimalType.Name)));
+
         }
     }
 }

@@ -24,7 +24,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatListModule} from '@angular/material/list';
 import { AngularFileUploaderModule } from "angular-file-uploader";
-
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
@@ -57,7 +57,8 @@ import { AngularFileUploaderModule } from "angular-file-uploader";
     MatDatepickerModule,
     MatNativeDateModule,
     MatListModule,
-    AngularFileUploaderModule
+    AngularFileUploaderModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 <!--Add pet form starts-->
-<mat-vertical-stepper dir="rtl">
+<mat-vertical-stepper dir="rtl" #stepper>
   <mat-step [stepControl]="firstFormGroup">
     <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>בחר סוג חיה</ng-template>
@@ -8,7 +8,11 @@
         <div class="col-md-12">
           <mat-form-field appearance="fill">
             <mat-label>סוג</mat-label>
-            <mat-select>
+            <mat-select
+              placeholder="בחר סוג"
+              name="animalType"
+              formControlName="animalType"
+            >
               <mat-option
                 *ngFor="let type of animaltypes_arr"
                 [value]="type.id"
@@ -27,7 +31,7 @@
   </mat-step>
 
   <mat-step [stepControl]="secondFormGroup" label="פרטי החיה">
-    <form [formGroup]="secondFormGroup">
+    <form [formGroup]="secondFormGroup" #f="ngForm">
       <!--Insert pet name-->
       <div class="row">
         <div class="col-md-6">
@@ -35,6 +39,7 @@
             <input
               formControlName="petName"
               matInput
+              name="name"
               placeholder="שם"
               required
             />
@@ -101,6 +106,27 @@
         </div>
       </div>
 
+      <!--TODO: This is a list of all unique traits for chosen animal type-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>רשימת תכונות מיוחדות</mat-label>
+            <mat-select
+              placeholder="תכונה"
+              name="animalTraits"
+              formControlName="animalTraits"
+            >
+              <mat-option
+                *ngFor="let trait of traits_arr"
+                [value]="trait.traitId"
+              >
+                {{ trait.traitId }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
       <!--Image upload-->
       <angular-file-uploader [config]="afuConfig"> </angular-file-uploader>
 
@@ -114,3 +140,9 @@
     </form>
   </mat-step>
 </mat-vertical-stepper>
+
+<hr />
+
+<p>Form value: {{ firstFormGroup.value | json }}</p>
+<p>Form value: {{ secondFormGroup.value | json }}</p>
+<p>Form value: {{ thirdFormGroup.value | json }}</p>

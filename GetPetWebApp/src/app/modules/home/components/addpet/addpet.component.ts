@@ -1,3 +1,5 @@
+import { AnimalTraitsService } from './services/animalTraits.service';
+import { IAnimalTrait } from './models/iAnimalTrait';
 import { CityService } from './services/city.service';
 import { ICity } from './models/iCity';
 import { CityFilter } from './models/cityFilter';
@@ -7,6 +9,7 @@ import { AnimalTypeService } from './services/animalType.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ThrowStmt } from '@angular/compiler';
+import { AnimalTraitFilter } from './models/AnimalTraitFilter';
 
 @Component({
   selector: 'app-addpet',
@@ -22,7 +25,7 @@ export class AddpetComponent implements OnInit {
   });
 
   secondFormGroup : FormGroup = this._formBuilder.group({
-  petName:['', [Validators.required]],
+  petName: new FormControl('', [Validators.required]),
   gender:['', [Validators.required]],
   dob:['', [Validators.required]]
   });
@@ -30,16 +33,21 @@ export class AddpetComponent implements OnInit {
   thirdFormGroup : FormGroup = this._formBuilder.group({
     city:['', [Validators.required]],
     description:['', [Validators.required]],
+    animalTraits: ['', [Validators.required]]
   })
+
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
+  traits_arr: IAnimalTrait[] = [];
 
-  constructor(public _formBuilder: FormBuilder, private _animalTypeService: AnimalTypeService, private _cityService : CityService) { }
+  constructor(public _formBuilder: FormBuilder, private _animalTypeService: AnimalTypeService, private _cityService: CityService, private _traitsService: AnimalTraitsService) { }
 
   ngOnInit(): void {
 
     this.loadAnimalTypes();
     this.loadCities();
+    this.loadUniqueTraits();
+  
   }
 
   afuConfig = {
@@ -83,14 +91,20 @@ export class AddpetComponent implements OnInit {
     });
   }
 
-  deleteForm() {
-    //delete all fields in form
-  }
+  loadUniqueTraits(animalTypeId: number = 2) {
+    let date = new Date();
+    date.setDate(date.getDate() - 20);
+    let filter = new AnimalTraitFilter(1,5,date, animalTypeId);
+    this._traitsService.Post(filter).subscribe(traits => {
+      this.traits_arr = traits;
+    })
 
+  }
+  
   // saveForm() {
   //   this.isSubmitted = true;
   //   if(this.addPetForm.valid){
   //     console.log('Add pet form data :: ', this.addPetForm.value);
   //   }
   // }
-}
+  }

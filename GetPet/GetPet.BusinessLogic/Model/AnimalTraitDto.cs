@@ -8,7 +8,11 @@ namespace GetPet.BusinessLogic.Model
     {
         public int Id { get; set; }
 
+        public int TraitId { get; set; }
+
         public string TraitName { get; set; }
+
+        public int AnimalTypeId { get; set; }
 
         public string AnimalTypeName { get; set; }
     }

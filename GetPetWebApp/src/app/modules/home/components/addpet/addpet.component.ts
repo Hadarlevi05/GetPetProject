@@ -46,8 +46,6 @@ export class AddpetComponent implements OnInit {
 
     this.loadAnimalTypes();
     this.loadCities();
-    this.loadUniqueTraits();
-  
   }
 
   afuConfig = {
@@ -91,7 +89,10 @@ export class AddpetComponent implements OnInit {
     });
   }
 
-  loadUniqueTraits(animalTypeId: number = 2) {
+  loadUniqueTraits(event) {
+
+    let animalTypeId = event.value;
+    // console.log(animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
     let filter = new AnimalTraitFilter(1,5,date, animalTypeId);
@@ -100,6 +101,10 @@ export class AddpetComponent implements OnInit {
     })
 
   }
+
+  // changeAnimalType(value : any) {
+  //   this.loadUniqueTraits(value);
+  // }
   
   // saveForm() {
   //   this.isSubmitted = true;

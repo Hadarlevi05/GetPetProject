@@ -4,10 +4,10 @@ using System.Text;
 
 namespace GetPet.BusinessLogic.Model
 {
-    public class AnimalTypeDto
+    public class OrganizationFilter : BaseFilter
     {
-        public int Id { get; set; }
-
         public string Name { get; set; }
+
+        public string Email { get; set; }
     }
 }

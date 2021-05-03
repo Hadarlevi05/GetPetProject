@@ -10,8 +10,15 @@ using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Repositories
 {
+    public interface IUserRepository : IBaseRepository<User>
+    {
+        Task<IEnumerable<User>> SearchAsync(UserFilter filter);
+        Task<User> GetByEmailAsync(string email);
+    }
+
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
+
         public UserRepository(GetPetDbContext getPetDbContext, IMapper mapper) : base(getPetDbContext)
         { 
         }
@@ -28,9 +35,36 @@ namespace GetPet.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<User>> SearchAsync(BaseFilter filter)
+        public async Task<IEnumerable<User>> SearchAsync(UserFilter filter)
         {
             var query = base.SearchAsync(entities.AsQueryable(), filter);
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+            {
+                query = query.Where(u => u.Name.StartsWith(filter.Name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Email))
+            {
+                query = query.Where(u => u.Email.StartsWith(filter.Email));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.CityName))
+            {
+                query = query.Where(u => u.City.Name.StartsWith(filter.CityName));
+            }
+
+            if (filter.EmailSubscription != null)
+            {
+                if (filter.EmailSubscription.Value)
+                {
+                    query = query.Where(u => u.EmailSubscription);
+                }
+                else
+                {
+                    query = query.Where(u => !u.EmailSubscription);
+                }
+            }
 
             return await query.ToListAsync();
         }
@@ -49,5 +83,12 @@ namespace GetPet.BusinessLogic.Repositories
         {
             await base.UpdateAsync(obj);
         }
+
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            return await entities.SingleOrDefaultAsync(u => u.Email.Equals(email, System.StringComparison.OrdinalIgnoreCase));
+
+        }
+
     }
 }

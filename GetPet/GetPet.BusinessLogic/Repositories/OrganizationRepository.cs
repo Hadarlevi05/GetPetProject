@@ -12,7 +12,8 @@ namespace GetPet.BusinessLogic.Repositories
 {
     public interface IOrganizationRepository : IBaseRepository<Organization>
     {
-        Task<IEnumerable<Organization>> SearchAsync(BaseFilter filter);
+        Task<IEnumerable<Organization>> SearchAsync(OrganizationFilter filter);
+
     }
     public class OrganizationRepository : BaseRepository<Organization>, IOrganizationRepository
     {
@@ -32,9 +33,19 @@ namespace GetPet.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Organization>> SearchAsync(BaseFilter filter)
+        public async Task<IEnumerable<Organization>> SearchAsync(OrganizationFilter filter)
         {
             var query = base.SearchAsync(entities.AsQueryable(), filter);
+
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+            {
+                query = query.Where(o => o.Name.StartsWith(filter.Name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(filter.Email))
+            {
+                query = query.Where(o => o.Email.StartsWith(filter.Email));
+            }
 
             return await query.ToListAsync();
         }

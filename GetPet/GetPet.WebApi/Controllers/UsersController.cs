@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -15,23 +17,62 @@ namespace GetPet.WebApi.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger<UsersController> _logger;
         private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         public UsersController(
             ILogger<UsersController> logger,
             IMapper mapper,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IUnitOfWork unitOfWork)
+
         {
             _logger = logger;
             _mapper = mapper;
             _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<UserDto>> Get([FromQuery]BaseFilter filter)
+        public async Task<IActionResult> Get([FromQuery] UserFilter filter)
         {
-            var users = await _userRepository.SearchAsync(filter);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            return _mapper.Map<IEnumerable<UserDto>>(users);
+            return Ok(await _userRepository.SearchAsync(filter));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(UserDto user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var userToInsert = _mapper.Map<User>(user);
+            await _userRepository.AddAsync(userToInsert);
+            await _unitOfWork.SaveChangesAsync();
+
+            return Ok(userToInsert);
         }
     }
 }

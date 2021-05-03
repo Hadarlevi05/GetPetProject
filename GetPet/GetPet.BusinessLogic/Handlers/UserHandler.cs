@@ -1,4 +1,5 @@
-﻿using GetPet.BusinessLogic.Handlers.Abstractions;
+﻿using AutoMapper;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
@@ -9,25 +10,47 @@ namespace GetPet.BusinessLogic.Handlers
     public class UserHandler : IUserHandler
     {
         private readonly IUserRepository _userRepository;
-
-        public UserHandler(IUserRepository userRepository)
+        private readonly IMapper _mapper;
+        public UserHandler(
+            IUserRepository userRepository,
+            IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
-        public Task<UserDto> Login(string email, string password)
+        public async Task<UserDto> Login(string email, string password)
         {
-            return null;
+            var user = await _userRepository.GetByEmailAsync(email);
+
+            //if (user.PasswordHash != password)
+            //    return null;
+
+            return _mapper.Map<UserDto>(user);
         }
 
-        public Task<UserDto> Register(UserDto user, Organization organization = null)
+        public async Task<UserDto> Register(UserDto userDto, Organization organization = null)
         {
-            return null;
+            var user = _mapper.Map<User>(userDto);
+            user.Organization = organization;
+            await _userRepository.AddAsync(user);
+            
+            return userDto;
         }
 
-        public async Task SetEmailSubscription(bool subscribed)
+        public async Task SetEmailSubscription(UserDto user, bool subscribed)
         {
-
+            var entity = await _userRepository.GetByIdAsync(user.Id);
+            entity.EmailSubscription = subscribed;
+            await _userRepository.UpdateAsync(entity);
         }
+
+        public async Task SetOrganization(UserDto user, Organization organization = null)
+        {
+            var entity = await _userRepository.GetByIdAsync(user.Id);
+            entity.Organization = organization;
+            await _userRepository.UpdateAsync(entity);
+        }
+
     }
 }

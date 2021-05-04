@@ -25,6 +25,7 @@ namespace GetPet.Tests
         private static IPetHandler petHandler;
         private static IPetRepository petRepository;
         private static IUnitOfWork unitOfWork;
+        private static ITraitRepository traitRepository;
 
         [SetUp]
         public void Setup()
@@ -37,13 +38,14 @@ namespace GetPet.Tests
             petRepository = serviceProvider.GetService<IPetRepository>();
             petHandler = serviceProvider.GetService<IPetHandler>();
             unitOfWork = serviceProvider.GetService<IUnitOfWork>();
+            traitRepository = serviceProvider.GetService<ITraitRepository>();
         }
 
         [Test]
         public void MockTest()
         {
             // ctrl r+t
-            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork);
+            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository);
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
             crawler.Load(file);
@@ -67,7 +69,7 @@ namespace GetPet.Tests
         public void SpcaTest()
         {
             // ctrl r+t
-            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork);
+            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository);
             spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
 
             var pets = spca.Parse();
@@ -79,7 +81,7 @@ namespace GetPet.Tests
         public void RehovotSpa()
         {
             // ctrl r+t
-            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork);
+            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository);
             spca.Load(@"http://rehovotspa.org.il/our-dogs/");
 
             var pets = spca.Parse();
@@ -115,6 +117,7 @@ namespace GetPet.Tests
                 .AddDbContext<GetPetDbContext>(options => options.UseSqlServer(sqlConnectionString))
                 .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<ITraitRepository, TraitRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()

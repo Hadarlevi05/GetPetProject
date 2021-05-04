@@ -45,7 +45,6 @@ namespace GetPet.CrawlerApp
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()
                 .AddScoped<ICrawler, SpcaCrawler>()
-                .AddScoped<ITraitRepository, TraitRepository>()
                 //.AddScoped<ICrawler, SpcaRamatGanCrawler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .BuildServiceProvider();
@@ -59,9 +58,6 @@ namespace GetPet.CrawlerApp
             foreach (var crawler in crawlers)
             {
                 crawler.Load();
-
-
-
                 var result = crawler.Parse();
                 crawler.InsertToDB(result);
             }

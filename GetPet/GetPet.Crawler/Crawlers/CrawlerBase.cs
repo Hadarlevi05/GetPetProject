@@ -40,6 +40,14 @@ namespace GetPet.Crawler.Crawlers
             _traitRepository = traitRepository;
         }
 
+        protected virtual List<Trait> GetListOfTraits()
+        {
+            var filter = new BaseFilter();
+            var results = _traitRepository.SearchAsync(filter).Result.ToList();
+
+            return results;
+        }
+
         public virtual void Load(string url)
         {
             string html = client.DownloadString(url);
@@ -58,11 +66,13 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual IList<PetDto> Parse()
         {
-            return parser.Parse();
+            var traits = GetListOfTraits();
+
+            return parser.Parse(traits);
         }
 
         public virtual async void InsertToDB(IList<PetDto> animals)
-        {            
+        {
             var tasks = animals
                 .Where(p => !IsPetExists(p))
                 .Select(pet => _petHandler.AddPet(pet));

@@ -1,5 +1,6 @@
 ﻿using GetPet.BusinessLogic.Model;
 using GetPet.Crawler.Utils;
+using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
@@ -27,12 +28,13 @@ namespace GetPet.Crawler.Parsers
             return null;
         }
 
-        public override PetDto ParseSingleNode(HtmlNode node)
+        public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
+            var traits = ParseTraits(node, name, allTraits);
 
             var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
@@ -45,7 +47,8 @@ namespace GetPet.Crawler.Parsers
                 Description = description,
                 Images = new List<string> {
                     image
-                }
+                },
+                Traits = traits.ToDictionary(k => k.Name, v => v.Name),
             };
             return pet;
         }

@@ -6,5 +6,10 @@ namespace GetPet.Data.Entities
     {
         [StringLength(400)]
         public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -3,6 +3,7 @@ using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
 using GetPet.Data;
+using GetPet.WebApi.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,19 @@ namespace GetPet.WebApi
         private void SetEnvironmentVariables()
         {
             Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
+            Constants.Secret = Configuration.GetValue<string>("Secret");
         }
 
         public IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(options => {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
+                
+            // services.AddNewtonsoftJson();
 
             string sqlConnectionString = Configuration.GetConnectionString("GetPetConnectionString");
 
@@ -85,6 +92,9 @@ namespace GetPet.WebApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

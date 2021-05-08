@@ -26,7 +26,7 @@ namespace GetPet.Data
                 var connectionString = configuration.GetConnectionString("GetPetConnectionString");
                 optionsBuilder.UseSqlServer(connectionString);
             }
-        } 
+        }
 
         #endregion
 
@@ -75,7 +75,7 @@ namespace GetPet.Data
             #endregion
 
             #region NotificationTrait
-            
+
             modelBuilder.Entity<NotificationTrait>()
                 .HasOne<Notification>(nt => nt.Notification);
 
@@ -92,6 +92,9 @@ namespace GetPet.Data
             modelBuilder.Entity<Pet>()
                 .HasOne<User>(p => p.User);
 
+            modelBuilder.Entity<Pet>()
+                .HasMany<PetTrait>(p => p.PetTraits);                
+
             #endregion
 
             #region PetHistoryStatus
@@ -102,12 +105,34 @@ namespace GetPet.Data
             #endregion
 
             #region PetTrait
-            
-            modelBuilder.Entity<PetTrait>()
-                .HasOne<Pet>(pt => pt.Pet);
 
             modelBuilder.Entity<PetTrait>()
-                .HasOne<Trait>(pt => pt.Trait);
+                .HasOne<Pet>(pt => pt.Pet)
+                .WithMany(p => p.PetTraits)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<PetTrait>()
+                .HasOne<Trait>(pt => pt.Trait)
+                .WithOne()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region Trait
+
+            modelBuilder.Entity<Trait>()
+                .HasMany<TraitOption>(pt => pt.TraitOptions)
+                .WithOne(to => to.Trait)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            #endregion
+
+            #region TraitOptions
+
+            modelBuilder.Entity<TraitOption>()
+                .HasOne<Trait>(to => to.Trait)
+                .WithMany(t => t.TraitOptions)
+                .OnDelete(DeleteBehavior.NoAction);
 
             #endregion
 
@@ -116,7 +141,7 @@ namespace GetPet.Data
             modelBuilder.Entity<User>()
                 .HasOne<City>(u => u.City);
 
-            modelBuilder.Entity<User>()               
+            modelBuilder.Entity<User>()
                 .HasOne<Organization>(u => u.Organization);
 
             #endregion
@@ -137,6 +162,7 @@ namespace GetPet.Data
         public DbSet<PetHistoryStatus> PetHistoryStatuses { get; set; }
         public DbSet<PetTrait> PetTraits { get; set; }
         public DbSet<Trait> Traits { get; set; }
+        public DbSet<TraitOption> TraitOptions { get; set; }
         public DbSet<User> Users { get; set; }
     }
 }

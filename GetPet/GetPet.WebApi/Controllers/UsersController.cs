@@ -74,5 +74,31 @@ namespace GetPet.WebApi.Controllers
 
             return Ok(userToInsert);
         }
+
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register(UserDto user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
+            var users = await _userRepository.Register(user);
+
+            return Ok(users);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto login)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var jwt = await _userRepository.Login(login);
+
+            return Ok(jwt);
+        }
     }
 }

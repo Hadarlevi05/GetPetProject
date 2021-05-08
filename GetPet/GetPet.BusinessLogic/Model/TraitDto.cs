@@ -7,5 +7,7 @@ namespace GetPet.BusinessLogic.Model
     public class TraitDto
     {
         public string Name { get; set; }
+
+        public List<TraitOptionDto> TraitOptions { get; set; }
     }
 }

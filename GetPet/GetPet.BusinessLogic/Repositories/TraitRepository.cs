@@ -25,7 +25,8 @@ namespace GetPet.BusinessLogic.Repositories
 
         public override IQueryable<Trait> LoadNavigationProperties(IQueryable<Trait> query)
         {
-            return query;
+            return query
+                .Include(t => t.TraitOptions);                
         }
 
         public new async Task DeleteAsync(int id)

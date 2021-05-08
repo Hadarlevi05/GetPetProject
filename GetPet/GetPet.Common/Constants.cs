@@ -8,5 +8,7 @@ namespace GetPet.Common
     {
         public static string WEBAPI_URL { get; set; }
 
+        public static string Secret { get; set; }
+
     }
 }

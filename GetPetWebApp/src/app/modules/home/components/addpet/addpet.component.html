@@ -7,17 +7,9 @@
         <div class="col-md-12">
           <mat-form-field appearance="fill">
             <mat-label>סוג</mat-label>
-            <mat-select
-              #typeSel
-              placeholder="בחר סוג"
-              name="animalType"
-              formControlName="animalType"
-              (selectionChange)="loadUniqueTraits($event)"
-            >
-              <mat-option
-                *ngFor="let type of animaltypes_arr"
-                [value]="type.id"
-              >
+            <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
+              (selectionChange)="loadUniqueTraits($event)">
+              <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
                 {{ type.name }}
               </mat-option>
             </mat-select>
@@ -37,13 +29,7 @@
       <div class="row">
         <div class="col-md-6">
           <mat-form-field>
-            <input
-              formControlName="petName"
-              matInput
-              name="name"
-              placeholder="שם"
-              required
-            />
+            <input formControlName="petName" matInput name="name" placeholder="שם" required />
           </mat-form-field>
         </div>
       </div>
@@ -63,10 +49,7 @@
         <mat-form-field appearance="fill">
           <mat-label>תאריך לידה</mat-label>
           <input formControlName="dob" matInput [matDatepicker]="picker" />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </div>
@@ -98,11 +81,7 @@
       <div class="row">
         <div class="col-sm-6">
           <mat-form-field>
-            <textarea
-              formControlName="description"
-              matInput
-              placeholder="תיאור נוסף"
-            ></textarea>
+            <textarea formControlName="description" matInput placeholder="תיאור נוסף"></textarea>
           </mat-form-field>
         </div>
       </div>
@@ -112,15 +91,8 @@
         <div class="col-md-12">
           <mat-form-field appearance="fill">
             <mat-label>רשימת תכונות מיוחדות</mat-label>
-            <mat-select
-              placeholder="תכונה"
-              name="animalTraits"
-              formControlName="animalTraits"
-            >
-              <mat-option
-                *ngFor="let trait of traits_arr"
-                [value]="trait.traitId"
-              >
+            <mat-select placeholder="תכונה" name="animalTraits" formControlName="animalTraits">
+              <mat-option *ngFor="let trait of traits_arr" [value]="trait.traitId">
                 {{ trait.traitName }}
               </mat-option>
             </mat-select>

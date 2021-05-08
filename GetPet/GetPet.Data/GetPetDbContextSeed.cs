@@ -43,8 +43,26 @@ namespace GetPet.Data
 
             var size = context.Traits.Add(new Trait { Name = "גודל", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
             var color = context.Traits.Add(new Trait { Name = "צבע", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            context.Traits.Add(new Trait { Name = "מאולף", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var trained = context.Traits.Add(new Trait { Name = "מאולף", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+
+            await context.SaveChangesAsync();
+
+            context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "בינוני", TraitId = size.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "גדול", TraitId = size.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "ענק", TraitId = size.Entity.Id });
+
+            context.TraitOptions.Add(new TraitOption { Option = "לבן", TraitId = color.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "שחור", TraitId = color.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "בז'", TraitId = color.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "דלמטי", TraitId = color.Entity.Id });
+
+            context.TraitOptions.Add(new TraitOption { Option = "כן", TraitId = goodWithKids.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "לא", TraitId = goodWithKids.Entity.Id });
+
+            context.TraitOptions.Add(new TraitOption { Option = "כן", TraitId = trained.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "לא", TraitId = trained.Entity.Id });
 
             await context.SaveChangesAsync();
 
@@ -52,9 +70,6 @@ namespace GetPet.Data
             context.AnimalTraits.Add(new AnimalTrait { Trait = size.Entity, AnimalType = cat.Entity, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
             await context.SaveChangesAsync();
-            
-            PasswordHashHelper hash = new PasswordHashHelper("password");
-            var hashPassword = System.Text.Encoding.Default.GetString(hash.Hash);
 
             var hadar = context.Users.Add(new User
             {
@@ -63,7 +78,7 @@ namespace GetPet.Data
                 Email = "hadar@getpet.co.il",
                 UserType = Enums.UserType.Admin,
                 EmailSubscription = true,
-                PasswordHash = hashPassword,
+                PasswordHash = SecurePasswordHasher.Hash("password"),
                 CreationTimestamp = DateTime.UtcNow,
                 UpdatedTimestamp = DateTime.UtcNow
             });
@@ -97,11 +112,11 @@ namespace GetPet.Data
                     Status = Enums.PetStatus.WaitingForAdoption,
                     UserId = hadar.Entity.Id,
                     Description = descriptions[i],
-                    Traits = new List<PetTrait>()
-                    {
-                        new PetTrait{ TraitId = size.Entity.Id, Value = "גדול", CreationTimestamp= DateTime.UtcNow, UpdatedTimestamp=DateTime.UtcNow},
-                        new PetTrait{ TraitId = color.Entity.Id, Value = "בז'", CreationTimestamp= DateTime.UtcNow, UpdatedTimestamp=DateTime.UtcNow }
-                    },
+                    //PetTraits = new List<PetTrait>()
+                    //{
+                    //    new PetTrait{ Trait = size.Entity,  Description = "גדול", CreationTimestamp= DateTime.UtcNow, UpdatedTimestamp=DateTime.UtcNow},
+                    //    new PetTrait{ Trait = color.Entity, Description = "בז'", CreationTimestamp= DateTime.UtcNow, UpdatedTimestamp=DateTime.UtcNow }
+                    //},
                     MetaFileLinks = new List<MetaFileLink>()
                     {
                         images[i]
@@ -112,9 +127,17 @@ namespace GetPet.Data
                 });
             }
 
-
-
             await context.SaveChangesAsync();
+
+            foreach (var pet in context.Pets)
+            {
+                pet.PetTraits = new List<PetTrait>();
+
+                pet.PetTraits.Add(new PetTrait { PetId = pet.Id, Trait = size.Entity, Description = "גדול", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+                pet.PetTraits.Add(new PetTrait { PetId = pet.Id, Trait = color.Entity, Description = "בז'", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+
+            }
+
 
             await transaction.CommitAsync();
         }

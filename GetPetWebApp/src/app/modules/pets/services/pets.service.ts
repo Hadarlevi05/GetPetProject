@@ -21,8 +21,8 @@ export class PetsService extends BaseService {
     return this.http.post<IPet[]>(`${this.entPointUrl}/search`, filter);
   }
 
-  addPet (formData: FormData) {
-    this.http.post(`${this.entPointUrl}/pets`, formData).subscribe(
+  addPet (pet: IPet) {
+    this.http.post(`${this.entPointUrl}/pets`, pet).subscribe(
       (response) => console.log(response),
       (error) => console.log(error)
     );

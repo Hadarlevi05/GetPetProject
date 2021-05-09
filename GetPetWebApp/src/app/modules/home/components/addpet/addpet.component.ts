@@ -10,6 +10,7 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AnimalTraitFilter } from './models/AnimalTraitFilter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
+import { IPet } from 'src/app/modules/pets/models/ipet';
 
 @Component({
   selector: 'app-addpet',
@@ -22,6 +23,10 @@ export class AddpetComponent implements OnInit {
   loading = false;
   success = false;
   addPetFormGroup!: FormGroup;
+
+  pet: IPet = {
+    name: 'kuku'
+  }
 
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
@@ -132,6 +137,14 @@ get formArray(): AbstractControl | null {
 
   onSubmit(postData) {
     console.log(postData);
+
+    this.pet.name = 'lulu';
+    this.pet.description = 'descccc';
+
+    console.log("PET INTO IS:")
+    console.log(this.pet);
+   
+    //this._petsService.addPet(this.pet);
   }
 
   // onSubmit() {

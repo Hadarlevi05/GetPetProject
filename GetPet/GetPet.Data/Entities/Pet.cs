@@ -24,6 +24,6 @@ namespace GetPet.Data.Entities
         public User User { get; set; }
 
         public IList<MetaFileLink> MetaFileLinks { get; set; }
-        public IList<PetTrait> Traits { get; set; }
+        public IList<PetTrait> PetTraits { get; set; }
     }
 }

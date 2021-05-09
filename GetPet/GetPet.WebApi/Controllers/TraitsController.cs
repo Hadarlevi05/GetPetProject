@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.WebApi.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -26,14 +26,18 @@ namespace GetPet.WebApi.Controllers
             _mapper = mapper;
             _traitRepository = traitRepository;
         }
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] BaseFilter filter)
         {
+
+            var user = HttpContext.Items["User"];
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-
             return Ok(await _traitRepository.SearchAsync(filter));
         }
     }

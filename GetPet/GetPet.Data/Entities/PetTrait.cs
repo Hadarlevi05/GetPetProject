@@ -14,7 +14,7 @@ namespace GetPet.Data.Entities
         public Trait Trait { get; set; }
 
         [StringLength(400)]
-        public string Value { get; set; }
+        public string Description { get; set; }
 
     }
 }

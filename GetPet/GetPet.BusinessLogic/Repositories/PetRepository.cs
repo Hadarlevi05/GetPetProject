@@ -26,7 +26,7 @@ namespace PetAdoption.BusinessLogic.Repositories
             query = query
                 .Include(q => q.MetaFileLinks)
                 .Include(q => q.AnimalType)
-                .Include(q => q.Traits)
+                .Include(q => q.PetTraits)
                     .ThenInclude(q => q.Trait)
                 .Include(q => q.User)
                     .ThenInclude(q => q.Organization)

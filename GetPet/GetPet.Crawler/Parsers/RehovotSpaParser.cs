@@ -49,6 +49,7 @@ namespace GetPet.Crawler.Parsers
                     image
                 },
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
+                TraitDTOs = traits,
             };
             return pet;
         }

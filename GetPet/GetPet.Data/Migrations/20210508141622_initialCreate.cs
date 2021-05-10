@@ -461,8 +461,7 @@ namespace GetPet.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PetTraits_TraitId",
                 table: "PetTraits",
-                column: "TraitId",
-                unique: true);
+                column: "TraitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TraitOptions_TraitId",

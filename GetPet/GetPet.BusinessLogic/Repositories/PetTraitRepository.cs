@@ -13,6 +13,7 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IPetTraitRepository : IBaseRepository<PetTrait>
     {
         Task<IEnumerable<PetTrait>> SearchAsync(BaseFilter filter);
+
     }
     public class PetTraitRepository : BaseRepository<PetTrait>, IPetTraitRepository
     {
@@ -26,7 +27,8 @@ namespace GetPet.BusinessLogic.Repositories
         {
             return query
                 .Include(u => u.Pet)
-                .Include(u => u.Trait);
+                .Include(u => u.Trait)
+                .ThenInclude(t => t.TraitOptions);
         }
 
         public new async Task DeleteAsync(int id)

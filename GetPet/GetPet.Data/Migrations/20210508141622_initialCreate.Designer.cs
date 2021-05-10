@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GetPet.Data.Migrations
 {
     [DbContext(typeof(GetPetDbContext))]
-    [Migration("20210328091819_add-description")]
-    partial class adddescription
+    [Migration("20210508141622_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -418,6 +418,10 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -430,15 +434,12 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Value")
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PetId");
 
-                    b.HasIndex("TraitId");
+                    b.HasIndex("TraitId")
+                        .IsUnique();
 
                     b.ToTable("PetTraits");
                 });
@@ -466,6 +467,35 @@ namespace GetPet.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Traits");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.TraitOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Option")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TraitId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TraitId");
+
+                    b.ToTable("TraitOptions");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.User", b =>
@@ -643,18 +673,29 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.PetTrait", b =>
                 {
                     b.HasOne("GetPet.Data.Entities.Pet", "Pet")
-                        .WithMany("Traits")
+                        .WithMany("PetTraits")
                         .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("GetPet.Data.Entities.Trait", "Trait")
-                        .WithMany()
-                        .HasForeignKey("TraitId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("GetPet.Data.Entities.PetTrait", "TraitId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Pet");
+
+                    b.Navigation("Trait");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.TraitOption", b =>
+                {
+                    b.HasOne("GetPet.Data.Entities.Trait", "Trait")
+                        .WithMany("TraitOptions")
+                        .HasForeignKey("TraitId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.Navigation("Trait");
                 });
@@ -680,7 +721,12 @@ namespace GetPet.Data.Migrations
                 {
                     b.Navigation("MetaFileLinks");
 
-                    b.Navigation("Traits");
+                    b.Navigation("PetTraits");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.Trait", b =>
+                {
+                    b.Navigation("TraitOptions");
                 });
 #pragma warning restore 612, 618
         }

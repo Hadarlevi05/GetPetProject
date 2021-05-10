@@ -36,7 +36,7 @@ namespace PetAdoption.WebApi.Controllers
         [HttpPost("search")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Search(PetFilter filter)
+        public async Task<IActionResult> Search([FromBody]PetFilter filter)
         {
             if (!ModelState.IsValid)
             {
@@ -47,14 +47,32 @@ namespace PetAdoption.WebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
 
+
         [HttpPost]
         public async Task Post(PetDto pet)
         {
             var petToInsert = _mapper.Map<Pet>(pet);
 
             await _petRepository.AddAsync(petToInsert);
-            
+
             await _unitOfWork.SaveChangesAsync();
         }
+
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> Get(int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    var pet = await _petRepository.GetByIdAsync(id);
+        //    if (pet == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(pet);
+        //}
     }
 }

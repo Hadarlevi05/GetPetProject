@@ -14,6 +14,7 @@ namespace GetPet.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -31,6 +32,7 @@ namespace GetPet.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -48,6 +50,7 @@ namespace GetPet.Data.Migrations
                     Name = table.Column<int>(type: "int", maxLength: 400, nullable: false),
                     Url = table.Column<int>(type: "int", maxLength: 1000, nullable: false),
                     CronCrawlTime = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -64,6 +67,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -79,6 +83,7 @@ namespace GetPet.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -95,6 +100,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LogText = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
                     DataSourceId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -123,6 +129,7 @@ namespace GetPet.Data.Migrations
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OrganizationId = table.Column<int>(type: "int", nullable: true),
                     CityId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -151,6 +158,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TraitId = table.Column<int>(type: "int", nullable: false),
                     AnimalTypeId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -172,12 +180,35 @@ namespace GetPet.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TraitOptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TraitId = table.Column<int>(type: "int", nullable: false),
+                    Option = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TraitOptions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TraitOptions_Traits_TraitId",
+                        column: x => x.TraitId,
+                        principalTable: "Traits",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmailHistories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -200,6 +231,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     AnimalTypeId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -229,9 +261,11 @@ namespace GetPet.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     Birthday = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
-                    AnimalTypeId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AnimalTypeId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -261,6 +295,7 @@ namespace GetPet.Data.Migrations
                     NotificationId = table.Column<int>(type: "int", nullable: false),
                     TraitId = table.Column<int>(type: "int", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -291,6 +326,7 @@ namespace GetPet.Data.Migrations
                     Path = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     MimeType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Size = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -314,6 +350,7 @@ namespace GetPet.Data.Migrations
                     PetId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     Remarks = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -336,7 +373,8 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetId = table.Column<int>(type: "int", nullable: false),
                     TraitId = table.Column<int>(type: "int", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -347,14 +385,12 @@ namespace GetPet.Data.Migrations
                         name: "FK_PetTraits_Pets_PetId",
                         column: x => x.PetId,
                         principalTable: "Pets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PetTraits_Traits_TraitId",
                         column: x => x.TraitId,
                         principalTable: "Traits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -425,6 +461,12 @@ namespace GetPet.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_PetTraits_TraitId",
                 table: "PetTraits",
+                column: "TraitId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TraitOptions_TraitId",
+                table: "TraitOptions",
                 column: "TraitId");
 
             migrationBuilder.CreateIndex(
@@ -460,6 +502,9 @@ namespace GetPet.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "PetTraits");
+
+            migrationBuilder.DropTable(
+                name: "TraitOptions");
 
             migrationBuilder.DropTable(
                 name: "DataSources");

@@ -1,0 +1,127 @@
+<!--Add pet form starts-->
+<mat-vertical-stepper dir="rtl" #stepper>
+  <mat-step [stepControl]="firstFormGroup" label="בחר סוג חיה">
+    <form [formGroup]="firstFormGroup">
+      <!--Select animal type-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>סוג</mat-label>
+            <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
+              (selectionChange)="loadUniqueTraits($event)">
+              <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
+                {{ type.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div>
+        <button mat-button matStepperNext>הבא</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" label="פרטי החיה">
+    <form [formGroup]="secondFormGroup" #f="ngForm">
+      <!--Insert pet name-->
+      <div class="row">
+        <div class="col-md-6">
+          <mat-form-field>
+            <input formControlName="petName" matInput name="name" placeholder="שם" required />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Select gender-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-radio-group formControlName="gender" class="margin-left">
+            <mat-radio-button value="male"> זכר </mat-radio-button>
+            <mat-radio-button value="female"> נקבה </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <!--Select date of birth-->
+      <div class="col-md-6 top-padding">
+        <mat-form-field appearance="fill">
+          <mat-label>תאריך לידה</mat-label>
+          <input formControlName="dob" matInput [matDatepicker]="picker" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <button mat-button matStepperPrevious>חזור</button>
+        <button mat-button matStepperNext>הבא</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdFormGroup" label="פרטי איש קשר">
+    <form [formGroup]="thirdFormGroup">
+      <!--Select city-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>עיר</mat-label>
+            <mat-select>
+              <mat-option *ngFor="let city of city_arr" [value]="city.id">
+                {{ city.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Some more details about the pet-->
+      <div class="row">
+        <div class="col-sm-6">
+          <mat-form-field>
+            <textarea formControlName="description" matInput placeholder="תיאור נוסף"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--TODO: This is a list of all unique traits for chosen animal type-->
+      <div class="row">
+        <div class="col-md-12">
+          <mat-form-field appearance="fill">
+            <mat-label>רשימת תכונות מיוחדות</mat-label>
+            <mat-select placeholder="תכונה" name="animalTraits" formControlName="animalTraits">
+              <mat-option *ngFor="let trait of traits_arr" [value]="trait.traitId">
+                {{ trait.traitName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!--Image upload-->
+      <angular-file-uploader [config]="afuConfig"> </angular-file-uploader>
+
+      <!-- Submit Button
+    <mat-card-actions>
+      <button (click)="saveForm()" mat-raised-button color="primary">
+        Save
+      </button>
+    </mat-card-actions> -->
+      <!--Add pet form ends-->
+    </form>
+  </mat-step>
+</mat-vertical-stepper>
+
+
+
+<hr />
+<h1>JSON</h1>
+<p>Form value: {{ firstFormGroup.value | json }}</p>
+<p>Form value: {{ secondFormGroup.value | json }}</p>
+<p>Form value: {{ thirdFormGroup.value | json }}</p>
+
+<ul>
+  <li *ngFor="let trait of traits_arr" [value]="trait.traitId">{{trait.traitName}}</li>
+</ul>

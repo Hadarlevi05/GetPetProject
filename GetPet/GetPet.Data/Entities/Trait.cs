@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace GetPet.Data.Entities
 {
@@ -6,6 +7,8 @@ namespace GetPet.Data.Entities
     {
         [StringLength(400)]
         public string Name { get; set; }
+
+        public List<TraitOption> TraitOptions { get; set; }
 
         public override string ToString()
         {

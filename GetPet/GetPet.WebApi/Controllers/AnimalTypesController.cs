@@ -22,7 +22,7 @@ namespace GetPet.WebApi.Controllers
             IAnimalTypeRepository animalTypeRepository)
         {
             _logger = logger;
-            _mapper = mapper;
+           _mapper = mapper;
             _animalTypeRepository = animalTypeRepository;
         }
 

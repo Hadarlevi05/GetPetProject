@@ -25,7 +25,10 @@ export class AddpetComponent implements OnInit {
   addPetFormGroup!: FormGroup;
 
   pet: IPet = {
-    name: 'kuku'
+    name: '',
+    description: '',
+    animalTypeId: 0,
+    userId: 1
   }
 
   animaltypes_arr: IAnimalType[] = [];
@@ -138,36 +141,21 @@ get formArray(): AbstractControl | null {
   onSubmit(postData) {
     console.log(postData);
 
-    this.pet.name = 'lulu';
-    this.pet.description = 'descccc';
+    this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
+    this.pet.description = this.formArray?.get([1])?.get('description')?.value;
+    this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
 
-    console.log("PET INTO IS:")
+    console.log("PET INFO IS:")
     console.log(this.pet);
-   
-    //this._petsService.addPet(this.pet);
+
+    try {
+       this._petsService.addPet(this.pet);
+       this.success = true;
+     } catch (err) {
+       console.log(err);
+     }
+     this.loading = false;
   }
-
-  // onSubmit() {
-  //   console.log("in onSubmit!");
-  //   var formData: any = new FormData();
-  //   formData.append("name", this.formArray?.get([1])?.get('petName')?.value);
-  //   formData.append("birthday", this.formArray?.get([1])?.get('dob')?.value);
-  //   formData.append("gender", this.formArray?.get([1])?.get('gender')?.value);
-  //   formData.append("animalTypeId", this.formArray?.get([0])?.get('animalType')?.value);
-  //   formData.append("description", this.formArray?.get([1])?.get('description')?.value);
-    
-  //   this.loading = true;
-  //   console.log("The form data that is going to be sent is:");
-  //   console.log(formData);
-
-  //   try {
-  //      this._petsService.addPet(formData);
-  //      this.success = true;
-  //    } catch (err) {
-  //      console.log(err);
-  //    }
-  //    this.loading = false;
-  // }
 
   // changeAnimalType(value : any) {
   //   this.loadUniqueTraits(value);

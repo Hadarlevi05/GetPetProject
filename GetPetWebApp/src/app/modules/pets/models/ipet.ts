@@ -11,9 +11,13 @@ export interface IPet {
 
   gender?: string;
 
+  animalTypeId: number;
+
   animalType?: string;
 
   status?: string;
+  
+  userId: number;
 
   user?: IUser;
 

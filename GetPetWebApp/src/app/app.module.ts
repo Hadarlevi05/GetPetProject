@@ -25,6 +25,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatListModule} from '@angular/material/list';
 import { AngularFileUploaderModule } from "angular-file-uploader";
 import {MatStepperModule} from '@angular/material/stepper';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatNativeDateModule,
     MatListModule,
     AngularFileUploaderModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

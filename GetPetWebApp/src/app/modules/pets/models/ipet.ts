@@ -1,23 +1,27 @@
 import { IUser } from "src/app/shared/models/iuser";
 
 export interface IPet {
-  id: number;
+  id?: number;
 
   name: string;
 
-  description: string;
+  description?: string;
 
-  birthday: string;
+  birthday?: string;
 
-  gender: string;
+  gender?: string;
 
-  animalType: string;
+  animalTypeId: number;
 
-  status: string;
+  animalType?: string;
 
-  user: IUser;
+  status?: string;
+  
+  userId: number;
 
-  images: string[];
+  user?: IUser;
 
-  traits: Map<string, string>;
+  images?: string[];
+
+  traits?: Map<string, string>;
 }

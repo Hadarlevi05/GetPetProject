@@ -7,45 +7,72 @@ import { AnimalTypeFilter } from './models/animalTypeFilter';
 import { IAnimalType } from './models/iAnimalType';
 import { AnimalTypeService } from './services/animalType.service';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ThrowStmt } from '@angular/compiler';
+import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AnimalTraitFilter } from './models/AnimalTraitFilter';
+import { PetsService } from 'src/app/modules/pets/services/pets.service';
+import { IPet } from 'src/app/modules/pets/models/ipet';
 
 @Component({
   selector: 'app-addpet',
   templateUrl: './addpet.component.html',
   styleUrls: ['./addpet.component.sass']
 })
+
 export class AddpetComponent implements OnInit {
 
-  isSubmitted = false;
+  loading = false;
+  success = false;
+  addPetFormGroup!: FormGroup;
 
-  firstFormGroup : FormGroup = this._formBuilder.group({
-    animalType: ['', [Validators.required]],
-  });
-
-  secondFormGroup : FormGroup = this._formBuilder.group({
-  petName: new FormControl('', [Validators.required]),
-  gender:['', [Validators.required]],
-  dob:['', [Validators.required]]
-  });
-
-  thirdFormGroup : FormGroup = this._formBuilder.group({
-    city:['', [Validators.required]],
-    description:['', [Validators.required]],
-    animalTraits: ['', [Validators.required]]
-  })
+  pet: IPet = {
+    name: '',
+    description: '',
+    animalTypeId: 0,
+    userId: 1
+  }
 
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
   traits_arr: IAnimalTrait[] = [];
+  gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
 
-  constructor(public _formBuilder: FormBuilder, private _animalTypeService: AnimalTypeService, private _cityService: CityService, private _traitsService: AnimalTraitsService) { }
+  constructor(private _formBuilder: FormBuilder,
+              private _animalTypeService: AnimalTypeService, 
+              private _cityService: CityService, 
+              private _traitsService: AnimalTraitsService,
+              private _petsService: PetsService) { }
 
   ngOnInit(): void {
 
     this.loadAnimalTypes();
     this.loadCities();
+
+    this.addPetFormGroup = this._formBuilder.group({
+      formArray: this._formBuilder.array([
+        this._formBuilder.group({
+          animalType: ['', [Validators.required]]
+        }),
+        this._formBuilder.group({
+          petName: new FormControl('', [Validators.required, 
+            Validators.minLength(2),
+            Validators.maxLength(10)]),
+          gender:['', [Validators.required]],
+          dob:['', [Validators.required]],
+          //animalTraits: new FormArray([]),
+          description:['', [Validators.required,
+                            Validators.maxLength(500)]],
+        }),
+        this._formBuilder.group({
+          //upload picture control?
+        }),
+        this._formBuilder.group({
+          city:['', [Validators.required]],
+        }),
+        this._formBuilder.group({
+          //preview and send
+        }),
+      ])
+    });
   }
 
   afuConfig = {
@@ -66,9 +93,13 @@ export class AddpetComponent implements OnInit {
     }
 };
 
-  // get animalTypeName() {
-  //   return this.addPetForm.get('animalType')
-  // }
+get formArray(): AbstractControl | null {
+  return this.addPetFormGroup.get('formArray');
+}
+
+  get traitsFormArray() {
+    return this.addPetFormGroup.controls.animalTraits as FormArray;
+  }
 
   loadAnimalTypes() {
 
@@ -100,16 +131,33 @@ export class AddpetComponent implements OnInit {
       this.traits_arr = traits;
     })
 
+    this.addTraitCheckboxes();
+  }
+
+  private addTraitCheckboxes() {
+    this.traits_arr.forEach(() => this.traitsFormArray.push(new FormControl(false)));
+  }
+
+  onSubmit(postData) {
+    console.log(postData);
+
+    this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
+    this.pet.description = this.formArray?.get([1])?.get('description')?.value;
+    this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
+
+    console.log("PET INFO IS:")
+    console.log(this.pet);
+
+    try {
+       this._petsService.addPet(this.pet);
+       this.success = true;
+     } catch (err) {
+       console.log(err);
+     }
+     this.loading = false;
   }
 
   // changeAnimalType(value : any) {
   //   this.loadUniqueTraits(value);
-  // }
-  
-  // saveForm() {
-  //   this.isSubmitted = true;
-  //   if(this.addPetForm.valid){
-  //     console.log('Add pet form data :: ', this.addPetForm.value);
-  //   }
   // }
   }

@@ -26,6 +26,7 @@ export class AddpetComponent implements OnInit {
 
   pet: IPet = {
     name: '',
+    images: [''],
     description: '',
     animalTypeId: 0,
     userId: 1
@@ -37,10 +38,10 @@ export class AddpetComponent implements OnInit {
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
 
   constructor(private _formBuilder: FormBuilder,
-              private _animalTypeService: AnimalTypeService, 
-              private _cityService: CityService, 
-              private _traitsService: AnimalTraitsService,
-              private _petsService: PetsService) { }
+    private _animalTypeService: AnimalTypeService,
+    private _cityService: CityService,
+    private _traitsService: AnimalTraitsService,
+    private _petsService: PetsService) { }
 
   ngOnInit(): void {
 
@@ -53,20 +54,20 @@ export class AddpetComponent implements OnInit {
           animalType: ['', [Validators.required]]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required, 
-            Validators.minLength(2),
-            Validators.maxLength(10)]),
-          gender:['', [Validators.required]],
-          dob:['', [Validators.required]],
+          petName: new FormControl('', [Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(10)]),
+          gender: ['', [Validators.required]],
+          dob: ['', [Validators.required]],
           //animalTraits: new FormArray([]),
-          description:['', [Validators.required,
-                            Validators.maxLength(500)]],
+          description: ['', [Validators.required,
+          Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
           //upload picture control?
         }),
         this._formBuilder.group({
-          city:['', [Validators.required]],
+          city: ['', [Validators.required]],
         }),
         this._formBuilder.group({
           //preview and send
@@ -80,7 +81,7 @@ export class AddpetComponent implements OnInit {
     formatsAllowed: ".jpg, .jpeg, .png",
     maxSize: 10,    //in MB
     uploadAPI: {
-      url:"https://example-file-upload-api" //TODO: change this url
+      url: "https://example-file-upload-api" //TODO: change this url
     },
     hideProgressBar: false,
     hideResetBtn: true,
@@ -91,11 +92,11 @@ export class AddpetComponent implements OnInit {
       afterUploadMsg_error: 'העלאת הקובץ נכשלה',
       sizeLimit: 'גודל מירבי'
     }
-};
+  };
 
-get formArray(): AbstractControl | null {
-  return this.addPetFormGroup.get('formArray');
-}
+  get formArray(): AbstractControl | null {
+    return this.addPetFormGroup.get('formArray');
+  }
 
   get traitsFormArray() {
     return this.addPetFormGroup.controls.animalTraits as FormArray;
@@ -114,7 +115,7 @@ get formArray(): AbstractControl | null {
   loadCities() {
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1,5,date);
+    let filter = new CityFilter(1, 5, date);
     this._cityService.Get(filter).subscribe(cities => {
       this.city_arr = cities;
     });
@@ -126,7 +127,7 @@ get formArray(): AbstractControl | null {
     // console.log(animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTraitFilter(1,5,date, animalTypeId);
+    let filter = new AnimalTraitFilter(1, 5, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
     })
@@ -149,15 +150,15 @@ get formArray(): AbstractControl | null {
     console.log(this.pet);
 
     try {
-       this._petsService.addPet(this.pet);
-       this.success = true;
-     } catch (err) {
-       console.log(err);
-     }
-     this.loading = false;
+      this._petsService.addPet(this.pet);
+      this.success = true;
+    } catch (err) {
+      console.log(err);
+    }
+    this.loading = false;
   }
 
   // changeAnimalType(value : any) {
   //   this.loadUniqueTraits(value);
   // }
-  }
+}

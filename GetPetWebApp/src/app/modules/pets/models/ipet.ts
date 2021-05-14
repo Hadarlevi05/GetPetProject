@@ -16,12 +16,12 @@ export interface IPet {
   animalType?: string;
 
   status?: string;
-  
+
   userId: number;
 
   user?: IUser;
 
-  images?: string[];
+  images: string[];
 
   traits?: Map<string, string>;
 }

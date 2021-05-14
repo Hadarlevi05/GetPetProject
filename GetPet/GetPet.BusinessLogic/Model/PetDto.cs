@@ -1,4 +1,5 @@
-﻿using GetPet.Data.Enums;
+﻿using GetPet.Data.Entities;
+using GetPet.Data.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -28,6 +29,8 @@ namespace GetPet.BusinessLogic.Model
         public IList<string> Images { get; set; }
 
         public IDictionary<string, string> Traits { get; set; }
+
+        public IList<Trait> TraitDTOs { get; set; }
 
         public string AgeInYears { get; set; }
 

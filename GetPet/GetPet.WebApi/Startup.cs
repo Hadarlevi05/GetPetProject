@@ -43,8 +43,11 @@ namespace GetPet.WebApi
 
             string sqlConnectionString = Configuration.GetConnectionString("GetPetConnectionString");
 
-            services.AddDbContext<GetPetDbContext>(
-                options => options.UseSqlServer(sqlConnectionString));
+            services.AddDbContext<GetPetDbContext>(options =>
+            {
+                options.UseSqlServer(sqlConnectionString);
+                options.EnableSensitiveDataLogging();
+            });
 
             services.AddSwaggerGen(c =>
             {

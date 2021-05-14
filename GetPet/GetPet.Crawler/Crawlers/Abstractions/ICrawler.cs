@@ -1,5 +1,5 @@
-﻿using GetPet.BusinessLogic.Handlers.Abstractions;
-using GetPet.BusinessLogic.Model;
+﻿using GetPet.BusinessLogic.Model;
+using GetPet.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

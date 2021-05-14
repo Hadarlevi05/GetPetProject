@@ -109,12 +109,12 @@ namespace GetPet.Data
             modelBuilder.Entity<PetTrait>()
                 .HasOne<Pet>(pt => pt.Pet)
                 .WithMany(p => p.PetTraits)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PetTrait>()
                 .HasOne<Trait>(pt => pt.Trait)
                 .WithOne()
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
@@ -123,7 +123,7 @@ namespace GetPet.Data
             modelBuilder.Entity<Trait>()
                 .HasMany<TraitOption>(pt => pt.TraitOptions)
                 .WithOne(to => to.Trait)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 
@@ -132,7 +132,7 @@ namespace GetPet.Data
             modelBuilder.Entity<TraitOption>()
                 .HasOne<Trait>(to => to.Trait)
                 .WithMany(t => t.TraitOptions)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
 

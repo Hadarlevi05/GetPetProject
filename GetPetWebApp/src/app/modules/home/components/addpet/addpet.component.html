@@ -54,12 +54,13 @@
 
                 <!--Unique traits for chosen animal type-->
                 <!--TODO: make it work...-->
-                <!-- <div class="row">
+                <div class="row">
                     <mat-label>תכונות מיוחדות:</mat-label>
-                    <section formArrayName="animalTraits" *ngFor="let trait of traits_arr">
+                    <!-- <section formArrayName="animalTraits" *ngFor="let trait of traits_arr">
+                      
                       <mat-checkbox [formControlName]="trait.traitId" name="trait.traitId">{{trait.traitName}}</mat-checkbox>
-                    </section>
-                </div> -->
+                    </section> -->
+                </div>
 
                 <!--Some more details about the pet-->
                 <div class="row">
@@ -128,3 +129,8 @@
   <li *ngFor="let trait of traits_arr" [value]="trait.traitId">{{trait.traitName}}</li>
 </ul>
 </div>
+
+<h5>בדיקה-אופציות לתכונות מיוחדות</h5>
+<ul>
+  <li *ngFor="let traitoption of options_arr">{{traitoption.option}}</li>
+</ul>

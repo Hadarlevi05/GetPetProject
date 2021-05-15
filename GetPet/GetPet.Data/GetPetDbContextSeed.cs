@@ -99,7 +99,7 @@ namespace GetPet.Data
             var hadar = context.Users.Add(new User
             {
                 CityId = telAviv.Id,
-                Name = "hadar",
+                Name = "הדר",
                 Email = "hadar@getpet.co.il",
                 UserType = Enums.UserType.Admin,
                 EmailSubscription = true,

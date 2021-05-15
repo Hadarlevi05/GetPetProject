@@ -1,5 +1,4 @@
-import { BaseFilter } from "./baseFilter";
-
+import { BaseFilter } from "./base-filter";
 
 export class AnimalTraitFilter extends BaseFilter {
 

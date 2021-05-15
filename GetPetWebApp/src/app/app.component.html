@@ -1,16 +1,32 @@
-<div class="toolbar" role="banner">
-  <img width="40" src="/assets/images/dog-paw.png" alt="GetPet icon" />
-  <span>Get Pet</span>
-    <div class="spacer">
-      <nav>
-        <a href="/">אימוץ כלב</a> 
-        <a href="/">מי אנחנו</a>
-        <a href="/addpet">הוסף בעל-חיים</a> 
-        <a href="/">מאמרים</a> 
-        <a href="/">תרומות</a>
-      </nav>
-    </div>
-    <a href="/login">התחברות</a> 
-    <a href="/register">הרשמה</a>
-</div>
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>
+      <img width="32" src="/assets/images/dog-paw.png" alt="GetPet icon" />
+      <a mat-button routerLink="/">גט-פט</a>
+    </span>
+
+    <span class="spacer"></span>
+
+    <a mat-button routerLink="/">אימוץ כלב</a>
+    <a mat-button routerLink="/">מי אנחנו</a>
+    <a mat-button routerLink="/pets/add">הוסף בעל-חיים</a>
+    <a mat-button routerLink="/">מאמרים</a>
+    <a mat-button routerLink="/">תרומות</a>
+
+    <span class="spacer"></span>
+
+    <span *ngIf="!isLogin" class="space-between">
+      <a mat-button routerLink="/account/login">התחבר</a>
+      <a mat-button routerLink="/account/register">הרשם</a>
+    </span>
+    <span *ngIf="isLogin" class="space-between">
+      <span>
+        שלום {{user.name}}
+      </span>
+      <a mat-button href="javascript:void(0)" (click)="logout()">התנתק</a>
+    </span>
+
+  </mat-toolbar-row>
+</mat-toolbar>
 <router-outlet></router-outlet>

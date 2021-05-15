@@ -1,58 +1,63 @@
 <mat-card dir="rtl">
     <mat-card-title>הרשמה</mat-card-title>
     <mat-card-content>
-
         <form [formGroup]="form" (ngSubmit)="submit()">
 
-            <p>
-                <mat-form-field appearance="outline">
-                    <mat-label>שם</mat-label>
-                    <input type="text" matInput placeholder="שם" formControlName="name">
-                </mat-form-field>
-            </p>
+            <mat-form-field appearance="outline">
+                <mat-label>שם</mat-label>
+                <input type="text" matInput placeholder="שם" formControlName="name">
 
-            <p>
-                <mat-form-field appearance="outline">
-                    <mat-label>אימייל</mat-label>
-                    <input type="text" matInput placeholder="אימייל" formControlName="email">
-                </mat-form-field>
-            </p>
+            </mat-form-field>
 
-            <p>
-                <mat-form-field appearance="outline">
-                    <mat-label>סיסמא</mat-label>
-                    <input type="password" matInput placeholder="סיסמא" formControlName="password">
-                </mat-form-field>
-            </p>
+            <mat-form-field appearance="outline">
+                <mat-label>אימייל</mat-label>
+                <input type="text" matInput placeholder="אימייל" formControlName="email">
+                <mat-error class="text-danger"
+                    *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">
+                    חובה להזין אימייל
+                </mat-error>
+                <mat-error class="text-danger"
+                    *ngIf="form.get('email')?.touched && form.get('email')?.hasError('email')">
+                    פורמט אימייל לא תקין
+                </mat-error>
+            </mat-form-field>
 
-            <p>
-                <mat-form-field appearance="outline">
-                    <mat-label>עיר</mat-label>
-                    <mat-select>
-                        <mat-option *ngFor="let city of cities" [value]="city.id">
-                            {{city.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </p>
+            <mat-form-field appearance="outline">
+                <mat-label>סיסמא</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" placeholder="סיסמא" formControlName="password">
+                <button type="button" mat-icon-button matSuffix (click)="hide = !hide;"
+                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
 
-            <p>
-                <mat-form-field appearance="outline">
-                    <mat-label>ארגון</mat-label>
-                    <input type="text" matInput placeholder="ארגון" formControlName="organization">
-                </mat-form-field>
-            </p>
+
+            <mat-form-field appearance="outline">
+                <mat-label>עיר</mat-label>
+                <input type="text" placeholder="בחר עיר" aria-label="Number" matInput formControlName="filterCity"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                    (optionSelected)="selectedCity($event.option.value)">
+                    <mat-option *ngFor="let city of filteredCities | async" [value]="city.name">
+                        {{city.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>ארגון</mat-label>
+                <input type="text" matInput placeholder="ארגון" formControlName="organizationName">
+            </mat-form-field>
+
             <p *ngIf="error" class="error">
                 {{ error }}
             </p>
 
             <div class="button">
-                <button type="submit" [disabled]="form.invalid || loading" mat-button>הרשם</button>
+                <button type="submit" [disabled]="form.invalid || loading" mat-raised-button
+                    color="primary">הרשם</button>
             </div>
-
         </form>
-
         <app-loader [Show]="loading"></app-loader>
-
     </mat-card-content>
 </mat-card>

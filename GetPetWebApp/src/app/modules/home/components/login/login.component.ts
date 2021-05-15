@@ -11,11 +11,13 @@ import { AlertService } from 'src/app/modules/pets/services/alert.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass']
 })
-//https://stackblitz.com/edit/angular-material-login-form?file=src%2Fapp%2Fapp.component.ts
 export class LoginComponent implements OnInit {
 
-  @Input() error: string | undefined;
+  @Input()
+  error: string | undefined;
+
   loading = false;
+  hide = true;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -39,7 +41,12 @@ export class LoginComponent implements OnInit {
         this.route.navigate(['']);
 
         this.loading = false;
-      });
+      },
+        (error) => {
+          this.loading = false;
+
+          this.error = "שם משתמש או סיסמא לא נכונים";
+        });
   }
 
 }

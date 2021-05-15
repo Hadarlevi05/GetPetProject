@@ -1,9 +1,9 @@
-import { AnimalTypeFilter } from './../models/animalTypeFilter';
+import { AnimalTypeFilter } from '../models/animal-type-filter';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from 'src/app/shared/services/base-service';
-import { IAnimalType } from '../models/iAnimalType';
+import { IAnimalType } from '../models/ianimal-type';
 
 @Injectable({
   providedIn: 'root'

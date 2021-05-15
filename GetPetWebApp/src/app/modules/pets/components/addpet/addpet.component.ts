@@ -3,14 +3,14 @@ import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { ICity } from 'src/app/shared/models/iCity';
-import { AnimalTypeService } from 'src/app/shared/services/animalType.service';
-import { AnimalTraitsService } from 'src/app/shared/services/animalTraits.service';
-import { IAnimalTrait } from '../../../../shared/models/iAnimalTrait';
-import { CityFilter } from 'src/app/shared/models/cityFilter';
-import { AnimalTypeFilter } from 'src/app/shared/models/animalTypeFilter';
-import { AnimalTraitFilter } from 'src/app/shared/models/AnimalTraitFilter';
-import { IAnimalType } from 'src/app/shared/models/iAnimalType';
+import { ICity } from 'src/app/shared/models/icity';
+import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
+import { AnimalTraitsService } from 'src/app/shared/services/animal-traits.service';
+import { IAnimalTrait } from '../../../../shared/models/ianimal-trait';
+import { CityFilter } from 'src/app/shared/models/city-filter';
+import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
+import { AnimalTraitFilter } from 'src/app/shared/models/animal-trait-filter';
+import { IAnimalType } from 'src/app/shared/models/ianimal-type';
 
 @Component({
   selector: 'app-addpet',

@@ -134,8 +134,8 @@ namespace GetPet.BusinessLogic.Repositories
                     UpdatedTimestamp = DateTime.UtcNow
                 };
             }
-
             entities.Add(user);
+
             await _unitOfWork.SaveChangesAsync();
 
             return user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 

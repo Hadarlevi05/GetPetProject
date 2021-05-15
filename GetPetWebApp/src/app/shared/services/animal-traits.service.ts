@@ -3,9 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { HtmlParser } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IAnimalTrait } from 'src/app/shared/models/iAnimalTrait';
+import { IAnimalTrait } from 'src/app/shared/models/ianimal-trait';
 import { BaseService } from 'src/app/shared/services/base-service';
-import { AnimalTraitFilter } from '../models/AnimalTraitFilter';
+import { AnimalTraitFilter } from '../models/animal-trait-filter';
 
 
 

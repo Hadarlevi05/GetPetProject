@@ -3,8 +3,8 @@ import { HttpClient, HttpParams, HttpParamsOptions } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from 'src/app/shared/services/base-service';
-import { CityFilter } from '../models/cityFilter';
-import { ICity } from '../models/iCity';
+import { CityFilter } from '../models/city-filter';
+import { ICity } from '../models/icity';
 
 @Injectable({
   providedIn: 'root'

@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IUser } from 'src/app/shared/models/iuser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/modules/pets/services/authentication.service';
+import { first, map, tap } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { AlertService } from 'src/app/modules/pets/services/alert.service';
 
 @Component({
@@ -13,20 +13,33 @@ import { AlertService } from 'src/app/modules/pets/services/alert.service';
 })
 //https://stackblitz.com/edit/angular-material-login-form?file=src%2Fapp%2Fapp.component.ts
 export class LoginComponent implements OnInit {
+
+  @Input() error: string | undefined;
+  loading = false;
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private route: Router
+  ) { }
+
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
   }
+
   form: FormGroup = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
   submit() {
-    if (this.form.valid) {
-      this.submitEM.emit(this.form.value);
-    }
-  }
-  @Input() error: string | undefined;
 
-  @Output() submitEM = new EventEmitter();
+    this.loading = true;
+
+    this.authenticationService.login(this.form.value.email, this.form.value.password)
+      .subscribe((res) => {
+        this.route.navigate(['']);
+
+        this.loading = false;
+      });
+  }
+
 }

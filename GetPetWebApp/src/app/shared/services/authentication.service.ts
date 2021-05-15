@@ -47,8 +47,6 @@ export class AuthenticationService extends BaseService {
     }
 
     login(email: string, password: string) {
-
-
         return this.http.post<ILoginResponse>(`${this.BASE_URL}users/login`, { email, password })
             .pipe(map(loginResponse => {
                 // login successful if there's a jwt token in the response
@@ -64,7 +62,11 @@ export class AuthenticationService extends BaseService {
             }));
     }
 
+    register(user: IUser) {
 
+        return this.http.post<ILoginResponse>(`${this.BASE_URL}users/register`, user)
+            .pipe(map(userResponse => this.login(user.email, user.password)));
+    }
 
     logout() {
         // remove user from local storage to log user out

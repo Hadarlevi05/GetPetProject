@@ -26,6 +26,8 @@ import { MatListModule } from '@angular/material/list';
 import { AngularFileUploaderModule } from "angular-file-uploader";
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatToolbarModule,
     MatSelectModule,
     MatRadioModule,
     MatCardModule,
@@ -58,6 +61,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatDatepickerModule,
     MatNativeDateModule,
     MatListModule,
+    MatAutocompleteModule,
     AngularFileUploaderModule,
     MatStepperModule,
     MatCheckboxModule

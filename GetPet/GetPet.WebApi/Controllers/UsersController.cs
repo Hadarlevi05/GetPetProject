@@ -5,6 +5,7 @@ using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -84,25 +85,32 @@ namespace GetPet.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var users = await _userRepository.Register(user);
+            var registeredUser = await _userRepository.Register(user);
 
-            return Ok(users);
+            return Ok(registeredUser);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto login)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
-            var loginResponse = await _userRepository.Login(login);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var loginResponse = await _userRepository.Login(login);
 
-            return Ok(new LoginResponseDto()
+                return Ok(new LoginResponseDto()
+                {
+                    Token = loginResponse.Token,
+                    User = loginResponse.User
+                });
+            }
+            catch (Exception ex)
             {
-                Token = loginResponse.Token,
-                User = loginResponse.User
-            });
+                return BadRequest();
+            }
         }
     }
 }

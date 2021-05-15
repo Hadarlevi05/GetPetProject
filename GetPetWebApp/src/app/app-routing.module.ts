@@ -8,9 +8,9 @@ import { RegisterComponent } from './modules/home/components/register/register.c
 const routes: Routes = [
   { path: '', component: IndexComponent },
   { path: 'index', component: IndexComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'addpet', component: AddpetComponent }
+  { path: 'account/login', component: LoginComponent },
+  { path: 'account/register', component: RegisterComponent },
+  { path: 'pets/add', component: AddpetComponent }
 ];
 
 @NgModule({

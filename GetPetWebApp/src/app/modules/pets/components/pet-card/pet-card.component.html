@@ -1,5 +1,5 @@
 <mat-card class="pet-card" fxFlexAlign="stretch">
-    <mat-card-header>        
+    <mat-card-header>
         <mat-card-title>{{ pet.name }}</mat-card-title>
         <mat-card-subtitle>{{ pet.gender }} {{ pet.birthday }}</mat-card-subtitle>
     </mat-card-header>
@@ -7,7 +7,7 @@
     <mat-card-content>
         <p>
             {{ pet.description }} <br>
-            איש קשר: {{ pet.user.name }}
+            איש קשר: {{ pet?.user?.name }}
             <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">
                 <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
                     {{ trait.key }}: {{ trait.value }}

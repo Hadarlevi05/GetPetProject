@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { IndexComponent } from './modules/home/components/index/index.component';
 import { LoginComponent } from './modules/home/components/login/login.component';
 import { RegisterComponent } from './modules/home/components/register/register.component';
-import { AddpetComponent } from './modules/home/components/addpet/addpet.component';
+import { AddpetComponent } from './modules/pets/components/addpet/addpet.component';
 import { PetCardComponent } from './modules/pets/components/pet-card/pet-card.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
@@ -22,10 +22,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatListModule} from '@angular/material/list';
+import { MatListModule } from '@angular/material/list';
 import { AngularFileUploaderModule } from "angular-file-uploader";
-import {MatStepperModule} from '@angular/material/stepper';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [

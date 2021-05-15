@@ -1,5 +1,6 @@
 ﻿using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers.Abstractions;
+using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Parsers;
 using PetAdoption.BusinessLogic.Repositories;
 
@@ -12,8 +13,9 @@ namespace GetPet.Crawler.Crawlers
         public SpcaCrawler(
             IPetHandler petHandler,
             IPetRepository petRepository,
-            IUnitOfWork unitOfWork) :
-            base(petHandler, petRepository, unitOfWork)
+            IUnitOfWork unitOfWork,
+            ITraitRepository traitRepository) :
+            base(petHandler, petRepository, unitOfWork, traitRepository)
         { }
     }
 }

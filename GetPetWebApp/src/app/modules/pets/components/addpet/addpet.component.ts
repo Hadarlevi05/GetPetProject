@@ -1,20 +1,20 @@
-import { AnimalTraitsService } from './services/animalTraits.service';
-import { IAnimalTrait } from './models/iAnimalTrait';
-import { CityService } from './services/city.service';
-import { ICity } from './models/iCity';
-import { CityFilter } from './models/cityFilter';
-import { AnimalTypeFilter } from './models/animalTypeFilter';
-import { IAnimalType } from './models/iAnimalType';
-import { AnimalTypeService } from './services/animalType.service';
+import { CityService } from '../../../../shared/services/city.service';
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AnimalTraitFilter } from './models/AnimalTraitFilter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
 import { TraitOptionFilter } from './models/traitOptionFilter';
 import { ITraitOption } from './models/iTraitOption';
 import { TraitOptionsService } from './services/traitOptions.service';
 import { compileNgModule } from '@angular/compiler';
+import { ICity } from 'src/app/shared/models/iCity';
+import { AnimalTypeService } from 'src/app/shared/services/animalType.service';
+import { AnimalTraitsService } from 'src/app/shared/services/animalTraits.service';
+import { IAnimalTrait } from '../../../../shared/models/iAnimalTrait';
+import { CityFilter } from 'src/app/shared/models/cityFilter';
+import { AnimalTypeFilter } from 'src/app/shared/models/animalTypeFilter';
+import { AnimalTraitFilter } from 'src/app/shared/models/AnimalTraitFilter';
+import { IAnimalType } from 'src/app/shared/models/iAnimalType';
 
 @Component({
   selector: 'app-addpet',
@@ -30,6 +30,7 @@ export class AddpetComponent implements OnInit {
 
   pet: IPet = {
     name: '',
+    images: [''],
     description: '',
     animalTypeId: 0,
     userId: 1
@@ -72,7 +73,7 @@ export class AddpetComponent implements OnInit {
           //upload picture control?
         }),
         this._formBuilder.group({
-          city:['', [Validators.required]],
+          city: ['', [Validators.required]],
         }),
         this._formBuilder.group({
           //preview and send
@@ -86,7 +87,7 @@ export class AddpetComponent implements OnInit {
     formatsAllowed: ".jpg, .jpeg, .png",
     maxSize: 10,    //in MB
     uploadAPI: {
-      url:"https://example-file-upload-api" //TODO: change this url
+      url: "https://example-file-upload-api" //TODO: change this url
     },
     hideProgressBar: false,
     hideResetBtn: true,
@@ -97,11 +98,11 @@ export class AddpetComponent implements OnInit {
       afterUploadMsg_error: 'העלאת הקובץ נכשלה',
       sizeLimit: 'גודל מירבי'
     }
-};
+  };
 
-get formArray(): AbstractControl | null {
-  return this.addPetFormGroup.get('formArray');
-}
+  get formArray(): AbstractControl | null {
+    return this.addPetFormGroup.get('formArray');
+  }
 
   // get traitsFormArray() {
   //   return this.addPetFormGroup.controls.animalTraits as FormArray;
@@ -120,7 +121,7 @@ get formArray(): AbstractControl | null {
   loadCities() {
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1,5,date);
+    let filter = new CityFilter(1, 5, date);
     this._cityService.Get(filter).subscribe(cities => {
       this.city_arr = cities;
     });
@@ -132,7 +133,7 @@ get formArray(): AbstractControl | null {
     console.log(animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTraitFilter(1,5,date, animalTypeId);
+    let filter = new AnimalTraitFilter(1, 5, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
     })
@@ -195,15 +196,15 @@ get formArray(): AbstractControl | null {
     console.log(this.pet);
 
     try {
-       this._petsService.addPet(this.pet);
-       this.success = true;
-     } catch (err) {
-       console.log(err);
-     }
-     this.loading = false;
+      this._petsService.addPet(this.pet);
+      this.success = true;
+    } catch (err) {
+      console.log(err);
+    }
+    this.loading = false;
   }
 
   // changeAnimalType(value : any) {
   //   this.loadUniqueTraits(value);
   // }
-  }
+}

@@ -38,7 +38,12 @@ namespace GetPet.CrawlerApp
             string sqlConnectionString = configuration.GetConnectionString("GetPetConnectionString");
 
             var serviceProvider = services
-                .AddDbContext<GetPetDbContext>(options => options.UseSqlServer(sqlConnectionString))
+                .AddDbContext<GetPetDbContext>(options =>
+                    {
+                        options.UseSqlServer(sqlConnectionString);
+                        options.EnableSensitiveDataLogging();
+                    }
+                )
                 .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()

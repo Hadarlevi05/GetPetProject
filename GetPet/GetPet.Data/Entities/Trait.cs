@@ -9,5 +9,10 @@ namespace GetPet.Data.Entities
         public string Name { get; set; }
 
         public List<TraitOption> TraitOptions { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Data.Entities;
@@ -22,6 +23,7 @@ namespace GetPet.Crawler.Crawlers
         protected readonly IPetHandler _petHandler;
         protected readonly IPetRepository _petRepository;
         protected readonly IUnitOfWork _unitOfWork;
+        protected readonly ITraitRepository _traitRepository;
 
         private List<Pet> pets;
         protected abstract string url { get; }
@@ -29,11 +31,21 @@ namespace GetPet.Crawler.Crawlers
         public CrawlerBase(
             IPetHandler petHandler,
             IPetRepository petRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            ITraitRepository traitRepository)
         {
             _petHandler = petHandler;
             _petRepository = petRepository;
             _unitOfWork = unitOfWork;
+            _traitRepository = traitRepository;
+        }
+
+        protected virtual List<Trait> GetListOfTraits()
+        {
+            var filter = new BaseFilter();
+            var results = _traitRepository.SearchAsync(filter).Result.ToList();
+
+            return results;
         }
 
         public virtual void Load(string url)
@@ -54,11 +66,13 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual IList<PetDto> Parse()
         {
-            return parser.Parse();
+            var traits = GetListOfTraits();
+
+            return parser.Parse(traits);
         }
 
         public virtual async void InsertToDB(IList<PetDto> animals)
-        {            
+        {
             var tasks = animals
                 .Where(p => !IsPetExists(p))
                 .Select(pet => _petHandler.AddPet(pet));

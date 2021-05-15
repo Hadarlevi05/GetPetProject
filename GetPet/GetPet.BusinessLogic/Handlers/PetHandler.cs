@@ -38,7 +38,6 @@ namespace GetPet.BusinessLogic.Handlers
                 var petToInsert = _mapper.Map<Pet>(pet);
 
                 petToInsert.MetaFileLinks = new List<MetaFileLink>();
-
                 foreach (var imageSource in images)
                 {
                     petToInsert.MetaFileLinks.Add(
@@ -48,9 +47,20 @@ namespace GetPet.BusinessLogic.Handlers
                             MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
                             Size = 1000
                         });
-
-                    await _petRepository.AddAsync(petToInsert);
                 }
+
+                petToInsert.PetTraits = new List<PetTrait>();
+                foreach (var trait in pet.TraitDTOs)
+                {
+                    petToInsert.PetTraits.Add(
+                        new PetTrait()
+                        {
+                            Trait = trait,
+                        }
+                    );
+                }               
+
+                await _petRepository.AddAsync(petToInsert);
             }
             catch (Exception ex)
             {

@@ -21,7 +21,7 @@ namespace GetPet.BusinessLogic.Repositories
         Task<IEnumerable<User>> SearchAsync(UserFilter filter);
         Task<User> GetByEmailAsync(string email);
         Task<User> Register(UserDto user);
-        Task<string> Login(LoginDto loginUser);
+        Task<LoginResponseDto> Login(LoginDto loginUser);
     }
 
     public class UserRepository : BaseRepository<User>, IUserRepository
@@ -29,7 +29,7 @@ namespace GetPet.BusinessLogic.Repositories
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public UserRepository(
-            GetPetDbContext getPetDbContext, 
+            GetPetDbContext getPetDbContext,
             IUnitOfWork unitOfWork,
             IMapper mapper) : base(getPetDbContext)
         {
@@ -41,7 +41,7 @@ namespace GetPet.BusinessLogic.Repositories
         {
             return query
                 .Include(u => u.Organization)
-                .Include(u => u.City);                
+                .Include(u => u.City);
         }
 
         public new async Task DeleteAsync(int id)
@@ -137,25 +137,29 @@ namespace GetPet.BusinessLogic.Repositories
 
             entities.Add(user);
             await _unitOfWork.SaveChangesAsync();
-            
-            return user;
+
+            return user;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         }
 
-        public async Task<string> Login(LoginDto loginUser)
+        public async Task<LoginResponseDto> Login(LoginDto loginUser)
         {
             var user = await GetByEmail(loginUser.Email);
 
             if (user == null)
                 throw new Exception("Email doesn't exist");
-            
+
             if (!SecurePasswordHasher.Verify(loginUser.Password, user.PasswordHash))
                 throw new Exception("Password incorrect");
 
             user.LastLoginDate = DateTime.UtcNow;
 
             await _unitOfWork.SaveChangesAsync();
-
-            return GenerateJwtToken(user);
+            var token = GenerateJwtToken(user);
+            return new LoginResponseDto
+            {
+                Token = token,
+                User = _mapper.Map<UserDto>(user)
+            };
         }
 
         private async Task<User> GetByEmail(string email)

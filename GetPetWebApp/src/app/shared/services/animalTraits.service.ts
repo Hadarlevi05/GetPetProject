@@ -1,10 +1,13 @@
-import { IAnimalTrait } from './../models/iAnimalTrait';
+
 import { HttpClient } from '@angular/common/http';
 import { HtmlParser } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { IAnimalTrait } from 'src/app/shared/models/iAnimalTrait';
 import { BaseService } from 'src/app/shared/services/base-service';
 import { AnimalTraitFilter } from '../models/AnimalTraitFilter';
+
+
 
 @Injectable({
   providedIn: 'root'

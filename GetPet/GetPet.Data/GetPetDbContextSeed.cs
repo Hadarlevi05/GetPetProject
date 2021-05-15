@@ -2,7 +2,9 @@
 using GetPet.Data.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace GetPet.Data
@@ -30,8 +32,19 @@ namespace GetPet.Data
 
             using var transaction = context.Database.BeginTransaction();
 
-            var city1 = context.Cities.Add(new City { Name = "תל אביב", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var city2 = context.Cities.Add(new City { Name = "כפר-סבא", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var cities = GetStringResource("GetPet.Data.StaticData.Cities.txt")
+                .Split(Environment.NewLine.ToCharArray())
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .Select(c => c.Trim());
+
+            foreach (var city in cities)
+            {
+                context.Cities.Add(new City { Name = city, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            }
+
+            await context.SaveChangesAsync();
+
+            var telAviv = context.Cities.SingleOrDefault(c => c.Name.Contains("תל אביב"));
 
             await context.SaveChangesAsync();
 
@@ -71,10 +84,22 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
+            var system = context.Users.Add(new User
+            {
+                CityId = telAviv.Id,
+                Name = "מערכת",
+                Email = "support@getpet.co.il",
+                UserType = Enums.UserType.Admin,
+                EmailSubscription = true,
+                PasswordHash = SecurePasswordHasher.Hash("password"),
+                CreationTimestamp = DateTime.UtcNow,
+                UpdatedTimestamp = DateTime.UtcNow
+            });
+
             var hadar = context.Users.Add(new User
             {
-                CityId = city1.Entity.Id,
-                Name = "מערכת",
+                CityId = telAviv.Id,
+                Name = "hadar",
                 Email = "hadar@getpet.co.il",
                 UserType = Enums.UserType.Admin,
                 EmailSubscription = true,
@@ -110,7 +135,7 @@ namespace GetPet.Data
                     Birthday = DateTime.UtcNow.AddYears(-2),
                     Gender = Enums.Gender.Male,
                     Status = Enums.PetStatus.WaitingForAdoption,
-                    UserId = hadar.Entity.Id,
+                    UserId = system.Entity.Id,
                     Description = descriptions[i],
                     //PetTraits = new List<PetTrait>()
                     //{
@@ -140,6 +165,18 @@ namespace GetPet.Data
 
 
             await transaction.CommitAsync();
+        }
+
+        public string GetStringResource(string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
         }
     }
 }

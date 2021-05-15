@@ -83,7 +83,7 @@ namespace GetPet.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             var users = await _userRepository.Register(user);
 
             return Ok(users);
@@ -96,9 +96,13 @@ namespace GetPet.WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var jwt = await _userRepository.Login(login);
+            var loginResponse = await _userRepository.Login(login);
 
-            return Ok(jwt);
+            return Ok(new LoginResponseDto()
+            {
+                Token = loginResponse.Token,
+                User = loginResponse.User
+            });
         }
     }
 }

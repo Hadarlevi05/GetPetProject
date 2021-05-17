@@ -28,6 +28,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MultiSelectChipsComponent } from './modules/pets/components/multi-select-chips/multi-select-chips.component';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     RegisterComponent,
     PetCardComponent,
     LoaderComponent,
-    AddpetComponent
+    AddpetComponent,
+    MultiSelectChipsComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatAutocompleteModule,
     AngularFileUploaderModule,
     MatStepperModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatChipsModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatDividerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { BaseFilter } from './../../../../../shared/models/baseFilter';
+import { BaseFilter } from './base-filter';
 
 export class TraitOptionFilter extends BaseFilter {
 

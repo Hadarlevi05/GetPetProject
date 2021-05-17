@@ -1,20 +1,21 @@
 import { CityService } from '../../../../shared/services/city.service';
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { TraitOptionFilter } from './models/traitOptionFilter';
-import { ITraitOption } from './models/iTraitOption';
-import { TraitOptionsService } from './services/traitOptions.service';
+import { TraitOptionFilter } from 'src/app/shared/models/traitOptionFilter';
+import { ITraitOption } from 'src/app/shared/models/iTraitOption';
+import { TraitOptionsService } from 'src/app/shared/services/traitOptions.service';
 import { compileNgModule } from '@angular/compiler';
-import { ICity } from 'src/app/shared/models/iCity';
-import { AnimalTypeService } from 'src/app/shared/services/animalType.service';
-import { AnimalTraitsService } from 'src/app/shared/services/animalTraits.service';
-import { IAnimalTrait } from '../../../../shared/models/iAnimalTrait';
-import { CityFilter } from 'src/app/shared/models/cityFilter';
-import { AnimalTypeFilter } from 'src/app/shared/models/animalTypeFilter';
-import { AnimalTraitFilter } from 'src/app/shared/models/AnimalTraitFilter';
-import { IAnimalType } from 'src/app/shared/models/iAnimalType';
+import { ICity } from 'src/app/shared/models/icity';
+import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
+import { AnimalTraitsService } from 'src/app/shared/services/animal-traits.service';
+import { IAnimalTrait } from 'src/app/shared/models/ianimal-trait';
+import { CityFilter } from 'src/app/shared/models/city-filter';
+import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
+import { AnimalTraitFilter } from 'src/app/shared/models/animal-trait-filter';
+import { IAnimalType } from 'src/app/shared/models/ianimal-type';
+import { MatChip } from '@angular/material/chips';
 
 @Component({
   selector: 'app-addpet',
@@ -22,12 +23,15 @@ import { IAnimalType } from 'src/app/shared/models/iAnimalType';
   styleUrls: ['./addpet.component.sass']
 })
 
-export class AddpetComponent implements OnInit {
+export class AddpetComponent 
+  implements OnInit {
 
   loading = false;
   success = false;
+  optionBooleanVal = false;
   addPetFormGroup!: FormGroup;
 
+  
   pet: IPet = {
     name: '',
     images: [''],
@@ -35,13 +39,14 @@ export class AddpetComponent implements OnInit {
     animalTypeId: 0,
     userId: 1
   }
-
+  
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
   traits_arr: IAnimalTrait[] = [];
+  traitsWithBooleanValue: IAnimalTrait[] = [];
   options_arr: ITraitOption[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
-
+  
   constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
               private _cityService: CityService, 
@@ -65,7 +70,7 @@ export class AddpetComponent implements OnInit {
             Validators.maxLength(10)]),
           gender:['', [Validators.required]],
           dob:['', [Validators.required]],
-          animalTraits: new FormArray([]),
+          chipsControl: new FormControl(['']),
           description:['', [Validators.required,
                             Validators.maxLength(500)]],
         }),
@@ -112,7 +117,7 @@ export class AddpetComponent implements OnInit {
 
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTypeFilter(1, 5, date);
+    let filter = new AnimalTypeFilter(1, 100, date);
     this._animalTypeService.Get(filter).subscribe(types => {
       this.animaltypes_arr = types;
     });
@@ -121,26 +126,24 @@ export class AddpetComponent implements OnInit {
   loadCities() {
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1, 5, date);
+    let filter = new CityFilter(1, 100, date);
     this._cityService.Get(filter).subscribe(cities => {
       this.city_arr = cities;
     });
   }
 
   loadUniqueTraits(event) {
-
     let animalTypeId = event.value;
-    console.log(animalTypeId);
+    console.log("animaltype changed to: " + animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTraitFilter(1, 5, date, animalTypeId);
+    let filter = new AnimalTraitFilter(1, 100, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
-    })
 
-    //add.this.test();
-    //this.addTraitCheckboxes();
-    this.getOptionsForTrait();
+      this.getOptionsForTrait();
+
+    })
   }
 
   // private addTraitCheckboxes() {
@@ -151,39 +154,43 @@ export class AddpetComponent implements OnInit {
 
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new TraitOptionFilter(1,5,date);
+    let filter = new TraitOptionFilter(1,100,date);
     
-    this.traits_arr.forEach((trait) => {
+    for(const trait of this.traits_arr) {
+      
       filter.traitId = trait.traitId;
+      console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
       this._traitOptionsService.Post(filter).subscribe(options => {
         this.options_arr = options;
+
+        for (const option of this.options_arr) {
+            console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
+            if (this.isBooleanValue(option)) {
+              this.optionBooleanVal = true;
+              this.traitsWithBooleanValue.push(trait);
+              break;
+            }
+        }
+          
+          if (this.optionBooleanVal) {  
+            //create chip: traitName needed.
+            console.log("trait: " + trait.traitName + " has a Yes/No value!");
+
+
+          } else {
+            //create selection: traitname and all of its options (in options_arr right now) needed.
+            console.log("trait: " + trait.traitName + " has several values!");
+            
+
+          }
+          this.optionBooleanVal = false;
       })
-
-      console.log("-----------");
-      console.log("trait id: " + trait.traitId + "trait name: " + trait.traitName);
-      this.options_arr.forEach(o => console.log(o));
-
-      //if (options_arr contraints כן ולא)
-      // {
-      //   create chip
-      // }
-      // else
-      // {
-           //create selection
-      // }
-    })
+    }
   }
 
-//   private test() {
-//     console.log("in test");
-//     let date = new Date();
-//     date.setDate(date.getDate() - 20);
-//     let filter = new TraitOptionFilter(1,5,date,3);
-
-//     this._traitOptionsService.Post(filter).subscribe(options => {
-//       this.options_arr = options;
-//   })
-// }
+  private isBooleanValue(optionElem) : boolean {
+    return (optionElem.option == "כן" || optionElem.option == 'לא')
+  }
 
   onSubmit(postData) {
     console.log(postData);
@@ -204,7 +211,4 @@ export class AddpetComponent implements OnInit {
     this.loading = false;
   }
 
-  // changeAnimalType(value : any) {
-  //   this.loadUniqueTraits(value);
-  // }
 }

@@ -1,4 +1,4 @@
-import { IAnimalTrait } from '../models/iAnimalTrait';
+import { IAnimalTrait } from '../models/ianimal-trait';
 import { HttpClient } from '@angular/common/http';
 import { HtmlParser } from '@angular/compiler';
 import { Injectable } from '@angular/core';

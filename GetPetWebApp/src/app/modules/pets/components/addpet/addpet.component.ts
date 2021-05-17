@@ -44,6 +44,7 @@ export class AddpetComponent
   city_arr: ICity[] = [];
   traits_arr: IAnimalTrait[] = [];
   traitsWithBooleanValue: IAnimalTrait[] = [];
+  optionsForTrait: ITraitOption[] = [];
   options_arr: ITraitOption[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
   
@@ -140,15 +141,9 @@ export class AddpetComponent
     let filter = new AnimalTraitFilter(1, 100, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
-
       this.getOptionsForTrait();
-
     })
   }
-
-  // private addTraitCheckboxes() {
-  //   this.traits_arr.forEach(() => this.traitsFormArray.push(new FormControl(false)));
-  // }
 
   private getOptionsForTrait() {
 
@@ -169,7 +164,11 @@ export class AddpetComponent
               this.optionBooleanVal = true;
               this.traitsWithBooleanValue.push(trait);
               break;
+            } else { //trait has several option values
+              //create selection: traitname and all of its options (in options_arr right now) needed.
+              this.optionsForTrait.push(option);
             }
+
         }
           
           if (this.optionBooleanVal) {  
@@ -191,6 +190,8 @@ export class AddpetComponent
   private isBooleanValue(optionElem) : boolean {
     return (optionElem.option == "כן" || optionElem.option == 'לא')
   }
+
+  
 
   onSubmit(postData) {
     console.log(postData);

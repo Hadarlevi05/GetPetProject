@@ -8,6 +8,8 @@ namespace GetPet.Data.Entities
         [StringLength(400)]
         public string Name { get; set; }
 
+        public int AnimalTypeId { get; set; }
+
         public List<TraitOption> TraitOptions { get; set; }
 
         public override string ToString()

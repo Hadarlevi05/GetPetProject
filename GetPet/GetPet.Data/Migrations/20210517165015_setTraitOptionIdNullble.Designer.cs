@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GetPet.Data.Migrations
 {
     [DbContext(typeof(GetPetDbContext))]
-    [Migration("20210517100757_initialCreate")]
-    partial class initialCreate
+    [Migration("20210517165015_setTraitOptionIdNullble")]
+    partial class setTraitOptionIdNullble
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -510,6 +510,9 @@ namespace GetPet.Data.Migrations
                     b.Property<int>("TraitId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TraitOptionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
@@ -528,6 +531,9 @@ namespace GetPet.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
+
+                    b.Property<int>("AnimalTypeId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");

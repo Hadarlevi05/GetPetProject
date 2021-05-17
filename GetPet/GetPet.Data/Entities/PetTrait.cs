@@ -13,7 +13,7 @@ namespace GetPet.Data.Entities
         public int TraitId { get; set; }
         public Trait Trait { get; set; }
 
-        public int TraitOptionId { get; set; }
+        public int? TraitOptionId { get; set; }
         
         [StringLength(400)]
         public string Description { get; set; }

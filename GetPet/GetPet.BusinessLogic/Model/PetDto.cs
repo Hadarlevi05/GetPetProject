@@ -5,9 +5,8 @@ using System.Collections.Generic;
 
 namespace GetPet.BusinessLogic.Model
 {
-    public class PetDto
-    {
-        public int Id { get; set; }
+    public class PetDto : BaseDto
+    {        
         
         public string Name { get; set; }
 
@@ -33,6 +32,12 @@ namespace GetPet.BusinessLogic.Model
         public IList<Trait> TraitDTOs { get; set; }
 
         public string AgeInYears { get; set; }
+
+        public PetSource Source { get; set; }
+        /// <summary>
+        /// if the source is external we should save the link to the original link
+        /// </summary>
+        public string SourceLink { get; set; }
 
         public override string ToString()
         {

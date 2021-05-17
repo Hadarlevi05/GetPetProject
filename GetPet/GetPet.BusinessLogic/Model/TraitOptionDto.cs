@@ -1,6 +1,6 @@
 ﻿namespace GetPet.BusinessLogic.Model
 {
-    public class TraitOptionDto
+    public class TraitOptionDto : BaseDto
     {
         public int TraitId { get; set; }
 

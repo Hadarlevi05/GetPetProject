@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace GetPet.BusinessLogic.Model
 {
-    public class UserDto
+    public class UserDto : BaseDto
     {
-        public int Id { get; set; }
-
+        
         public string Email { get; set; }
 
+        [JsonIgnore]
         public string Password { get; set; }
 
         public string Name { get; set; }

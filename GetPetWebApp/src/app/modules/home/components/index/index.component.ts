@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { IArticle } from 'src/app/modules/articles/models/iarticle';
+import { ArticleService } from 'src/app/modules/articles/services/article.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
 import { PetFilter } from 'src/app/modules/pets/models/pet-filter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
+import { BaseFilter } from 'src/app/shared/models/base-filter';
 
 @Component({
   selector: 'app-index',
@@ -13,20 +16,48 @@ export class IndexComponent implements OnInit {
   loading = true;
 
   pets: IPet[] = [];
+  articles: IArticle[] = [];
 
-  constructor(private petsService: PetsService) { }
+  gridColumns = 3;
 
-  ngOnInit(): void {
-    this.loadPets();
+  toggleGridColumns() {
+    this.gridColumns = this.gridColumns === 3 ? 4 : 3;
   }
 
 
-  loadPets() {
+  constructor(
+    private petsService: PetsService,
+    private articleService: ArticleService) { }
+
+  ngOnInit(): void {
+    this.loadPets();
+    this.loadArticles();
+  }
+
+  loadArticles() {
+
+    this.loading = false;
 
     let date = new Date();
-    date.setDate(date.getDate() - 20);
+    date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 5, date);
+    let filter = new BaseFilter(1, 10, date);
+
+    this.articleService.Search(filter).subscribe(articles => {
+      this.articles = articles;
+
+      this.loading = false;
+    });
+  }
+
+  loadPets() {
+
+    this.loading = false;
+
+    let date = new Date();
+    date.setDate(date.getDate() - 14);
+
+    let filter = new PetFilter(1, 10, date);
 
     this.petsService.Search(filter).subscribe(pets => {
       this.pets = pets;

@@ -91,7 +91,7 @@ namespace GetPet.Data
                 Email = "support@getpet.co.il",
                 UserType = Enums.UserType.Admin,
                 EmailSubscription = true,
-                PasswordHash = SecurePasswordHasher.Hash("password"),
+                PasswordHash = SecurePasswordHasher.Hash("123456"),
                 CreationTimestamp = DateTime.UtcNow,
                 UpdatedTimestamp = DateTime.UtcNow
             });
@@ -103,10 +103,35 @@ namespace GetPet.Data
                 Email = "hadar@getpet.co.il",
                 UserType = Enums.UserType.Admin,
                 EmailSubscription = true,
-                PasswordHash = SecurePasswordHasher.Hash("password"),
+                PasswordHash = SecurePasswordHasher.Hash("123456"),
                 CreationTimestamp = DateTime.UtcNow,
                 UpdatedTimestamp = DateTime.UtcNow
             });
+
+            var sharon = context.Users.Add(new User
+            {
+                CityId = telAviv.Id,
+                Name = "שרון",
+                Email = "sharon@getpet.co.il",
+                UserType = Enums.UserType.Admin,
+                EmailSubscription = true,
+                PasswordHash = SecurePasswordHasher.Hash("123456"),
+                CreationTimestamp = DateTime.UtcNow,
+                UpdatedTimestamp = DateTime.UtcNow
+            });
+
+            var liza = context.Users.Add(new User
+            {
+                CityId = telAviv.Id,
+                Name = "ליזה",
+                Email = "liza@getpet.co.il",
+                UserType = Enums.UserType.Admin,
+                EmailSubscription = true,
+                PasswordHash = SecurePasswordHasher.Hash("123456"),
+                CreationTimestamp = DateTime.UtcNow,
+                UpdatedTimestamp = DateTime.UtcNow
+            });
+
 
             await context.SaveChangesAsync();
 
@@ -163,6 +188,49 @@ namespace GetPet.Data
 
             }
 
+            await context.SaveChangesAsync();
+
+
+            var articleTitles = new[] {
+                "גם לי מגיע לחיות",
+                "מהי תולעת הפארק? למה לשים לב ואיך לטפל?",
+                "לאמץ כלב חדש זו הנאה אדירה. בואו ללמוד את השלבים הראשונים והדגשים שחשוב לדעת",
+                "30 בחודש – תורמים לבעלי החיים",
+                "קר שם בחוץ"
+            };
+
+            for (int i = 1; i <= 5; i++)
+            {
+                var mtf = context.MetaFileLinks.Add(new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/article{i}.jpg", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+                
+                await context.SaveChangesAsync();
+
+                context.Articles.Add(new Article
+                {
+                    Title = articleTitles[i - 1],
+                    Content = @"כמה שווים חיים של חתולה?
+                    בעוד ברחבי העולם חתולים וכלבים מקבלים מעמד המכיר בהם כיצורים רגישים ובעלי זכויות, אצלנו חייו של חתול הפכו מזמן לשיקולים צרים של רווח והפסד.
+                    לפני מספר חודשים, קיבלנו פניה מפעילים בעפולה, לפיה המחלקה הווטרינרית פינתה גורת חתולים עם בעיות חמורות בעיניה. הפעילים הציפו באותו היום ובמהלך סוף השבוע לאחריו את המוקד העירוני בטלפונים ובהודעות, בניסיון לדעת מה עלה בגורל החתולה. כמה פעילים הציעו לשאת בעלויות הטיפול או לקחת אותה תחת חסותם ולדאוג לטיפול בה. רק ביום א’ התקבלה התשובה שהחתולה הומתה “המתת חסד”. לא נמסר לאיזו מרפאה הועברה החתולה, ומה היו השיקולים להמתתה. הפעילים הבינו מיד כי משהו אינו כשורה, וכי העירייה לא מספרת את כל הסיפור. בעקבות זאת הוצאנו מכתב בהול ובקשת חופש מידע לעירייה בנוגע לחתולה.
+                    רק לאחר שלושה חודשים התברר כי ניתן היה לאשפז את החתולה, ובהתאם להתקדמות הטיפול, למסור אותה לאימוץ לבית חם. אולם בעירייה החליטו להמית אותה בשל “העלות הגבוהה של הטיפול ועקב כך שלחתול אין בעלים”! זאת, למרות הפעילים הרבים שהציעו לממן את הטיפול.
+                    אז כמה שווים חייה של חתולה? לא פעם רשויות מקומיות קובעות מחיר כמעט אפסי – לפעמים אפילו הימנעות מחוסר נוחות תספיק. הגיע הזמן שכל הרשויות המקומיות בישראל יבינו כי לכל בעלי החיים, גם הפצועים וה”קשים”, מגיע לחיות!
+                    מקור:           
+                    https://www.letlive.org.il/?p=43555
+                    ",
+                    UserId = hadar.Entity.Id,
+                    MetaFileLinkId = mtf.Entity.Id,
+                    Comments = new List<Comment> {
+                        new Comment {
+                            Text ="כתבה מאוד מועילה",
+                            UserId = liza.Entity.Id,
+                        },
+                        new Comment {
+                            Text ="טוב לדעת",
+                            UserId = sharon.Entity.Id,
+                        }
+                    }
+                });
+            }
+            await context.SaveChangesAsync();
 
             await transaction.CommitAsync();
         }

@@ -29,6 +29,25 @@ namespace GetPet.BusinessLogic.MappingProfiles
             AnimalTraitMapping();
 
             TraitOptionsMapping();
+
+            ArticleMapping();
+
+            CommentMapping();
+        }
+
+        private void CommentMapping()
+        {
+            CreateMap<Comment, CommentDto>()
+                .ReverseMap();
+        }
+
+        private void ArticleMapping()
+        {
+            CreateMap<Article, ArticleDto>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.MetaFileLink == null ? null : src.MetaFileLink.Path))
+                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count));
+
+            CreateMap<ArticleDto, Article>();
         }
 
         private void TraitOptionsMapping()

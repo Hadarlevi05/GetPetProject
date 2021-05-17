@@ -23,6 +23,7 @@ namespace GetPet.Crawler.Parsers
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
             var traits = ParseTraits(node, name, allTraits);
+            string sourceLink = node.SelectSingleNode("./a").Attributes["href"].Value;
 
             // TODO: in all parsers: AnimalType, SourceWebsite, Images
 
@@ -34,6 +35,8 @@ namespace GetPet.Crawler.Parsers
                 Description = description,
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
+                Source = PetSource.External,
+                SourceLink = sourceLink
             };
 
             return pet;

@@ -165,9 +165,7 @@ namespace GetPet.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             #endregion
-        }
-
-        public DbSet<AnimalTrait> AnimalTraits { get; set; }
+        }        
         public DbSet<AnimalType> AnimalTypes { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<DataSourceLog> DataSourceLogs { get; set; }

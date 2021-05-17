@@ -65,18 +65,17 @@ namespace GetPet.WebApi
 
             services.AddAutoMapper(typeof(GetPetProfile));
 
-            services.AddScoped<IPetRepository, PetRepository>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ICityRepository, CityRepository>();
-            services.AddScoped<IAnimalTypeRepository, AnimalTypeRepository>();
-            services.AddScoped<ITraitRepository, TraitRepository>();
-            services.AddScoped<IOrganizationRepository, OrganizationRepository>();
-            services.AddScoped<IPetTraitRepository, PetTraitRepository>();
-            services.AddScoped<IAnimalTraitRepository, AnimalTraitRepository>();
-            services.AddScoped<ITraitOptionRepository, TraitOptionRepository>();
-            services.AddScoped<IArticleRepository, ArticleRepository>();            
-            services.AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IPetRepository, PetRepository>()
+                .AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<ICityRepository, CityRepository>()
+                .AddScoped<IAnimalTypeRepository, AnimalTypeRepository>()
+                .AddScoped<ITraitRepository, TraitRepository>()
+                .AddScoped<IOrganizationRepository, OrganizationRepository>()
+                .AddScoped<IPetTraitRepository, PetTraitRepository>()
+                .AddScoped<ITraitOptionRepository, TraitOptionRepository>()
+                .AddScoped<IArticleRepository, ArticleRepository>()
+                .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
+                .AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

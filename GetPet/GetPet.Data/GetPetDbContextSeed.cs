@@ -81,11 +81,6 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            context.AnimalTraits.Add(new AnimalTrait { Trait = size.Entity, AnimalType = dog.Entity, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            context.AnimalTraits.Add(new AnimalTrait { Trait = size.Entity, AnimalType = cat.Entity, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-
-            await context.SaveChangesAsync();
-
             var system = context.Users.Add(new User
             {
                 CityId = telAviv.Id,

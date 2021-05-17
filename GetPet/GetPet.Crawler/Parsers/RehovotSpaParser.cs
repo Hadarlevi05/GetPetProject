@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
 {
-    public class RehovotSpaParser: ParserBase
+    public class RehovotSpaParser : ParserBase
     {
         public override HtmlNodeCollection GetNodes()
         {
@@ -22,7 +22,7 @@ namespace GetPet.Crawler.Parsers
             }
             catch (Exception ex)
             {
-               // throw ex;
+                // throw ex;
             }
 
             return null;
@@ -35,9 +35,9 @@ namespace GetPet.Crawler.Parsers
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
             var traits = ParseTraits(node, name, allTraits);
-
             var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
+            var sourceLink = "http://rehovotspa.org.il/our-dogs/";
 
             var pet = new PetDto
             {
@@ -50,6 +50,9 @@ namespace GetPet.Crawler.Parsers
                 },
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
+                Source = PetSource.External,
+                SourceLink = sourceLink
+
             };
             return pet;
         }

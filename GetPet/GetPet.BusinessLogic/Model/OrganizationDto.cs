@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GetPet.BusinessLogic.Model
 {
-    public class OrganizationDto
+    public class OrganizationDto : BaseDto
     {
         public string Name { get; set; }
 

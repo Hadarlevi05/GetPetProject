@@ -30,6 +30,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MultiSelectChipsComponent } from './modules/pets/components/multi-select-chips/multi-select-chips.component';
 import { MatDividerModule } from '@angular/material/divider';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { MatDividerModule } from '@angular/material/divider';
     LoaderComponent,
     AddpetComponent,
     MultiSelectChipsComponent
+    AddpetComponent,
+    ArticleCardComponent
   ],
   imports: [
     BrowserModule,
@@ -72,6 +76,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     MatToolbarModule,
     MatDividerModule,
+    MatCheckboxModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

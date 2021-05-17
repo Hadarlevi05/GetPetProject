@@ -24,4 +24,6 @@ export interface IPet {
   images: string[];
 
   traits?: Map<string, string>;
+
+  creationTimestamp: Date;
 }

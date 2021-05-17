@@ -83,6 +83,7 @@ namespace GetPet.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
+                    AnimalTypeId = table.Column<int>(type: "int", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -376,6 +377,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetId = table.Column<int>(type: "int", nullable: false),
                     TraitId = table.Column<int>(type: "int", nullable: false),
+                    TraitOptionId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),

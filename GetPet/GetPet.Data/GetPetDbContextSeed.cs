@@ -54,10 +54,12 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            var size = context.Traits.Add(new Trait { Name = "גודל", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var color = context.Traits.Add(new Trait { Name = "צבע", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var trained = context.Traits.Add(new Trait { Name = "מאולף", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var size = context.Traits.Add(new Trait { Name = "גודל", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var color = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var trained = context.Traits.Add(new Trait { Name = "מאולף", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+
+            var colorCat = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = cat.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
             await context.SaveChangesAsync();
 

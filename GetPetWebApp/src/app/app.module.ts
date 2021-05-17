@@ -42,8 +42,7 @@ import { ArticleCardComponent } from './modules/articles/components/article-card
     PetCardComponent,
     LoaderComponent,
     AddpetComponent,
-    MultiSelectChipsComponent
-    AddpetComponent,
+    MultiSelectChipsComponent,
     ArticleCardComponent
   ],
   imports: [

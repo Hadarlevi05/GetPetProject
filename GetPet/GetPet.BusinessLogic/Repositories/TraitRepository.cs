@@ -12,7 +12,7 @@ namespace GetPet.BusinessLogic.Repositories
 {
     public interface ITraitRepository : IBaseRepository<Trait>
     {
-        Task<IEnumerable<Trait>> SearchAsync(BaseFilter filter);
+        Task<IEnumerable<Trait>> SearchAsync(TraitFilter filter);
     }
 
     public class TraitRepository : BaseRepository<Trait>, ITraitRepository
@@ -34,9 +34,14 @@ namespace GetPet.BusinessLogic.Repositories
             await base.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Trait>> SearchAsync(BaseFilter filter)
+        public async Task<IEnumerable<Trait>> SearchAsync(TraitFilter filter)
         {
             var query = base.SearchAsync(entities.AsQueryable(), filter);
+
+            if (filter.AnimalTypeId.HasValue)
+            {
+                query = query.Where(t => t.AnimalTypeId == filter.AnimalTypeId);
+            }
 
             return await query.ToListAsync();
         }

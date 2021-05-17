@@ -4,6 +4,4 @@ export interface ITraitOption {
 
     option: string;
 
-    name: string;
-
 }

@@ -54,7 +54,7 @@
 
                 <!--Unique traits for chosen animal type-->
                 <div class="row">
-                    <mat-label>תכונות מיוחדות:</mat-label>
+                    <mat-label>בחר תכונות מיוחדות:</mat-label>
                     <app-chips-multi-select [options]="traitsWithBooleanValue" formControlName="chipsControl">
                     </app-chips-multi-select>
                 </div>
@@ -124,11 +124,6 @@
 
 <h5>בדיקה-תכונות מיוחדות</h5>
 <ul>
-  <li *ngFor="let trait of traits_arr" [value]="trait.traitId">{{trait.traitName}}</li>
+  <li *ngFor="let trait of traits_arr" [value]="trait.name">{{trait.name}}</li>
 </ul>
 </div>
-
-<h5>בדיקה-אופציות לתכונות מיוחדות</h5>
-<ul>
-  <li *ngFor="let traitoption of options_arr">{{traitoption.option}}</li>
-</ul>

@@ -9,13 +9,13 @@ import { TraitOptionsService } from 'src/app/shared/services/traitOptions.servic
 import { compileNgModule } from '@angular/compiler';
 import { ICity } from 'src/app/shared/models/icity';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
-import { AnimalTraitsService } from 'src/app/shared/services/animal-traits.service';
-import { IAnimalTrait } from 'src/app/shared/models/ianimal-trait';
 import { CityFilter } from 'src/app/shared/models/city-filter';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
-import { AnimalTraitFilter } from 'src/app/shared/models/animal-trait-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
 import { MatChip } from '@angular/material/chips';
+import { TraitsService } from 'src/app/shared/services/traits.service';
+import { ITrait } from 'src/app/shared/models/itrait';
+import { TraitFilter } from 'src/app/shared/models/trait-filter';
 
 @Component({
   selector: 'app-addpet',
@@ -43,16 +43,16 @@ export class AddpetComponent
   
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
-  traits_arr: IAnimalTrait[] = [];
-  traitsWithBooleanValue: IAnimalTrait[] = [];
+  traits_arr: ITrait[] = [];
   optionsForTrait: ITraitOption[] = [];
-  options_arr: ITraitOption[] = [];
+  traitsWithBooleanValue: ITrait[] = [];
+  traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
   
   constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
               private _cityService: CityService, 
-              private _traitsService: AnimalTraitsService,
+              private _traitsService: TraitsService,
               private _traitOptionsService: TraitOptionsService,
               private _petsService: PetsService) { }
 
@@ -139,58 +139,75 @@ export class AddpetComponent
     console.log("animaltype changed to: " + animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTraitFilter(1, 100, date, animalTypeId);
+    let filter = new TraitFilter(1, 100, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
-      this.getOptionsForTrait();
+      this.classifyTraits();
     })
   }
 
-  private getOptionsForTrait() {
+  private classifyTraits() {
 
-    let date = new Date();
-    date.setDate(date.getDate() - 20);
-    let filter = new TraitOptionFilter(1,100,date);
-    
+    console.log(this.traits_arr);
+
     for(const trait of this.traits_arr) {
-      
-      filter.traitId = trait.traitId;
-      console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
-      this._traitOptionsService.Post(filter).subscribe(options => {
-        this.options_arr = options;
-
-        for (const option of this.options_arr) {
-            console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
-            if (this.isBooleanValue(option)) {
-              this.optionBooleanVal = true;
-              this.traitsWithBooleanValue.push(trait);
-              break;
-            } else { //trait has several option values
-              //create selection: traitname and all of its options (in options_arr right now) needed.
-              this.optionsForTrait.push(option);
-            }
-
-        }
-          
-          if (this.optionBooleanVal) {  
-            //create chip: traitName needed.
-            console.log("trait: " + trait.traitName + " has a Yes/No value!");
-
-
+      this.optionsForTrait = trait.traitOptions;
+      for (const option of this.optionsForTrait) {
+        if (this.isBooleanValue(option)) {
+            this.traitsWithBooleanValue.push(trait);
+            break;
           } else {
-            //create selection: traitname and all of its options (in options_arr right now) needed.
-            console.log("trait: " + trait.traitName + " has several values!");
-            
-
+            this.traitsWithSetOfValues.push(trait);
           }
-          this.optionBooleanVal = false;
-      })
+      }
     }
   }
 
-  private isBooleanValue(optionElem) : boolean {
-    return (optionElem.option == "כן" || optionElem.option == 'לא')
+  private isBooleanValue(op: ITraitOption) : boolean {
+    return (op.option == 'כן' || op.option == 'לא')
   }
+  // private getOptionsForTrait() {
+
+  //   let date = new Date();
+  //   date.setDate(date.getDate() - 20);
+  //   let filter = new TraitOptionFilter(1,100,date);
+    
+  //   for(const trait of this.traits_arr) {
+      
+  //     filter.traitId = trait.traitId;
+  //     console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
+  //     this._traitOptionsService.Post(filter).subscribe(options => {
+  //       this.options_arr = options;
+
+  //       for (const option of this.options_arr) {
+  //           console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
+  //           if (this.isBooleanValue(option)) {
+  //             this.optionBooleanVal = true;
+  //             this.traitsWithBooleanValue.push(trait);
+  //             break;
+  //           } else { //trait has several option values
+  //             //create selection: traitname and all of its options (in options_arr right now) needed.
+  //             this.optionsForTrait.push(option);
+  //           }
+
+  //       }
+          
+  //         if (this.optionBooleanVal) {  
+  //           //create chip: traitName needed.
+  //           console.log("trait: " + trait.traitName + " has a Yes/No value!");
+
+
+  //         } else {
+  //           //create selection: traitname and all of its options (in options_arr right now) needed.
+  //           console.log("trait: " + trait.traitName + " has several values!");
+            
+
+  //         }
+  //         this.optionBooleanVal = false;
+  //     })
+  //   }
+  // }
+
 
   
 

@@ -9,7 +9,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatChip, MatChipList } from '@angular/material/chips';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
-import { IAnimalTrait } from 'src/app/shared/models/ianimal-trait';
+import { ITrait } from 'src/app/shared/models/itrait';
 
 @UntilDestroy()
 @Component({
@@ -29,7 +29,7 @@ export class MultiSelectChipsComponent
   @ViewChild(MatChipList)
   chipList!: MatChipList;
 
-  @Input() options: IAnimalTrait[] = [];
+  @Input() options: ITrait[] = [];
 
   value: string[] = [];
 

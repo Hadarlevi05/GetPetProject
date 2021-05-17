@@ -27,9 +27,9 @@ namespace GetPet.WebApi.Controllers
             _traitRepository = traitRepository;
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] BaseFilter filter)
+        //[Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Get([FromBody] TraitFilter filter)
         {
 
             var user = HttpContext.Items["User"];

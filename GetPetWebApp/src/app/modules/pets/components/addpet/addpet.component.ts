@@ -29,7 +29,8 @@ export class AddpetComponent implements OnInit {
     images: [''],
     description: '',
     animalTypeId: 0,
-    userId: 1
+    userId: 1,
+    creationTimestamp: new Date()
   }
 
   animaltypes_arr: IAnimalType[] = [];

@@ -1,5 +1,6 @@
 ﻿using GetPet.Data.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,5 +30,7 @@ namespace GetPet.Data.Entities
         [ForeignKey("City")]
         public int CityId { get; set; }
         public virtual City City { get; set; }
+
+        public List<Article> Articles { get; set; }
     }
 }

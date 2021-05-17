@@ -28,6 +28,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     RegisterComponent,
     PetCardComponent,
     LoaderComponent,
-    AddpetComponent
+    AddpetComponent,
+    ArticleCardComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +67,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatAutocompleteModule,
     AngularFileUploaderModule,
     MatStepperModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]

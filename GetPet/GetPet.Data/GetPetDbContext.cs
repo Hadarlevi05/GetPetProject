@@ -59,8 +59,6 @@ namespace GetPet.Data
 
             #region MetaFileLink
 
-            modelBuilder.Entity<MetaFileLink>()
-                .HasOne<Pet>(mfl => mfl.Pet);
 
             #endregion
 
@@ -93,7 +91,7 @@ namespace GetPet.Data
                 .HasOne<User>(p => p.User);
 
             modelBuilder.Entity<Pet>()
-                .HasMany<PetTrait>(p => p.PetTraits);                
+                .HasMany<PetTrait>(p => p.PetTraits);
 
             #endregion
 
@@ -112,9 +110,7 @@ namespace GetPet.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PetTrait>()
-                .HasOne<Trait>(pt => pt.Trait)
-                .WithOne()
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne<Trait>(pt => pt.Trait);                     
 
             #endregion
 
@@ -146,6 +142,29 @@ namespace GetPet.Data
 
             #endregion
 
+            #region Articles
+
+            modelBuilder.Entity<Article>()
+                .HasOne<User>(a => a.User)
+                .WithMany(u => u.Articles)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Article>()
+                .HasOne<MetaFileLink>(a => a.MetaFileLink)
+                .WithOne()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Article>()
+                 .HasMany<Comment>(a => a.Comments)
+                 .WithOne(c => c.Article)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne<User>(a => a.User)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
+
+            #endregion
         }
 
         public DbSet<AnimalTrait> AnimalTraits { get; set; }
@@ -164,5 +183,7 @@ namespace GetPet.Data
         public DbSet<Trait> Traits { get; set; }
         public DbSet<TraitOption> TraitOptions { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

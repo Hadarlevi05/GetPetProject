@@ -5,9 +5,6 @@ namespace GetPet.Data.Entities
 {
     public class MetaFileLink : BaseEntity
     {
-        [ForeignKey("Pet")]
-        public int PetId { get; set; }
-        public Pet Pet { get; set; }
 
         [StringLength(400)]
         public string Path { get; set; }

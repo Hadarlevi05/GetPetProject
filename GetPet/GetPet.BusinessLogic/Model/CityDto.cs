@@ -1,9 +1,8 @@
 ﻿
 namespace GetPet.BusinessLogic.Model
 {
-    public class CityDto
-    {
-        public int Id { get; set; }
+    public class CityDto : BaseDto
+    {        
 
         public string Name { get; set; }
 

@@ -75,6 +75,45 @@ namespace GetPet.Data.Migrations
                     b.ToTable("AnimalTypes");
                 });
 
+            modelBuilder.Entity("GetPet.Data.Entities.Article", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("MetaFileLinkId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MetaFileLinkId")
+                        .IsUnique()
+                        .HasFilter("[MetaFileLinkId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Articles");
+                });
+
             modelBuilder.Entity("GetPet.Data.Entities.City", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +143,40 @@ namespace GetPet.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("ArticleId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.DataSource", b =>
@@ -215,7 +288,7 @@ namespace GetPet.Data.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
-                    b.Property<int>("PetId")
+                    b.Property<int?>("PetId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Size")
@@ -355,6 +428,12 @@ namespace GetPet.Data.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
+                    b.Property<int>("Source")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SourceLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -436,8 +515,7 @@ namespace GetPet.Data.Migrations
 
                     b.HasIndex("PetId");
 
-                    b.HasIndex("TraitId")
-                        .IsUnique();
+                    b.HasIndex("TraitId");
 
                     b.ToTable("PetTraits");
                 });
@@ -567,6 +645,43 @@ namespace GetPet.Data.Migrations
                     b.Navigation("Trait");
                 });
 
+            modelBuilder.Entity("GetPet.Data.Entities.Article", b =>
+                {
+                    b.HasOne("GetPet.Data.Entities.MetaFileLink", "MetaFileLink")
+                        .WithOne()
+                        .HasForeignKey("GetPet.Data.Entities.Article", "MetaFileLinkId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GetPet.Data.Entities.User", "User")
+                        .WithMany("Articles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("MetaFileLink");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.Comment", b =>
+                {
+                    b.HasOne("GetPet.Data.Entities.Article", "Article")
+                        .WithMany("Comments")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("GetPet.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("GetPet.Data.Entities.DataSourceLog", b =>
                 {
                     b.HasOne("GetPet.Data.Entities.DataSource", "DataSource")
@@ -591,13 +706,9 @@ namespace GetPet.Data.Migrations
 
             modelBuilder.Entity("GetPet.Data.Entities.MetaFileLink", b =>
                 {
-                    b.HasOne("GetPet.Data.Entities.Pet", "Pet")
+                    b.HasOne("GetPet.Data.Entities.Pet", null)
                         .WithMany("MetaFileLinks")
-                        .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pet");
+                        .HasForeignKey("PetId");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.Notification", b =>
@@ -673,13 +784,13 @@ namespace GetPet.Data.Migrations
                     b.HasOne("GetPet.Data.Entities.Pet", "Pet")
                         .WithMany("PetTraits")
                         .HasForeignKey("PetId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GetPet.Data.Entities.Trait", "Trait")
-                        .WithOne()
-                        .HasForeignKey("GetPet.Data.Entities.PetTrait", "TraitId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("TraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Pet");
@@ -692,7 +803,7 @@ namespace GetPet.Data.Migrations
                     b.HasOne("GetPet.Data.Entities.Trait", "Trait")
                         .WithMany("TraitOptions")
                         .HasForeignKey("TraitId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Trait");
@@ -715,6 +826,11 @@ namespace GetPet.Data.Migrations
                     b.Navigation("Organization");
                 });
 
+            modelBuilder.Entity("GetPet.Data.Entities.Article", b =>
+                {
+                    b.Navigation("Comments");
+                });
+
             modelBuilder.Entity("GetPet.Data.Entities.Pet", b =>
                 {
                     b.Navigation("MetaFileLinks");
@@ -725,6 +841,11 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.Trait", b =>
                 {
                     b.Navigation("TraitOptions");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.User", b =>
+                {
+                    b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618
         }

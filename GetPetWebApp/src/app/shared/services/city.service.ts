@@ -19,10 +19,7 @@ export class CityService extends BaseService {
 
   Get(filter: CityFilter): Observable<ICity[]> {
 
-    let params: HttpParams = new HttpParams();// .set('filters', JSON.stringify(filters));
-    params = params.append('page', `${filter.page}`);
-    params = params.append('perPage', `${filter.perPage}`);
-
+    let params: HttpParams = this.GetHttpParams(filter);
 
     return this.http.get<ICity[]>(`${this.entPointUrl}cities`, { params });
   }

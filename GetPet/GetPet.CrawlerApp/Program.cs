@@ -47,6 +47,7 @@ namespace GetPet.CrawlerApp
                 .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
+                .AddScoped<ITraitRepository, TraitRepository>()                
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()
                 .AddScoped<ICrawler, SpcaCrawler>()

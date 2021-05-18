@@ -63,9 +63,9 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
+            var traitOptionSmall =context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "בינוני", TraitId = size.Entity.Id });
-            context.TraitOptions.Add(new TraitOption { Option = "גדול", TraitId = size.Entity.Id });
+            var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "ענק", TraitId = size.Entity.Id });
 
             context.TraitOptions.Add(new TraitOption { Option = "לבן", TraitId = color.Entity.Id });
@@ -180,13 +180,12 @@ namespace GetPet.Data
             {
                 pet.PetTraits = new List<PetTrait>();
 
-                pet.PetTraits.Add(new PetTrait { PetId = pet.Id, Trait = size.Entity, Description = "גדול", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+                pet.PetTraits.Add(new PetTrait { PetId = pet.Id, Trait = size.Entity, TraitOptionId = traitOptionBig.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
                 pet.PetTraits.Add(new PetTrait { PetId = pet.Id, Trait = color.Entity, Description = "בז'", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
             }
 
             await context.SaveChangesAsync();
-
 
             var articleTitles = new[] {
                 "גם לי מגיע לחיות",

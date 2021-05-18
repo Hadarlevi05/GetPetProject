@@ -28,6 +28,8 @@ namespace PetAdoption.BusinessLogic.Repositories
                 .Include(q => q.AnimalType)
                 .Include(q => q.PetTraits)
                     .ThenInclude(q => q.Trait)
+                .Include(q => q.PetTraits)
+                    .ThenInclude(q => q.TraitOption)
                 .Include(q => q.User)
                     .ThenInclude(q => q.Organization)
                 .Include(q => q.User)

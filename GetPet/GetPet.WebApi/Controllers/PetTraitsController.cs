@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace GetPet.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PetTraitsController : ControllerBase
     {
         private readonly IMapper _mapper;

@@ -54,13 +54,15 @@ namespace PetAdoption.BusinessLogic.Repositories
             return await query.SingleOrDefaultAsync();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             entity.CreationTimestamp = 
                 entity.UpdatedTimestamp = 
                     DateTime.UtcNow;
 
             await entities.AddAsync(entity);
+
+            return entity;
         }
 
         public async Task UpdateAsync(T entity)

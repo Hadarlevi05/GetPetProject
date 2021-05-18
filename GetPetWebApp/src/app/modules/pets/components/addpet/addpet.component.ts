@@ -1,16 +1,21 @@
 import { CityService } from '../../../../shared/services/city.service';
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
+import { TraitOptionFilter } from 'src/app/shared/models/traitOptionFilter';
+import { ITraitOption } from 'src/app/shared/models/iTraitOption';
+import { TraitOptionsService } from 'src/app/shared/services/traitOptions.service';
+import { compileNgModule } from '@angular/compiler';
 import { ICity } from 'src/app/shared/models/icity';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
-import { AnimalTraitsService } from 'src/app/shared/services/animal-traits.service';
-import { IAnimalTrait } from '../../../../shared/models/ianimal-trait';
 import { CityFilter } from 'src/app/shared/models/city-filter';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
-import { AnimalTraitFilter } from 'src/app/shared/models/animal-trait-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
+import { MatChip } from '@angular/material/chips';
+import { TraitsService } from 'src/app/shared/services/traits.service';
+import { ITrait } from 'src/app/shared/models/itrait';
+import { TraitFilter } from 'src/app/shared/models/trait-filter';
 
 @Component({
   selector: 'app-addpet',
@@ -18,12 +23,15 @@ import { IAnimalType } from 'src/app/shared/models/ianimal-type';
   styleUrls: ['./addpet.component.sass']
 })
 
-export class AddpetComponent implements OnInit {
+export class AddpetComponent 
+  implements OnInit {
 
   loading = false;
   success = false;
+  optionBooleanVal = false;
   addPetFormGroup!: FormGroup;
 
+  
   pet: IPet = {
     name: '',
     images: [''],
@@ -32,17 +40,21 @@ export class AddpetComponent implements OnInit {
     userId: 1,
     creationTimestamp: new Date()
   }
-
+  
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
-  traits_arr: IAnimalTrait[] = [];
+  traits_arr: ITrait[] = [];
+  optionsForTrait: ITraitOption[] = [];
+  traitsWithBooleanValue: ITrait[] = [];
+  traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
-
+  
   constructor(private _formBuilder: FormBuilder,
-    private _animalTypeService: AnimalTypeService,
-    private _cityService: CityService,
-    private _traitsService: AnimalTraitsService,
-    private _petsService: PetsService) { }
+              private _animalTypeService: AnimalTypeService, 
+              private _cityService: CityService, 
+              private _traitsService: TraitsService,
+              private _traitOptionsService: TraitOptionsService,
+              private _petsService: PetsService) { }
 
   ngOnInit(): void {
 
@@ -55,14 +67,14 @@ export class AddpetComponent implements OnInit {
           animalType: ['', [Validators.required]]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(10)]),
-          gender: ['', [Validators.required]],
-          dob: ['', [Validators.required]],
-          //animalTraits: new FormArray([]),
-          description: ['', [Validators.required,
-          Validators.maxLength(500)]],
+          petName: new FormControl('', [Validators.required, 
+            Validators.minLength(2),
+            Validators.maxLength(10)]),
+          gender:['', [Validators.required]],
+          dob:['', [Validators.required]],
+          chipsControl: new FormControl(['']),
+          description:['', [Validators.required,
+                            Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
           //upload picture control?
@@ -99,15 +111,15 @@ export class AddpetComponent implements OnInit {
     return this.addPetFormGroup.get('formArray');
   }
 
-  get traitsFormArray() {
-    return this.addPetFormGroup.controls.animalTraits as FormArray;
-  }
+  // get traitsFormArray() {
+  //   return this.addPetFormGroup.controls.animalTraits as FormArray;
+  // }
 
   loadAnimalTypes() {
 
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTypeFilter(1, 5, date);
+    let filter = new AnimalTypeFilter(1, 100, date);
     this._animalTypeService.Get(filter).subscribe(types => {
       this.animaltypes_arr = types;
     });
@@ -116,29 +128,88 @@ export class AddpetComponent implements OnInit {
   loadCities() {
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1, 5, date);
+    let filter = new CityFilter(1, 100, date);
     this._cityService.Get(filter).subscribe(cities => {
       this.city_arr = cities;
     });
   }
 
   loadUniqueTraits(event) {
-
     let animalTypeId = event.value;
-    // console.log(animalTypeId);
+    console.log("animaltype changed to: " + animalTypeId);
     let date = new Date();
     date.setDate(date.getDate() - 20);
-    let filter = new AnimalTraitFilter(1, 5, date, animalTypeId);
+    let filter = new TraitFilter(1, 100, date, animalTypeId);
     this._traitsService.Post(filter).subscribe(traits => {
       this.traits_arr = traits;
+      this.classifyTraits();
     })
-
-    this.addTraitCheckboxes();
   }
 
-  private addTraitCheckboxes() {
-    this.traits_arr.forEach(() => this.traitsFormArray.push(new FormControl(false)));
+  private classifyTraits() {
+
+    console.log(this.traits_arr);
+
+    for(const trait of this.traits_arr) {
+      this.optionsForTrait = trait.traitOptions;
+      for (const option of this.optionsForTrait) {
+        if (this.isBooleanValue(option)) {
+            this.traitsWithBooleanValue.push(trait);
+            break;
+          } else {
+            this.traitsWithSetOfValues.push(trait);
+          }
+      }
+    }
   }
+
+  private isBooleanValue(op: ITraitOption) : boolean {
+    return (op.option == 'כן' || op.option == 'לא')
+  }
+  // private getOptionsForTrait() {
+
+  //   let date = new Date();
+  //   date.setDate(date.getDate() - 20);
+  //   let filter = new TraitOptionFilter(1,100,date);
+    
+  //   for(const trait of this.traits_arr) {
+      
+  //     filter.traitId = trait.traitId;
+  //     console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
+  //     this._traitOptionsService.Post(filter).subscribe(options => {
+  //       this.options_arr = options;
+
+  //       for (const option of this.options_arr) {
+  //           console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
+  //           if (this.isBooleanValue(option)) {
+  //             this.optionBooleanVal = true;
+  //             this.traitsWithBooleanValue.push(trait);
+  //             break;
+  //           } else { //trait has several option values
+  //             //create selection: traitname and all of its options (in options_arr right now) needed.
+  //             this.optionsForTrait.push(option);
+  //           }
+
+  //       }
+          
+  //         if (this.optionBooleanVal) {  
+  //           //create chip: traitName needed.
+  //           console.log("trait: " + trait.traitName + " has a Yes/No value!");
+
+
+  //         } else {
+  //           //create selection: traitname and all of its options (in options_arr right now) needed.
+  //           console.log("trait: " + trait.traitName + " has several values!");
+            
+
+  //         }
+  //         this.optionBooleanVal = false;
+  //     })
+  //   }
+  // }
+
+
+  
 
   onSubmit(postData) {
     console.log(postData);
@@ -159,7 +230,4 @@ export class AddpetComponent implements OnInit {
     this.loading = false;
   }
 
-  // changeAnimalType(value : any) {
-  //   this.loadUniqueTraits(value);
-  // }
 }

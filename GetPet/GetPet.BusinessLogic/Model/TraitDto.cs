@@ -5,7 +5,10 @@ using System.Text;
 namespace GetPet.BusinessLogic.Model
 {
     public class TraitDto : BaseDto
+
     {
+        public int traitId { get; set; }
+
         public string Name { get; set; }
 
         public List<TraitOptionDto> TraitOptions { get; set; }

@@ -53,13 +53,11 @@
                 </div>
 
                 <!--Unique traits for chosen animal type-->
-                <!--TODO: make it work...-->
-                <!-- <div class="row">
-                    <mat-label>תכונות מיוחדות:</mat-label>
-                    <section formArrayName="animalTraits" *ngFor="let trait of traits_arr">
-                      <mat-checkbox [formControlName]="trait.traitId" name="trait.traitId">{{trait.traitName}}</mat-checkbox>
-                    </section>
-                </div> -->
+                <div class="row">
+                    <mat-label>בחר תכונות מיוחדות:</mat-label>
+                    <app-chips-multi-select [options]="traitsWithBooleanValue" formControlName="chipsControl">
+                    </app-chips-multi-select>
+                </div>
 
                 <!--Some more details about the pet-->
                 <div class="row">
@@ -113,6 +111,7 @@
   </div>
 <!--Add pet form ends-->
 
+
 <div *ngIf="success" class="notification is-success">
   form sent successfully!
 </div>
@@ -125,6 +124,6 @@
 
 <h5>בדיקה-תכונות מיוחדות</h5>
 <ul>
-  <li *ngFor="let trait of traits_arr" [value]="trait.traitId">{{trait.traitName}}</li>
+  <li *ngFor="let trait of traits_arr" [value]="trait.name">{{trait.name}}</li>
 </ul>
 </div>

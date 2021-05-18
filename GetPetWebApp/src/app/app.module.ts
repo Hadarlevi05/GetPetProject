@@ -28,6 +28,8 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MultiSelectChipsComponent } from './modules/pets/components/multi-select-chips/multi-select-chips.component';
+import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 
@@ -40,6 +42,7 @@ import { ArticleCardComponent } from './modules/articles/components/article-card
     PetCardComponent,
     LoaderComponent,
     AddpetComponent,
+    MultiSelectChipsComponent,
     ArticleCardComponent
   ],
   imports: [
@@ -67,6 +70,11 @@ import { ArticleCardComponent } from './modules/articles/components/article-card
     MatAutocompleteModule,
     AngularFileUploaderModule,
     MatStepperModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatDividerModule,
     MatCheckboxModule,
     FlexLayoutModule
   ],

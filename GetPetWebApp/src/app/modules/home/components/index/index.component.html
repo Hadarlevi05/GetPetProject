@@ -1,10 +1,10 @@
-<app-loader [Show]="loading"></app-loader>
-
 <section>
     <h2>מאמרים אחרונים</h2>
     <div class="pets-container">
 
-        <div class="content">
+        <app-loader [Show]="articleLoading"></app-loader>
+
+        <div class="content" *ngIf="!articleLoading">
             <div fxLayout="row wrap" fxLayoutGap="16px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
                     fxFlex.xl="20%" fx *ngFor="let article of articles">
@@ -22,7 +22,9 @@
         <mat-tab label="כלבים">
             <div class="pets-container">
 
-                <div class="content">
+                <app-loader [Show]="petLoading"></app-loader>
+
+                <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
                         <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
                             fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">

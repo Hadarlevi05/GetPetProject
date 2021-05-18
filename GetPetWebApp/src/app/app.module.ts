@@ -33,6 +33,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 import { SearchPetsComponent } from './modules/pets/components/search-pets/search-pets.component';
+import { SearchCriteriaComponent } from './modules/pets/components/search-criteria/search-criteria.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { SearchPetsComponent } from './modules/pets/components/search-pets/searc
     AddpetComponent,
     MultiSelectChipsComponent,
     ArticleCardComponent,
-    SearchPetsComponent
+    SearchPetsComponent,
+    SearchCriteriaComponent
   ],
   imports: [
     BrowserModule,

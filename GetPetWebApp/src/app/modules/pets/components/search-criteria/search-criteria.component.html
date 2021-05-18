@@ -1,0 +1,16 @@
+<div>
+    <strong>{{trait.name }}</strong>
+
+    <span *ngFor="let option of trait.traitOptions">
+        {{ option.option }}
+    </span>
+
+    <mat-chip-list selectable multiple>
+        <mat-chip #c="matChip" *ngFor="let option of trait.traitOptions" [value]="option.id">
+            <mat-icon *ngIf="true">check</mat-icon>
+            {{ option.option }}
+        </mat-chip>
+    </mat-chip-list>
+
+
+</div>

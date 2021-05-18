@@ -34,10 +34,12 @@ export class AddpetComponent
   
   pet: IPet = {
     name: '',
-    images: [''],
-    description: '',
     animalTypeId: 0,
     userId: 1,
+    birthday: "",
+    traits: new Map(),
+    description: '',
+    images: [''],
     creationTimestamp: new Date()
   }
   
@@ -73,14 +75,12 @@ export class AddpetComponent
           gender:['', [Validators.required]],
           dob:['', [Validators.required]],
           chipsControl: new FormControl(['']),
+          traits: new FormControl (['']),
           description:['', [Validators.required,
                             Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
           //upload picture control?
-        }),
-        this._formBuilder.group({
-          city: ['', [Validators.required]],
         }),
         this._formBuilder.group({
           //preview and send
@@ -135,6 +135,8 @@ export class AddpetComponent
   }
 
   loadUniqueTraits(event) {
+
+    this.deleteTraitsArrays();
     let animalTypeId = event.value;
     console.log("animaltype changed to: " + animalTypeId);
     let date = new Date();
@@ -158,61 +160,35 @@ export class AddpetComponent
             break;
           } else {
             this.traitsWithSetOfValues.push(trait);
+            break;
           }
       }
     }
+
+    // console.log("traits with boolean value:");
+    // console.log(this.traitsWithBooleanValue);
+    // console.log("trait with set of value:");
+    // console.log(this.traitsWithSetOfValues);
   }
 
   private isBooleanValue(op: ITraitOption) : boolean {
     return (op.option == 'כן' || op.option == 'לא')
   }
-  // private getOptionsForTrait() {
 
-  //   let date = new Date();
-  //   date.setDate(date.getDate() - 20);
-  //   let filter = new TraitOptionFilter(1,100,date);
-    
-  //   for(const trait of this.traits_arr) {
-      
-  //     filter.traitId = trait.traitId;
-  //     console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
-  //     this._traitOptionsService.Post(filter).subscribe(options => {
-  //       this.options_arr = options;
-
-  //       for (const option of this.options_arr) {
-  //           console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
-  //           if (this.isBooleanValue(option)) {
-  //             this.optionBooleanVal = true;
-  //             this.traitsWithBooleanValue.push(trait);
-  //             break;
-  //           } else { //trait has several option values
-  //             //create selection: traitname and all of its options (in options_arr right now) needed.
-  //             this.optionsForTrait.push(option);
-  //           }
-
-  //       }
-          
-  //         if (this.optionBooleanVal) {  
-  //           //create chip: traitName needed.
-  //           console.log("trait: " + trait.traitName + " has a Yes/No value!");
-
-
-  //         } else {
-  //           //create selection: traitname and all of its options (in options_arr right now) needed.
-  //           console.log("trait: " + trait.traitName + " has several values!");
-            
-
-  //         }
-  //         this.optionBooleanVal = false;
-  //     })
-  //   }
-  // }
-
-
-  
+  private deleteTraitsArrays() {
+    this.traits_arr = [];
+    this.traitsWithBooleanValue = [];
+    this.traitsWithSetOfValues = [];
+  }
 
   onSubmit(postData) {
     console.log(postData);
+
+    // userId: 1,
+    // birthday: "",
+    // traits: new Map(),
+    // images: [''],
+    // creationTimestamp: new Date()
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;

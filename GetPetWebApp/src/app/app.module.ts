@@ -32,6 +32,7 @@ import { MultiSelectChipsComponent } from './modules/pets/components/multi-selec
 import { MatDividerModule } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
+import { SelectComponent } from './modules/pets/components/select/select.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ArticleCardComponent } from './modules/articles/components/article-card
     LoaderComponent,
     AddpetComponent,
     MultiSelectChipsComponent,
-    ArticleCardComponent
+    ArticleCardComponent,
+    SelectComponent
   ],
   imports: [
     BrowserModule,

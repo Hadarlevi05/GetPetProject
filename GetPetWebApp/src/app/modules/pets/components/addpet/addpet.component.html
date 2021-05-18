@@ -59,6 +59,12 @@
                     </app-chips-multi-select>
                 </div>
 
+                <div class="row">
+                  <div *ngFor="let trait of traitsWithSetOfValues">
+                    <app-select [trait]="trait"></app-select>
+                  </div>
+                </div>
+
                 <!--Some more details about the pet-->
                 <div class="row">
                   <mat-form-field appearance="outline">
@@ -81,22 +87,7 @@
                 </div>
             </mat-step>
 
-            <mat-step formGroupName="3" [stepControl]="formArray?.get([3])!" label="פרטי איש קשר">
-                <!--Select city-->
-                <div class="row">
-                    <mat-form-field appearance="outline">
-                      <mat-label>עיר</mat-label>
-                      <mat-select formControlName="city">
-                        <mat-option *ngFor="let city of city_arr" [value]="city.id">
-                          {{ city.name }}
-                        </mat-option>
-                      </mat-select>
-                      <mat-icon matPrefix>place</mat-icon>
-                    </mat-form-field>
-                </div>
-            </mat-step>
-
-            <mat-step formGroupName="4" [stepControl]="formArray?.get([4])!" label="סיום ושליחה">
+            <mat-step formGroupName="3" [stepControl]="formArray?.get([3])!" label="סיום ושליחה">
                 <div class="row">
                   <!--TODO: a preview of the form before sending-->
 
@@ -121,9 +112,3 @@
 <hr />
 <h1>JSON</h1>
 <p>Form value: {{ addPetFormGroup.value | json }}</p>
-
-<h5>בדיקה-תכונות מיוחדות</h5>
-<ul>
-  <li *ngFor="let trait of traits_arr" [value]="trait.name">{{trait.name}}</li>
-</ul>
-</div>

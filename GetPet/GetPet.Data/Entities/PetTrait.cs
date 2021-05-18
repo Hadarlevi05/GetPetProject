@@ -13,8 +13,11 @@ namespace GetPet.Data.Entities
         public int TraitId { get; set; }
         public Trait Trait { get; set; }
 
+        [ForeignKey("TraitOption")]
         public int? TraitOptionId { get; set; }
-        
+        public TraitOption TraitOption { get; set; }
+
+
         [StringLength(400)]
         public string Description { get; set; }
 

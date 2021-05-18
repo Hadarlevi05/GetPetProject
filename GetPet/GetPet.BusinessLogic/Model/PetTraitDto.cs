@@ -10,6 +10,6 @@ namespace GetPet.BusinessLogic.Model
 
         public string TraitName { get; set; }
 
-        public string TraitValue { get; set; }
+        public string TraitValue { get; set; }        
     }
 }

@@ -152,35 +152,6 @@ namespace GetPet.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AnimalTraits",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TraitId = table.Column<int>(type: "int", nullable: false),
-                    AnimalTypeId = table.Column<int>(type: "int", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreationTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AnimalTraits", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AnimalTraits_AnimalTypes_AnimalTypeId",
-                        column: x => x.AnimalTypeId,
-                        principalTable: "AnimalTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AnimalTraits_Traits_TraitId",
-                        column: x => x.TraitId,
-                        principalTable: "Traits",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "TraitOptions",
                 columns: table => new
                 {
@@ -377,7 +348,7 @@ namespace GetPet.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PetId = table.Column<int>(type: "int", nullable: false),
                     TraitId = table.Column<int>(type: "int", nullable: false),
-                    TraitOptionId = table.Column<int>(type: "int", nullable: false),
+                    TraitOptionId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedTimestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -392,6 +363,12 @@ namespace GetPet.Data.Migrations
                         principalTable: "Pets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetTraits_TraitOptions_TraitOptionId",
+                        column: x => x.TraitOptionId,
+                        principalTable: "TraitOptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PetTraits_Traits_TraitId",
                         column: x => x.TraitId,
@@ -460,16 +437,6 @@ namespace GetPet.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnimalTraits_AnimalTypeId",
-                table: "AnimalTraits",
-                column: "AnimalTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AnimalTraits_TraitId",
-                table: "AnimalTraits",
-                column: "TraitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Articles_MetaFileLinkId",
@@ -554,6 +521,11 @@ namespace GetPet.Data.Migrations
                 column: "TraitId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PetTraits_TraitOptionId",
+                table: "PetTraits",
+                column: "TraitOptionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TraitOptions_TraitId",
                 table: "TraitOptions",
                 column: "TraitId");
@@ -571,9 +543,6 @@ namespace GetPet.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AnimalTraits");
-
             migrationBuilder.DropTable(
                 name: "Comments");
 
@@ -593,9 +562,6 @@ namespace GetPet.Data.Migrations
                 name: "PetTraits");
 
             migrationBuilder.DropTable(
-                name: "TraitOptions");
-
-            migrationBuilder.DropTable(
                 name: "Articles");
 
             migrationBuilder.DropTable(
@@ -605,10 +571,13 @@ namespace GetPet.Data.Migrations
                 name: "Notifications");
 
             migrationBuilder.DropTable(
-                name: "Traits");
+                name: "TraitOptions");
 
             migrationBuilder.DropTable(
                 name: "MetaFileLinks");
+
+            migrationBuilder.DropTable(
+                name: "Traits");
 
             migrationBuilder.DropTable(
                 name: "Pets");

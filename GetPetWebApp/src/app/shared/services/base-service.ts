@@ -3,7 +3,9 @@ import { BaseFilter } from '../models/base-filter';
 
 export class BaseService {
 
-    protected BASE_URL = 'https://localhost:44345/';
+    protected BASE_URL = 'https://localhost:44345/api/';
+
+    protected IMAGE_BASE_URL = 'https://localhost:44345/api/';
 
     constructor(protected http: HttpClient) { }
 

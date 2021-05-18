@@ -31,6 +31,14 @@ namespace GetPet.BusinessLogic.MappingProfiles
             ArticleMapping();
 
             CommentMapping();
+
+            MetaFileLinkMapping();
+        }
+
+        private void MetaFileLinkMapping()
+        {
+            CreateMap<MetaFileLink, MetaFileLinkDto>()
+                .ReverseMap();
         }
 
         private void CommentMapping()

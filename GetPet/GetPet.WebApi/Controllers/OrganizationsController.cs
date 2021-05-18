@@ -11,7 +11,7 @@ using GetPet.Data.Entities;
 namespace GetPet.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class OrganizationsController : ControllerBase
     {
         private readonly IMapper _mapper;

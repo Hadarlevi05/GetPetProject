@@ -42,7 +42,7 @@ namespace GetPet.Crawler.Crawlers
 
         protected virtual List<Trait> GetListOfTraits()
         {
-            var filter = new BaseFilter();
+            var filter = new TraitFilter();
             var results = _traitRepository.SearchAsync(filter).Result.ToList();
 
             return results;

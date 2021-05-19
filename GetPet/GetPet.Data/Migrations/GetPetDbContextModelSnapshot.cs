@@ -19,37 +19,6 @@ namespace GetPet.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("GetPet.Data.Entities.AnimalTrait", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("AnimalTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationTimestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TraitId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedTimestamp")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AnimalTypeId");
-
-                    b.HasIndex("TraitId");
-
-                    b.ToTable("AnimalTraits");
-                });
-
             modelBuilder.Entity("GetPet.Data.Entities.AnimalType", b =>
                 {
                     b.Property<int>("Id")
@@ -520,6 +489,8 @@ namespace GetPet.Data.Migrations
 
                     b.HasIndex("TraitId");
 
+                    b.HasIndex("TraitOptionId");
+
                     b.ToTable("PetTraits");
                 });
 
@@ -630,25 +601,6 @@ namespace GetPet.Data.Migrations
                     b.HasIndex("OrganizationId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("GetPet.Data.Entities.AnimalTrait", b =>
-                {
-                    b.HasOne("GetPet.Data.Entities.AnimalType", "AnimalType")
-                        .WithMany()
-                        .HasForeignKey("AnimalTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GetPet.Data.Entities.Trait", "Trait")
-                        .WithMany()
-                        .HasForeignKey("TraitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AnimalType");
-
-                    b.Navigation("Trait");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.Article", b =>
@@ -799,9 +751,15 @@ namespace GetPet.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("GetPet.Data.Entities.TraitOption", "TraitOption")
+                        .WithMany()
+                        .HasForeignKey("TraitOptionId");
+
                     b.Navigation("Pet");
 
                     b.Navigation("Trait");
+
+                    b.Navigation("TraitOption");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.TraitOption", b =>

@@ -13,7 +13,8 @@ import { BaseFilter } from 'src/app/shared/models/base-filter';
 })
 export class IndexComponent implements OnInit {
 
-  loading = true;
+  petLoading = true;
+  articleLoading = true;
 
   pets: IPet[] = [];
   articles: IArticle[] = [];
@@ -36,7 +37,7 @@ export class IndexComponent implements OnInit {
 
   loadArticles() {
 
-    this.loading = false;
+    this.articleLoading = true;
 
     let date = new Date();
     date.setDate(date.getDate() - 14);
@@ -46,13 +47,13 @@ export class IndexComponent implements OnInit {
     this.articleService.Search(filter).subscribe(articles => {
       this.articles = articles;
 
-      this.loading = false;
+      this.articleLoading = false;
     });
   }
 
   loadPets() {
 
-    this.loading = false;
+    this.petLoading = false;
 
     let date = new Date();
     date.setDate(date.getDate() - 14);
@@ -62,7 +63,7 @@ export class IndexComponent implements OnInit {
     this.petsService.Search(filter).subscribe(pets => {
       this.pets = pets;
 
-      this.loading = false;
+      this.petLoading = false;
     });
   }
 }

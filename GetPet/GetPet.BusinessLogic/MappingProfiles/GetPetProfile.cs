@@ -26,13 +26,27 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
             PetTraitMapping();
 
-            AnimalTraitMapping();
-
             TraitOptionsMapping();
 
             ArticleMapping();
 
             CommentMapping();
+
+            MetaFileLinkMapping();
+
+            TraitOptionMapping();
+        }
+
+        private void TraitOptionMapping()
+        {
+            CreateMap<TraitOption, TraitOptionDto>()
+                .ReverseMap();
+        }
+
+        private void MetaFileLinkMapping()
+        {
+            CreateMap<MetaFileLink, MetaFileLinkDto>()
+                .ReverseMap();
         }
 
         private void CommentMapping()
@@ -61,12 +75,12 @@ namespace GetPet.BusinessLogic.MappingProfiles
             CreateMap<PetTrait, PetTraitDto>()
                 .ForMember(dest => dest.PetName, opt => opt.MapFrom(src => src.Pet.Name))
                 .ForMember(dest => dest.TraitName, opt => opt.MapFrom(src => src.Trait.Name))
-                .ForMember(dest => dest.TraitValue, opt => opt.MapFrom(src => src.Description));
+                .ForMember(dest => dest.TraitValue, opt => opt.MapFrom(src => src.TraitOption != null ? src.TraitOption.Option : src.Description));
 
             CreateMap<PetTraitDto, PetTrait>()
                 .ForMember(dest => dest.PetId, opt => opt.MapFrom(src => src.PetName))
-                .ForMember(dest => dest.TraitId, opt => opt.MapFrom(src => src.TraitName)); 
-                //.ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Description));
+                .ForMember(dest => dest.TraitId, opt => opt.MapFrom(src => src.TraitName));
+            //.ForMember(dest => dest.Value, opt => opt.MapFrom(src => src.Description));
         }
 
         private void UserMapping()
@@ -83,7 +97,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
             CreateMap<Pet, PetDto>()
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (src.Gender)))
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.MetaFileLinks.Select(mfl => mfl.Path)))
-                .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.ToDictionary(t => t.Trait.Name, t => t.Description)))
+                .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.ToDictionary(t => t.Trait.Name, t => t.TraitOption != null ? t.TraitOption.Option : t.Description)))
                 .ForMember(dest => dest.AnimalTypeId, opt => opt.MapFrom(src => src.AnimalType.Id))
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.DateHumanize()));
 
@@ -110,12 +124,5 @@ namespace GetPet.BusinessLogic.MappingProfiles
             CreateMap<Organization, OrganizationDto>().ReverseMap();
         }
 
-        private void AnimalTraitMapping()
-        {
-            CreateMap<AnimalTrait, AnimalTraitDto>()
-                .ForMember(dest => dest.TraitName, opt => opt.MapFrom(src => (src.Trait.Name)))
-                .ForMember(dest => dest.AnimalTypeName, opt => opt.MapFrom(src => (src.AnimalType.Name)));
-
-        }
     }
 }

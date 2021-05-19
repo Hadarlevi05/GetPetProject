@@ -25,4 +25,8 @@
     <ProjectReference Include="..\GetPet.Data\GetPet.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\upload-content\" />
+  </ItemGroup>
+
 </Project>

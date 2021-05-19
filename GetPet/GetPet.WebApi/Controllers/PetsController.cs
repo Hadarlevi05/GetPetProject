@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace PetAdoption.WebApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PetsController : ControllerBase
     {
         private readonly IMapper _mapper;

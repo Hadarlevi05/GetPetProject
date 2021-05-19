@@ -3,112 +3,108 @@
     <mat-card-title>הוסף בעל חיים</mat-card-title>
   </mat-card-header>
 
-<mat-card-content>
-<div class="container">
-          <!--Add pet form starts-->
-          <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="success">
-          <mat-vertical-stepper dir="rtl" #stepper [linear]="true" formArrayName="formArray">
-            <mat-step formGroupName="0" [stepControl]="formArray?.get([0])!" label="בחר סוג חיה">
-                <!--Select animal type-->
-                <div class="row">
-                    <mat-form-field appearance="outline">
-                      <mat-label>סוג</mat-label>
-                      <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
-                        (selectionChange)="loadUniqueTraits($event)">
-                        <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
-                          {{ type.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                </div>
-            </mat-step>
+  <mat-card-content>
+    <div class="container">
+      <!--Add pet form starts-->
+      <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="success">
+        <mat-vertical-stepper dir="rtl" #stepper [linear]="true" formArrayName="formArray">
+          <mat-step formGroupName="0" [stepControl]="formArray?.get([0])!" label="בחר סוג חיה">
+            <!--Select animal type-->
+            <div class="row">
+              <mat-form-field appearance="outline">
+                <mat-label>סוג</mat-label>
+                <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
+                  (selectionChange)="loadUniqueTraits($event)">
+                  <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
+                    {{ type.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </mat-step>
 
-            <mat-step formGroupName="1" [stepControl]="formArray?.get([1])!" label="פרטי החיה">
-                <!--Insert pet name-->
-                <div class="row">
-                  <mat-form-field hintLabel="מקסימום 10 תווים" appearance="outline">
-                    <mat-label>שם</mat-label>
-                    <input #petName maxlength="10" formControlName="petName" matInput name="name" placeholder="שם" required />
-                    <mat-hint align="end">{{petName.value?.length || 0}}/10</mat-hint>
-                  </mat-form-field>
-                </div>
+          <mat-step formGroupName="1" [stepControl]="formArray?.get([1])!" label="פרטי החיה">
+            <!--Insert pet name-->
+            <div class="row">
+              <mat-form-field hintLabel="מקסימום 10 תווים" appearance="outline">
+                <mat-label>שם</mat-label>
+                <input #petName maxlength="10" formControlName="petName" matInput name="name" placeholder="שם"
+                  required />
+                <mat-hint align="end">{{petName.value?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+            </div>
 
-                <!--Select gender-->
-                <div class="col-6">
-                    <mat-label>מין</mat-label>
-                    <mat-radio-group formControlName="gender" class="margin-left gender-radio-group">
-                      <mat-radio-button *ngFor="let gender of gender_arr; index as id" [value]=id> {{gender}}
-                      </mat-radio-button>
-                    </mat-radio-group>
-                </div>
+            <!--Select gender-->
+            <div class="col-6">
+              <mat-label>מין</mat-label>
+              <mat-radio-group formControlName="gender" class="margin-left gender-radio-group">
+                <mat-radio-button *ngFor="let gender of gender_arr; index as id" [value]=id> {{gender}}
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
 
-                <!--Select date of birth-->
-                <div class="row">
-                <mat-form-field appearance="outline">
-                  <mat-label>תאריך לידה</mat-label>
-                  <input formControlName="dob" matInput [matDatepicker]="picker" />
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-                </div>
+            <!--Select date of birth-->
+            <div class="row">
+              <mat-form-field appearance="outline">
+                <mat-label>תאריך לידה</mat-label>
+                <input formControlName="dob" matInput [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
 
-                <!--Unique traits for chosen animal type-->
-                <div class="row">
-                    <mat-label>בחר תכונות מיוחדות:</mat-label>
-                    <app-chips-multi-select [options]="traitsWithBooleanValue" formControlName="chipsControl">
-                    </app-chips-multi-select>
-                </div>
+            <!--Unique traits for chosen animal type-->
+            <div class="row">
+              <mat-label>בחר תכונות מיוחדות:</mat-label>
+              <app-chips-multi-select [options]="traitsWithBooleanValue" formControlName="chipsControl">
+              </app-chips-multi-select>
+            </div>
 
-                <div class="row">
-                  <div *ngFor="let trait of traitsWithSetOfValues">
-                    <app-select [trait]="trait"></app-select>
-                  </div>
-                </div>
+            <div class="row" *ngFor="let trait of traitsWithSetOfValues">
 
-                <!--Some more details about the pet-->
-                <div class="row">
-                  <mat-form-field appearance="outline">
-                    <textarea matInput 
-                              style="width: 300px;"
-                              placeholder="תיאור נוסף"
-                              formControlName="description" 
-                              cdkTextareaAutosize
-                              cdkAutosizeMinRows="5"
-                              cdkAutosizeMaxRows="10" >
+              <app-select [trait]="trait" (selectionEvent)="onTraitSelection($event)"></app-select>
+
+            </div>
+
+            <!--Some more details about the pet-->
+            <div class="row">
+              <mat-form-field appearance="outline">
+                <textarea matInput style="width: 300px;" placeholder="תיאור נוסף" formControlName="description"
+                  cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="10">
                     </textarea>
-                  </mat-form-field>
-                </div>
-            </mat-step>
+              </mat-form-field>
+            </div>
+          </mat-step>
 
-            <mat-step formGroupName="2" label="הוספת תמונות" [optional]="true">
-                <!--Image upload-->
-                <div class="row">
-                <angular-file-uploader [config]="afuConfig"> </angular-file-uploader>
-                </div>
-            </mat-step>
+          <mat-step formGroupName="2" label="הוספת תמונות" [optional]="true">
+            <!--Image upload-->
+            <div class="row">
+              <angular-file-uploader [config]="afuConfig"> </angular-file-uploader>
+            </div>
+          </mat-step>
 
-            <mat-step formGroupName="3" [stepControl]="formArray?.get([3])!" label="סיום ושליחה">
-                <div class="row">
-                  <!--TODO: a preview of the form before sending-->
+          <mat-step formGroupName="3" [stepControl]="formArray?.get([3])!" label="סיום ושליחה">
+            <div class="row">
+              <!--TODO: a preview of the form before sending-->
 
-                  <!--submit button-->
-                  <div class="row">
-                    <button mat-button color="primary" type="submit" (click)="onSubmit(addPetForm.value)">שלח</button>
-                  </div>
-                </div>
-            </mat-step>
-          </mat-vertical-stepper>
-        </form>
-  </div>
-<!--Add pet form ends-->
-
-
-<div *ngIf="success" class="notification is-success">
-  form sent successfully!
-</div>
+              <!--submit button-->
+              <div class="row">
+                <button mat-button color="primary" type="submit" (click)="onSubmit(addPetForm.value)">שלח</button>
+              </div>
+            </div>
+          </mat-step>
+        </mat-vertical-stepper>
+      </form>
+    </div>
+    <!--Add pet form ends-->
 
 
-<div dir="ltr" align="left">
-<hr />
-<h1>JSON</h1>
-<p>Form value: {{ addPetFormGroup.value | json }}</p>
+    <div *ngIf="success" class="notification is-success">
+      form sent successfully!
+    </div>
+
+
+    <div dir="ltr" align="left">
+      <hr />
+      <h1>JSON</h1>
+      <p>Form value: {{ addPetFormGroup.value | json }}</p>

@@ -16,6 +16,7 @@ import { MatChip } from '@angular/material/chips';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
+import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 
 @Component({
   selector: 'app-addpet',
@@ -50,6 +51,7 @@ export class AddpetComponent
   traitsWithBooleanValue: ITrait[] = [];
   traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
+  traitSelections: ITraitSelection[] = [];
   
   constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
@@ -75,7 +77,7 @@ export class AddpetComponent
           gender:['', [Validators.required]],
           dob:['', [Validators.required]],
           chipsControl: new FormControl(['']),
-          traits: new FormControl (['']),
+          traits: this._formBuilder.array([]),
           description:['', [Validators.required,
                             Validators.maxLength(500)]],
         }),
@@ -111,9 +113,16 @@ export class AddpetComponent
     return this.addPetFormGroup.get('formArray');
   }
 
-  // get traitsFormArray() {
-  //   return this.addPetFormGroup.controls.animalTraits as FormArray;
-  // }
+  get traits() : FormArray {
+    return this.addPetFormGroup.get('traits') as FormArray;
+  }
+
+  //this method is called when a new app-select is created!
+  //it creates a new formControl for it.
+  addSelect() {
+    this.traits.push(this._formBuilder.control(''));
+    console.log("a new form control has added to traits");
+  }
 
   loadAnimalTypes() {
 
@@ -160,15 +169,16 @@ export class AddpetComponent
             break;
           } else {
             this.traitsWithSetOfValues.push(trait);
+            //this.addSelect(); //adds a new formControl to addpetformgroup
             break;
           }
       }
     }
 
-    // console.log("traits with boolean value:");
-    // console.log(this.traitsWithBooleanValue);
-    // console.log("trait with set of value:");
-    // console.log(this.traitsWithSetOfValues);
+    console.log("traits with boolean value:");
+    console.log(this.traitsWithBooleanValue);
+    console.log("trait with set of value:");
+    console.log(this.traitsWithSetOfValues);
   }
 
   private isBooleanValue(op: ITraitOption) : boolean {
@@ -179,6 +189,17 @@ export class AddpetComponent
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
     this.traitsWithSetOfValues = [];
+  }
+
+  onTraitSelection(traitSelection: ITraitSelection) {
+    console.log('all traitSelections', this.traitSelections);
+    const item = this.traitSelections.find(i => i.traitId === traitSelection.traitId);
+    if (item) {
+      item.traitOptionId = traitSelection.traitOptionId;
+      item.description = traitSelection.description;
+    } else {
+      this.traitSelections.push(traitSelection);
+    }
   }
 
   onSubmit(postData) {

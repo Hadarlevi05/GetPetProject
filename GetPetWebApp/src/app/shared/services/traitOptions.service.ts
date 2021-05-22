@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from 'src/app/shared/services/base-service';
+import { ITraitOption } from '../models/itraitoption';
 import { TraitOptionFilter } from '../models/traitOptionFilter';
-import { ITraitOption } from '../models/iTraitOption';
 
 @Injectable({
   providedIn: 'root'

@@ -1,1 +1,37 @@
-<app-search-criteria *ngFor="let trait of traits" [trait]="trait"></app-search-criteria>
+<div class="main-container" dir="rtl">
+    <aside>
+        <form [formGroup]="form">
+
+            <section class="row">
+                <mat-form-field appearance="outline">
+                    <mat-label>סוג</mat-label>
+                    <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
+                        <mat-option *ngFor="let type of animaltypes" [value]="type.id">
+                            {{ type.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </section>
+            <section class="row filter-list">
+                <app-search-criteria *ngFor="let trait of booleanTraits" [trait]="trait"></app-search-criteria>
+            </section>
+            <section class="row">
+                <app-search-criteria *ngFor="let trait of nonBooleanTraits" [trait]="trait"></app-search-criteria>
+            </section>
+            <section class="row">
+                <button mat-raised-button color="primary">חפש</button>
+            </section>
+        </form>
+    </aside>
+    <main>
+        <div class="content" *ngIf="!loading">
+            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
+                    fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                    <app-pet-card [pet]="pet"></app-pet-card>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

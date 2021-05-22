@@ -48,22 +48,33 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            var dog = context.AnimalTypes.Add(new AnimalType { Name = "כלב", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var cat = context.AnimalTypes.Add(new AnimalType { Name = "חתול", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            context.AnimalTypes.Add(new AnimalType { Name = "שפן", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var animalTypeList = new[] {
+                "כלבים",
+                "חתולים",
+                "מכרסמים"
+            };
+
+            foreach (var item in animalTypeList)
+            {
+                context.AnimalTypes.Add(new AnimalType { Name = item, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+                await context.SaveChangesAsync();
+            }
+
+            var dog = context.AnimalTypes.FirstOrDefault();
+            var cat = context.AnimalTypes.Skip(1).Take(1).FirstOrDefault();
 
             await context.SaveChangesAsync();
 
-            var size = context.Traits.Add(new Trait { Name = "גודל", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var color = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var trained = context.Traits.Add(new Trait { Name = "מאולף", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var size = context.Traits.Add(new Trait { Name = "גודל", AnimalTypeId = dog.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var color = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = dog.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", AnimalTypeId = dog.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var trained = context.Traits.Add(new Trait { Name = "מאולף", AnimalTypeId = dog.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
-            var colorCat = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = cat.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var colorCat = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
 
             await context.SaveChangesAsync();
 
-            var traitOptionSmall =context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
+            var traitOptionSmall = context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "בינוני", TraitId = size.Entity.Id });
             var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "ענק", TraitId = size.Entity.Id });
@@ -153,7 +164,7 @@ namespace GetPet.Data
                 context.Pets.Add(new Pet
                 {
                     Name = names[i],
-                    AnimalTypeId = dog.Entity.Id,
+                    AnimalTypeId = dog.Id,
                     Birthday = DateTime.UtcNow.AddYears(-2),
                     Gender = Enums.Gender.Male,
                     Status = Enums.PetStatus.WaitingForAdoption,
@@ -198,7 +209,7 @@ namespace GetPet.Data
             for (int i = 1; i <= 5; i++)
             {
                 var mtf = context.MetaFileLinks.Add(new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/article{i}.jpg", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-                
+
                 await context.SaveChangesAsync();
 
                 context.Articles.Add(new Article

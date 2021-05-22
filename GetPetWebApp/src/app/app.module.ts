@@ -34,6 +34,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 import { SearchPetsComponent } from './modules/pets/components/search-pets/search-pets.component';
 import { SearchCriteriaComponent } from './modules/pets/components/search-criteria/search-criteria.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -80,7 +81,8 @@ import { SearchCriteriaComponent } from './modules/pets/components/search-criter
     MatToolbarModule,
     MatDividerModule,
     MatCheckboxModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]

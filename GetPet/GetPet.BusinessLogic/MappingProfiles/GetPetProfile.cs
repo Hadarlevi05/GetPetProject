@@ -116,7 +116,9 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void TraitMapping()
         {
-            CreateMap<Trait, TraitDto>();
+            CreateMap<Trait, TraitDto>()
+                .ForMember(dest => dest.IsBoolean, opt => opt.MapFrom(src =>
+                    src.TraitOptions.Count == 2 && src.TraitOptions.Count(i => i.Option == "כן" || i.Option == "לא") == 2));
         }
 
         private void OrganizationMapping()

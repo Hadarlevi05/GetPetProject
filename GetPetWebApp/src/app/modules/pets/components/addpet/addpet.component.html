@@ -47,7 +47,8 @@
             <div class="row">
               <mat-form-field appearance="outline">
                 <mat-label>תאריך לידה</mat-label>
-                <input formControlName="dob" matInput [matDatepicker]="picker" />
+                <mat-hint>*ניתן למלא תאריך לידה משוער</mat-hint>
+                <input formControlName="dob" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" />
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
               </mat-form-field>
@@ -56,7 +57,10 @@
             <!--Unique traits for chosen animal type-->
             <div class="row">
               <mat-label>בחר תכונות מיוחדות:</mat-label>
-              <app-chips-multi-select [options]="traitsWithBooleanValue" formControlName="chipsControl">
+              <app-chips-multi-select 
+                  [options]="traitsWithBooleanValue"
+                  [isMatChipsTraitsLoaded]="isMatChipsLoaded" 
+                  formControlName="chipsControl">
               </app-chips-multi-select>
             </div>
 

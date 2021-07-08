@@ -1,15 +1,19 @@
 import {
   AfterViewInit,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
+  OnChanges
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { MatChip, MatChipList } from '@angular/material/chips';
+import { MatChip, MatChipList, MatChipSelectionChange } from '@angular/material/chips';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { map } from 'rxjs/operators';
 import { ITrait } from 'src/app/shared/models/itrait';
+import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 
 @UntilDestroy()
 @Component({
@@ -25,11 +29,19 @@ import { ITrait } from 'src/app/shared/models/itrait';
   ],
 })
 export class MultiSelectChipsComponent
-  implements OnInit, AfterViewInit, ControlValueAccessor {
+  implements OnInit, AfterViewInit, ControlValueAccessor, OnChanges {
   @ViewChild(MatChipList)
   chipList!: MatChipList;
 
+  traitChipSelection: ITraitSelection = {} as ITraitSelection;
+  traitChipSelections: ITraitSelection[] = [];
+
+  @Input() isMatChipsTraitsLoaded;
+
   @Input() options: ITrait[] = [];
+
+  @Output()
+  selectionEvent = new EventEmitter<ITraitSelection>();
 
   value: string[] = [];
 
@@ -62,7 +74,29 @@ export class MultiSelectChipsComponent
     this.disabled = isDisabled;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
+
+  selectionChange(event: MatChipSelectionChange){
+
+    //canceled. delete this.
+  }
+
+  ngOnChanges() {
+
+    console.log("in child: isMatChipsTraitsLoaded: " + this.isMatChipsTraitsLoaded);
+
+    //set all matchips to be false
+    this.options.forEach (op => {
+      this.traitChipSelection = {} as ITraitSelection;      
+      this.traitChipSelection.traitId = op.id;
+      this.traitChipSelection.traitOptionId = 
+      (op.traitOptions[0].option === "לא") ? op.traitOptions[0].id : op.traitOptions[1].id;
+      this.traitChipSelections.push(this.traitChipSelection);
+    })
+    console.log('all matchips selections', this.traitChipSelections);
+  }
 
   ngAfterViewInit() {
     this.selectChips(this.value);
@@ -99,7 +133,24 @@ export class MultiSelectChipsComponent
     chipsToSelect.forEach((chip) => chip.select());
   }
 
+  //value is of type iTrait
   toggleSelection(chip: MatChip) {
     if (!this.disabled) chip.toggleSelected();
+    console.log("1. chip changed! : Property no. " + chip.value.id + " changed to : " + chip.selected);
+    console.log("2. CHIP DETAILS: name" + chip.value.name + " traitOptions: " + chip.value.traitOptions);
+
+    //strategy: all mats are "no" and then update to change
+    var optionId;
+    const item = this.traitChipSelections.find(i => i.traitId === chip.value.id);
+    if (item) {
+      if (chip.selected) {
+        optionId = (chip.value.traitOptions[0].option === "כן") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
+      } else {
+        optionId = (chip.value.traitOptions[0].option === "לא") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
+      }
+
+      item.traitOptionId = optionId;
+    }
+    console.log('all matchips selections', this.traitChipSelections);
   }
 }

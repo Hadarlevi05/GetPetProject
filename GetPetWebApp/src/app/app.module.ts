@@ -46,7 +46,7 @@ import { SelectComponent } from './modules/pets/components/select/select.compone
     LoaderComponent,
     AddpetComponent,
     MultiSelectChipsComponent,    
-    SelectComponent
+    SelectComponent,
     ArticleCardComponent,
     SearchPetsComponent,
     SearchCriteriaComponent

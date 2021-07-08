@@ -1,6 +1,7 @@
 <mat-chip-list selectable multiple>
     <mat-chip #c="matChip" *ngFor="let op of options" 
-              [value]="op.name"
+              [value]="op"
+              (selectionChange)="selectionChange($event)"
               (click)="toggleSelection(c)">
         <mat-icon *ngIf="c.selected">check</mat-icon>
         {{op.name}}

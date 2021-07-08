@@ -30,6 +30,7 @@ export class AddpetComponent
   loading = false;
   success = false;
   optionBooleanVal = false;
+  isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
 
   
@@ -52,6 +53,8 @@ export class AddpetComponent
   traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
   traitSelections: ITraitSelection[] = [];
+  minDate!: Date;
+  maxDate!: Date;
   
   constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
@@ -63,7 +66,8 @@ export class AddpetComponent
   ngOnInit(): void {
 
     this.loadAnimalTypes();
-    this.loadCities();
+    this.setAllowedDatePickerRange();
+    //this.loadCities();
 
     this.addPetFormGroup = this._formBuilder.group({
       formArray: this._formBuilder.array([
@@ -117,12 +121,10 @@ export class AddpetComponent
     return this.addPetFormGroup.get('traits') as FormArray;
   }
 
-  //this method is called when a new app-select is created!
-  //it creates a new formControl for it.
-  addSelect() {
-    this.traits.push(this._formBuilder.control(''));
-    console.log("a new form control has added to traits");
-  }
+  // addSelect() {
+  //   this.traits.push(this._formBuilder.control(''));
+  //   console.log("a new form control has added to traits");
+  // }
 
   loadAnimalTypes() {
 
@@ -134,14 +136,14 @@ export class AddpetComponent
     });
   }
 
-  loadCities() {
-    let date = new Date();
-    date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1, 100, date);
-    this._cityService.Get(filter).subscribe(cities => {
-      this.city_arr = cities;
-    });
-  }
+  // loadCities() {
+  //   let date = new Date();
+  //   date.setDate(date.getDate() - 20);
+  //   let filter = new CityFilter(1, 100, date);
+  //   this._cityService.Get(filter).subscribe(cities => {
+  //     this.city_arr = cities;
+  //   });
+  // }
 
   loadUniqueTraits(event) {
 
@@ -166,10 +168,10 @@ export class AddpetComponent
       for (const option of this.optionsForTrait) {
         if (this.isBooleanValue(option)) {
             this.traitsWithBooleanValue.push(trait);
+            this.isMatChipsLoaded = true;
             break;
           } else {
             this.traitsWithSetOfValues.push(trait);
-            //this.addSelect(); //adds a new formControl to addpetformgroup
             break;
           }
       }
@@ -189,6 +191,7 @@ export class AddpetComponent
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
     this.traitsWithSetOfValues = [];
+    this.isMatChipsLoaded = false;
   }
 
   onTraitSelection(traitSelection: ITraitSelection) {
@@ -202,14 +205,29 @@ export class AddpetComponent
     }
   }
 
+  //Date picker allows users to select date of birth range from
+  //20 years ago until today.
+  setAllowedDatePickerRange() {
+    const currentYear = new Date().getFullYear();
+    this.minDate = new Date(currentYear - 20, 0, 1);
+    this.maxDate = new Date();
+    }
+
   onSubmit(postData) {
     console.log(postData);
 
-    // userId: 1,
-    // birthday: "",
-    // traits: new Map(),
-    // images: [''],
-    // creationTimestamp: new Date()
+  // id?: number;
+  // birthday?: string;
+  // gender?: string;
+  // animalType?: string;
+  // status?: string;
+  // userId: number;
+  // user?: IUser;
+  // images: string[];
+  // traits?: Map<string, string>;
+  // creationTimestamp: Date;
+
+    
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
@@ -226,5 +244,4 @@ export class AddpetComponent
     }
     this.loading = false;
   }
-
 }

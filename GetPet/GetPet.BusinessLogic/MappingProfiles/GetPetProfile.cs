@@ -92,6 +92,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
                 .ForPath(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId));
         }
 
+        private string _DisplayDateFormat = "dd/MM/yyyy";
         private void PetMapping()
         {
             CreateMap<Pet, PetDto>()
@@ -99,7 +100,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.MetaFileLinks.Select(mfl => mfl.Path)))
                 .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.ToDictionary(t => t.Trait.Name, t => t.TraitOption != null ? t.TraitOption.Option : t.Description)))
                 .ForMember(dest => dest.AnimalTypeId, opt => opt.MapFrom(src => src.AnimalType.Id))
-                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.DateHumanize()));
+                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.ToString(_DisplayDateFormat)));
 
             CreateMap<PetDto, Pet>();
         }

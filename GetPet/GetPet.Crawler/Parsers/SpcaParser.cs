@@ -1,8 +1,8 @@
 ﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -22,7 +22,7 @@ namespace GetPet.Crawler.Parsers
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
 
             string name = ParseName(node);
-            var year = ParseAgeInYear(node);
+            var birthday = ParseAgeInYear(node);
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
@@ -32,7 +32,7 @@ namespace GetPet.Crawler.Parsers
             {
                 Name = name,
                 Gender = gender,
-                AgeInYears = year,
+                Birthday = birthday,
                 Description = description,
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
@@ -49,14 +49,7 @@ namespace GetPet.Crawler.Parsers
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }
 
-        public override string ParseAgeInYear(HtmlNode node)
-        {
-            var year = node.GetAttributeValue("data-type", "none");
-
-            // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
-
-            return year;
-        }
+        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
 
         public override string ParseDescription(HtmlNode node, string name = "")
         {

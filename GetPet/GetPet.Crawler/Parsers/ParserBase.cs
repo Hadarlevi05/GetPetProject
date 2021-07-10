@@ -4,8 +4,10 @@ using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -34,7 +36,7 @@ namespace GetPet.Crawler.Parsers
         public abstract PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null);
 
         public abstract string ParseName(HtmlNode node);
-        public abstract string ParseAgeInYear(HtmlNode node);
+        public abstract DateTime ParseAgeInYear(HtmlNode node);
 
         public Gender ParseGender(HtmlNode node, string name)
         {
@@ -63,6 +65,34 @@ namespace GetPet.Crawler.Parsers
             var description = ParseDescription(node, name);
 
             return allTraits.Where(t => description.Contains(t.Name)).ToList();
+        }
+
+        public virtual DateTime ParseAgeInYear(string inputAge)
+        {
+            int year = 0;
+            int month = 0;
+
+            var ageByGender = Regex.Match(inputAge, @"(?<=בן)(.*?)(?=\.)");
+
+            if (!ageByGender.Success)
+            {
+                ageByGender = Regex.Match(inputAge, @"(?<=בת)(.*?)(?=\.)");
+            }
+
+            string age = (!ageByGender.Success) ? inputAge : ageByGender.Value;
+
+            if (age.Split(new string[] { " ו" }, StringSplitOptions.None).Length > 1)
+            {
+                string[] splitByAnd = age.Split(new[] { " ו" }, 2, StringSplitOptions.None);
+                year = ParserUtils.ConvertYear(splitByAnd[0]);
+                month = ParserUtils.ConvertMonth(splitByAnd[1]);
+            }
+            else
+            {
+                year = ParserUtils.ConvertYear(age);
+            }
+
+            return DateTime.Now.AddYears(-year).AddMonths(-month).Date;
         }
     }
 }

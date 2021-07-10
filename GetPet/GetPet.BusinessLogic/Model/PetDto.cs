@@ -10,7 +10,7 @@ namespace GetPet.BusinessLogic.Model
         
         public string Name { get; set; }
 
-        public string Birthday { get; set; }
+        public DateTime Birthday { get; set; }
         
         public Gender Gender { get; set; }
                 
@@ -30,8 +30,6 @@ namespace GetPet.BusinessLogic.Model
         public IDictionary<string, string> Traits { get; set; }
 
         public IList<Trait> TraitDTOs { get; set; }
-
-        public string AgeInYears { get; set; }
 
         public PetSource Source { get; set; }
         /// <summary>

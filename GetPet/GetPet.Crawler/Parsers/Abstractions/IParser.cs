@@ -13,7 +13,7 @@ namespace GetPet.Crawler.Parsers.Abstractions
         HtmlDocument Document { get; set; }
         IList<PetDto> Parse(List<Trait> allTraits = null);
         string ParseName(HtmlNode node);
-        string ParseAgeInYear(HtmlNode node);
+        DateTime ParseAgeInYear(HtmlNode node);
         Gender ParseGender(HtmlNode node, string name);
         Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name);
         string ParseDescription(HtmlNode node, string name);

@@ -30,11 +30,14 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
+            int animalTypeId = 3; // Todo: Get Dog or cat from API or other way
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
-            var traits = ParseTraits(node, name, allTraits);
+            var traits = ParseTraits(node, name, allTraitsByAnimalType);
             var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
             var sourceLink = "http://rehovotspa.org.il/our-dogs/";
@@ -51,8 +54,8 @@ namespace GetPet.Crawler.Parsers
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
-                SourceLink = sourceLink
-
+                SourceLink = sourceLink,
+                AnimalTypeId = animalTypeId,
             };
             return pet;
         }

@@ -18,14 +18,15 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
+            int animalTypeId = 3; // Todo: Get Dog or cat from API or other way
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+
             string name = ParseName(node);
             var year = ParseAgeInYear(node);
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
-            var traits = ParseTraits(node, name, allTraits);
+            var traits = ParseTraits(node, name, allTraitsByAnimalType);
             string sourceLink = node.SelectSingleNode("./a").Attributes["href"].Value;
-
-            // TODO: in all parsers: AnimalType, SourceWebsite, Images
 
             var pet = new PetDto
             {
@@ -36,7 +37,8 @@ namespace GetPet.Crawler.Parsers
                 Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
-                SourceLink = sourceLink
+                SourceLink = sourceLink,
+                AnimalTypeId = animalTypeId,
             };
 
             return pet;

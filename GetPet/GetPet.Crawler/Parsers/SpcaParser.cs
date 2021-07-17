@@ -18,7 +18,9 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
-            int animalTypeId = 3; // Todo: Get Dog or cat from API or other way
+            Data.Enums.AnimalType animalType = ParseAnimalType(node, "class");
+
+            int animalTypeId = (int)animalType;
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
 
             string name = ParseName(node);

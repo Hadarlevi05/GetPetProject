@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AnimalType = GetPet.Data.Enums.AnimalType;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -29,7 +30,7 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
-            int animalTypeId = 3; // Todo: Get Dog or cat from API or other way
+            int animalTypeId = (int)ParseAnimalType(node, string.Empty);
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
 
             string name = ParseName(node);
@@ -65,5 +66,10 @@ namespace GetPet.Crawler.Parsers
         }
 
         public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
+
+        public override AnimalType ParseAnimalType(HtmlNode node, string name)
+        {
+            return AnimalType.Dog; // Rehovot API have 'dogs' stated within the url
+        }
     }
 }

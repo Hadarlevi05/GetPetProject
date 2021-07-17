@@ -45,11 +45,11 @@ namespace GetPet.Crawler.Parsers
             return ParserUtils.ConvertGender(gender);
         }
 
-        public Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name)
+        public virtual Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name)
         {
-            var gender = node.GetAttributeValue(name, "unknown");
+            var animalType = node.GetAttributeValue(name, "unknown");
 
-            return ParserUtils.ConvertAnimalType(gender);
+            return ParserUtils.ConvertAnimalType(animalType);
         }
 
         public virtual string ParseDescription(HtmlNode node, string name)

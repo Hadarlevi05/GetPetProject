@@ -29,6 +29,7 @@ namespace GetPet.Crawler.Parsers
             var description = ParseDescription(node);
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
             string sourceLink = node.SelectSingleNode("./a").Attributes["href"].Value;
+            var image = node.SelectSingleNode(".//img").GetAttributeValue("src", "");
 
             var pet = new PetDto
             {
@@ -40,6 +41,9 @@ namespace GetPet.Crawler.Parsers
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalTypeId = animalTypeId,
+                Images = new List<string> {
+                    image
+                },
             };
 
             return pet;

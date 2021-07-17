@@ -54,16 +54,23 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            var size = context.Traits.Add(new Trait { Name = "גודל", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var color = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var trained = context.Traits.Add(new Trait { Name = "מאולף", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            // Dogs
+            var size = context.Traits.Add(new Trait { Name = "גודל", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
+            var color = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
+            var goodWithKids = context.Traits.Add(new Trait { Name = "מסתדר עם ילדים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var goodWithPpl = context.Traits.Add(new Trait { Name = "מסתדר עם אנשים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var goodWithDogs = context.Traits.Add(new Trait { Name = "מסתדר עם כלבים", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var trained = context.Traits.Add(new Trait { Name = "מאולף", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var worried = context.Traits.Add(new Trait { Name = "חששן", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var vaccinated = context.Traits.Add(new Trait { Name = "מחוסן", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
+            var mixed = context.Traits.Add(new Trait { Name = "מעורב", AnimalTypeId = dog.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
 
-            var colorCat = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = cat.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            // Cats
+            var colorCat = context.Traits.Add(new Trait { Name = "צבע", AnimalTypeId = cat.Entity.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
 
             await context.SaveChangesAsync();
 
-            var traitOptionSmall =context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "קטן", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "בינוני", TraitId = size.Entity.Id });
             var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "ענק", TraitId = size.Entity.Id });
@@ -73,11 +80,13 @@ namespace GetPet.Data
             context.TraitOptions.Add(new TraitOption { Option = "בז'", TraitId = color.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "דלמטי", TraitId = color.Entity.Id });
 
-            context.TraitOptions.Add(new TraitOption { Option = "כן", TraitId = goodWithKids.Entity.Id });
-            context.TraitOptions.Add(new TraitOption { Option = "לא", TraitId = goodWithKids.Entity.Id });
-
-            context.TraitOptions.Add(new TraitOption { Option = "כן", TraitId = trained.Entity.Id });
-            context.TraitOptions.Add(new TraitOption { Option = "לא", TraitId = trained.Entity.Id });
+            AddBooleanTraitOption(context, goodWithKids);
+            AddBooleanTraitOption(context, trained);
+            AddBooleanTraitOption(context, goodWithPpl);
+            AddBooleanTraitOption(context, goodWithDogs);
+            AddBooleanTraitOption(context, worried);
+            AddBooleanTraitOption(context, vaccinated);
+            AddBooleanTraitOption(context, mixed);
 
             await context.SaveChangesAsync();
 
@@ -143,7 +152,7 @@ namespace GetPet.Data
                 "לואיש"
             };
             var descriptions = new[] {
-                "לואי שלנו הוא כלב חברותי ואהוב על כל הבריות, אוהב לשחק מאוד ונהדר עם ילדים נשים ותף",
+                "לואי שלנו הוא כלב חברותי ואהוב על כל הבריות, אוהב לשחק מאוד ונהדר עם ילדים נשים וטף",
                 "כלב חתיך ויפיוף",
                 "לואי לואי לואי לורם יפסום"
             };
@@ -198,7 +207,7 @@ namespace GetPet.Data
             for (int i = 1; i <= 5; i++)
             {
                 var mtf = context.MetaFileLinks.Add(new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/article{i}.jpg", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-                
+
                 await context.SaveChangesAsync();
 
                 context.Articles.Add(new Article
@@ -229,6 +238,12 @@ namespace GetPet.Data
             await context.SaveChangesAsync();
 
             await transaction.CommitAsync();
+        }
+
+        private static void AddBooleanTraitOption(GetPetDbContext context, Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<Trait> vaccinated)
+        {
+            context.TraitOptions.Add(new TraitOption { Option = "כן", TraitId = vaccinated.Entity.Id });
+            context.TraitOptions.Add(new TraitOption { Option = "לא", TraitId = vaccinated.Entity.Id });
         }
 
         public string GetStringResource(string resourceName)

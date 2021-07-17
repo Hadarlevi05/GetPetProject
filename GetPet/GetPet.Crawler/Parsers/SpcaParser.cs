@@ -34,7 +34,6 @@ namespace GetPet.Crawler.Parsers
                 Gender = gender,
                 Birthday = birthday,
                 Description = description,
-                Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
                 SourceLink = sourceLink,

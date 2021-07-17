@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using GetPet.Data.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace GetPet.Data.Entities
@@ -11,6 +12,8 @@ namespace GetPet.Data.Entities
         public int AnimalTypeId { get; set; }
 
         public List<TraitOption> TraitOptions { get; set; }
+
+        public TraitType TraitType { get; set; }
 
         public override string ToString()
         {

@@ -50,7 +50,6 @@ namespace GetPet.Crawler.Parsers
                 Images = new List<string> {
                     image
                 },
-                Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
                 SourceLink = sourceLink,

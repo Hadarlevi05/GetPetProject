@@ -17,6 +17,6 @@ namespace GetPet.Crawler.Parsers.Abstractions
         Gender ParseGender(HtmlNode node, string name);
         Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name);
         string ParseDescription(HtmlNode node, string name);
-        List<Trait> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null);
+        Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null);
     }
 }

@@ -57,14 +57,49 @@ namespace GetPet.Crawler.Parsers
             return node.GetAttributeValue("title", "");
         }
 
-        public virtual List<Trait> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null)
+        public virtual Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null)
         {
+            var results = new Dictionary<Trait, TraitOption>();
             if (allTraits == null)
-                return new List<Trait>();
+                return results;
 
             var description = ParseDescription(node, name);
 
-            return allTraits.Where(t => description.Contains(t.Name)).ToList();
+            foreach (var trait in allTraits)
+            {
+                switch (trait.TraitType)
+                {
+                    case TraitType.Boolean:
+                        {
+                            var isTrue = description.Contains(trait.Name) && !description.Contains($"לא {trait.Name}");
+                            var isFalse = description.Contains($"לא {trait.Name}");
+
+                            if (isTrue)
+                            {
+                                var yes = trait.TraitOptions.FirstOrDefault(t => t.Option == "כן");
+                                results[trait] = yes;
+                            }
+                            else if (isFalse)
+                            {
+                                var no = trait.TraitOptions.FirstOrDefault(t => t.Option == "לא");
+                                results[trait] = no;
+                            }
+                            break;
+                        };
+                    case TraitType.Values:
+                        {
+                            var result = trait.TraitOptions.FirstOrDefault(t => description.Contains(t.Option));
+
+                            if (result != null)
+                            {
+                                results[trait] = result;
+                            }
+                            break;
+                        };
+                }
+            }
+
+            return results;
         }
 
         public virtual DateTime ParseAgeInYear(string inputAge)

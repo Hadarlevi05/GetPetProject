@@ -29,7 +29,7 @@ namespace GetPet.BusinessLogic.Model
 
         public IDictionary<string, string> Traits { get; set; }
 
-        public IList<Trait> TraitDTOs { get; set; }
+        public IDictionary<Trait, TraitOption> TraitDTOs { get; set; }
 
         public PetSource Source { get; set; }
         /// <summary>

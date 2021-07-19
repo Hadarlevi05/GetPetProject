@@ -40,8 +40,10 @@ export class MultiSelectChipsComponent
 
   @Input() options: ITrait[] = [];
 
-  @Output()
-  selectionEvent = new EventEmitter<ITraitSelection>();
+  // @Output()
+  // selectionEvent = new EventEmitter<ITraitSelection>();
+
+  @Output() data: EventEmitter<ITraitSelection[]> = new EventEmitter<ITraitSelection[]>();
 
   value: string[] = [];
 
@@ -75,13 +77,13 @@ export class MultiSelectChipsComponent
   }
 
   ngOnInit() {
+    this.data.emit(this.traitChipSelections);
+ }
 
-  }
+  // selectionChange(event: MatChipSelectionChange){
 
-  selectionChange(event: MatChipSelectionChange){
-
-    //canceled. delete this.
-  }
+  //   //canceled. delete this.
+  // }
 
   ngOnChanges() {
 

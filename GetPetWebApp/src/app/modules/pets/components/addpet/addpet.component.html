@@ -60,6 +60,7 @@
               <app-chips-multi-select 
                   [options]="traitsWithBooleanValue"
                   [isMatChipsTraitsLoaded]="isMatChipsLoaded" 
+                  (data)="eventHandler($event)"
                   formControlName="chipsControl">
               </app-chips-multi-select>
             </div>
@@ -83,7 +84,7 @@
           <mat-step formGroupName="2" label="הוספת תמונות" [optional]="true">
             <!--Image upload-->
             <div class="row">
-              <angular-file-uploader [config]="afuConfig"> </angular-file-uploader>
+
             </div>
           </mat-step>
 
@@ -107,8 +108,13 @@
       form sent successfully!
     </div>
 
-
     <div dir="ltr" align="left">
       <hr />
       <h1>JSON</h1>
       <p>Form value: {{ addPetFormGroup.value | json }}</p>
+
+
+
+    <hr>
+
+  <app-file-uploader></app-file-uploader>

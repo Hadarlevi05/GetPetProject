@@ -35,6 +35,8 @@ import { ArticleCardComponent } from './modules/articles/components/article-card
 import { SearchPetsComponent } from './modules/pets/components/search-pets/search-pets.component';
 import { SearchCriteriaComponent } from './modules/pets/components/search-criteria/search-criteria.component';
 import { SelectComponent } from './modules/pets/components/select/select.component';
+import { FileUploaderComponent } from './modules/pets/components/file-uploader/file-uploader.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -49,8 +51,9 @@ import { SelectComponent } from './modules/pets/components/select/select.compone
     SelectComponent,
     ArticleCardComponent,
     SearchPetsComponent,
-    SearchCriteriaComponent
-  ],
+    SearchCriteriaComponent,
+    FileUploaderComponent,
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -79,10 +82,10 @@ import { SelectComponent } from './modules/pets/components/select/select.compone
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
-    MatToolbarModule,
     MatDividerModule,
     MatCheckboxModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

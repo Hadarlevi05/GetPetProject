@@ -1,18 +1,12 @@
-import { CityService } from '../../../../shared/services/city.service';
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { TraitOptionFilter } from 'src/app/shared/models/traitOptionFilter';
 import { ITraitOption } from 'src/app/shared/models/iTraitOption';
-import { TraitOptionsService } from 'src/app/shared/services/traitOptions.service';
-import { compileNgModule } from '@angular/compiler';
 import { ICity } from 'src/app/shared/models/icity';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
-import { CityFilter } from 'src/app/shared/models/city-filter';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
-import { MatChip } from '@angular/material/chips';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
@@ -27,11 +21,17 @@ import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 export class AddpetComponent 
   implements OnInit {
 
+  //@ViewChild(FileUploaderComponent) fileUploaderChild;
+
   loading = false;
   success = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
+
+  // ngAfterViewInit() {
+  //   this.fileUploader = this.fileUploaderChild.uploader;
+  // }
 
   
   pet: IPet = {
@@ -44,7 +44,8 @@ export class AddpetComponent
     images: [''],
     creationTimestamp: new Date()
   }
-  
+
+
   animaltypes_arr: IAnimalType[] = [];
   city_arr: ICity[] = [];
   traits_arr: ITrait[] = [];
@@ -53,21 +54,20 @@ export class AddpetComponent
   traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
   traitSelections: ITraitSelection[] = [];
+  traitChipSelections: ITraitSelection[] = [];
+  allSelectedTraits: ITraitSelection[] = [];
   minDate!: Date;
   maxDate!: Date;
   
   constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
-              private _cityService: CityService, 
               private _traitsService: TraitsService,
-              private _traitOptionsService: TraitOptionsService,
               private _petsService: PetsService) { }
 
   ngOnInit(): void {
 
     this.loadAnimalTypes();
     this.setAllowedDatePickerRange();
-    //this.loadCities();
 
     this.addPetFormGroup = this._formBuilder.group({
       formArray: this._formBuilder.array([
@@ -86,32 +86,14 @@ export class AddpetComponent
                             Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
-          //upload picture control?
+          //upload pictures
         }),
         this._formBuilder.group({
-          //preview and send
+          //send button
         }),
       ])
     });
   }
-
-  afuConfig = {
-    multiple: false,
-    formatsAllowed: ".jpg, .jpeg, .png",
-    maxSize: 10,    //in MB
-    uploadAPI: {
-      url: "https://example-file-upload-api" //TODO: change this url
-    },
-    hideProgressBar: false,
-    hideResetBtn: true,
-    replaceTexts: {
-      selectFileBtn: 'בחר קובץ',
-      uploadBtn: 'שלח',
-      afterUploadMsg_success: 'העלאה הצליחה',
-      afterUploadMsg_error: 'העלאת הקובץ נכשלה',
-      sizeLimit: 'גודל מירבי'
-    }
-  };
 
   get formArray(): AbstractControl | null {
     return this.addPetFormGroup.get('formArray');
@@ -120,11 +102,6 @@ export class AddpetComponent
   get traits() : FormArray {
     return this.addPetFormGroup.get('traits') as FormArray;
   }
-
-  // addSelect() {
-  //   this.traits.push(this._formBuilder.control(''));
-  //   console.log("a new form control has added to traits");
-  // }
 
   loadAnimalTypes() {
 
@@ -135,15 +112,6 @@ export class AddpetComponent
       this.animaltypes_arr = types;
     });
   }
-
-  // loadCities() {
-  //   let date = new Date();
-  //   date.setDate(date.getDate() - 20);
-  //   let filter = new CityFilter(1, 100, date);
-  //   this._cityService.Get(filter).subscribe(cities => {
-  //     this.city_arr = cities;
-  //   });
-  // }
 
   loadUniqueTraits(event) {
 
@@ -195,7 +163,7 @@ export class AddpetComponent
   }
 
   onTraitSelection(traitSelection: ITraitSelection) {
-    console.log('all traitSelections', this.traitSelections);
+    console.log('traitSelections', this.traitSelections);
     const item = this.traitSelections.find(i => i.traitId === traitSelection.traitId);
     if (item) {
       item.traitOptionId = traitSelection.traitOptionId;
@@ -203,6 +171,10 @@ export class AddpetComponent
     } else {
       this.traitSelections.push(traitSelection);
     }
+  }
+
+  eventHandler(event:ITraitSelection[]) {
+    this.traitChipSelections = event;
   }
 
   //Date picker allows users to select date of birth range from
@@ -214,7 +186,6 @@ export class AddpetComponent
     }
 
   onSubmit(postData) {
-    console.log(postData);
 
   // id?: number;
   // birthday?: string;
@@ -224,17 +195,28 @@ export class AddpetComponent
   // userId: number;
   // user?: IUser;
   // images: string[];
-  // traits?: Map<string, string>;
-  // creationTimestamp: Date;
 
-    
+    //console.log('data from selections:', this.traitSelections)
+    //console.log('data from child:',this.traitChipSelections);
+
+    this.allSelectedTraits = this.traitSelections.concat(this.traitChipSelections);
+    console.log("allSelectedTraits: ", this.allSelectedTraits);
+
+    let traitsMap = this.allSelectedTraits.reduce((mapAccumulator, obj) => {
+      mapAccumulator.set(obj.traitId, obj.traitOptionId);
+      return mapAccumulator;
+    }, new Map());
+    console.log(traitsMap);
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
+    this.pet.traits = traitsMap;
 
-    console.log("PET INFO IS:")
-    console.log(this.pet);
+    console.log("PET INFO: ", this.pet);
+
+    // //upload images
+    // this.fileUploader.uploadAll();
 
     try {
       this._petsService.addPet(this.pet);

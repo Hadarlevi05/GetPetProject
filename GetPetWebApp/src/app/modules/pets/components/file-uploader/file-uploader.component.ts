@@ -11,16 +11,16 @@ import { UploadService } from '../../services/upload.service';
 })
 export class FileUploaderComponent implements OnInit {
 
-  @ViewChild("fileUpload", {static: false}) 
-    fileUpload!: ElementRef;
-    files: any[]  = [];  
+  @ViewChild("fileUpload", {static: false}) fileUpload!: ElementRef;
   
-  constructor(private uploadService: UploadService) { }
+  file: any;
+  
+  constructor(private uploadService: UploadService) {}
 
   fileName: string = '';
-  clicked: boolean = false;
 
   uploadFile(file) { 
+    console.log("in uploadFile:", file);
     this.fileName = file.data.name;
     const formData = new FormData();  
     formData.append('formFile', file.data);  
@@ -53,29 +53,30 @@ export class FileUploaderComponent implements OnInit {
       });  
   }
 
-  private uploadFiles() {  
-    this.fileUpload.nativeElement.value = '';  
-    this.files.forEach(file => {  
-      this.uploadFile(file);  
-    });  
-}
+//   private uploadFiles() {  
+//     this.fileUpload.nativeElement.value = '';  
+//     this.files.forEach(file => {  
+//       this.uploadFile(file);  
+//     });  
+// }
 
 onClick() {  
-  this.clicked = true;
-  const fileUpload = this.fileUpload.nativeElement;fileUpload.onchange = () => {  
-  for (let index = 0; index < fileUpload.files.length; index++)  
-  {  
-   const file = fileUpload.files[index];  
-   console.log("current file name: ", file.name);
-   console.log("arr of files: ",fileUpload.files);
-   this.files.push({ data: file, inProgress: false, progress: 0});  
-  }  
-    this.uploadFiles();  
+  const fileUpload = this.fileUpload.nativeElement;
+  fileUpload.onchange = () => {  
+   console.log("fileUpload ref: ", fileUpload);
+   const file = fileUpload.files[0];
+   console.log("file is: ", file);
+   this.file = { data: file, inProgress: false, progress: 0};
+   //this.file = fileObj;
+   //this.files.push({ data: file, inProgress: false, progress: 0});  
+   this.fileUpload.nativeElement.value = '';
+   this.uploadFile(this.file);  
   };  
   fileUpload.click();  
 }
 
   ngOnInit(): void {
+    this.file = { data: null, inProgress: false, progress: 0};
   }
 
 }

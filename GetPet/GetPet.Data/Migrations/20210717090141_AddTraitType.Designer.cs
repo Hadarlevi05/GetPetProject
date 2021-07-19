@@ -4,14 +4,16 @@ using GetPet.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GetPet.Data.Migrations
 {
     [DbContext(typeof(GetPetDbContext))]
-    partial class GetPetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210717090141_AddTraitType")]
+    partial class AddTraitType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,10 +509,6 @@ namespace GetPet.Data.Migrations
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FemaleName")
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -538,9 +536,6 @@ namespace GetPet.Data.Migrations
 
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("FemaleOption")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

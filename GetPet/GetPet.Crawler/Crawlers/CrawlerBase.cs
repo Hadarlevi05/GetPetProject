@@ -79,14 +79,14 @@ namespace GetPet.Crawler.Crawlers
 
             await Task.WhenAll(tasks);
 
-            await _unitOfWork.SaveChangesAsync();
+            // There is an async/await bug here. Need to investigate. Foir know, lets use the sync version
+            // await _unitOfWork.SaveChangesAsync();
+            _unitOfWork.SaveChanges();
         }
 
         private bool IsPetExists(PetDto pet)
         {
-            // TODO: Add source (which website) to animals
-
-            return pets.Any(p => p.Name == pet.Name); // TODO: Better comapring conditions. Consider using 'Equals'
+            return pets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink); 
         }
     }
 }

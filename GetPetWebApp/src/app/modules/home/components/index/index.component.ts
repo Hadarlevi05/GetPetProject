@@ -58,7 +58,7 @@ export class IndexComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 10, date);
+    let filter = new PetFilter(1, 100, date);
 
     this.petsService.Search(filter).subscribe(pets => {
       this.pets = pets;

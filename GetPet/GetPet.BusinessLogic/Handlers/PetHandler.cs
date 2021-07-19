@@ -55,7 +55,8 @@ namespace GetPet.BusinessLogic.Handlers
                     petToInsert.PetTraits.Add(
                         new PetTrait()
                         {
-                            Trait = trait,
+                            Trait = trait.Key,
+                            TraitOption = trait.Value,                           
                         }
                     );
                 }               

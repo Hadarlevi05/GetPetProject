@@ -56,14 +56,16 @@ namespace GetPet.Tests
 
             var firstPet = pets[0];
             Assert.AreEqual(firstPet.Name, "פרייה");
-            Assert.AreEqual(firstPet.AgeInYears, "שנתיים וחודשיים");
+            Assert.AreEqual(firstPet.Birthday, DateTime.Now.AddYears(-2).AddMonths(-2).Date);
             Assert.AreEqual(firstPet.Gender, Gender.Female);
-            Assert.IsNotNull(firstPet.Traits.FirstOrDefault());
+            Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
 
             var lastPet = pets[1];
             Assert.AreEqual(lastPet.Name, "סקאי");
-            Assert.AreEqual(lastPet.AgeInYears, "5 שנים");
+            Assert.AreEqual(lastPet.Birthday, DateTime.Now.AddYears(-5).Date);
             Assert.AreEqual(lastPet.Gender, Gender.Male);
+            Assert.IsNotNull(lastPet.TraitDTOs.FirstOrDefault());
+            Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
         }
 
         [Test]
@@ -87,6 +89,27 @@ namespace GetPet.Tests
 
             var pets = spca.Parse();
 
+            Debugger.Break();
+        }
+
+
+        [Test]
+        public void TestRehovotBirthday()
+        {
+            // ctrl r+t
+            RehovotSpaParser p = new RehovotSpaParser();
+
+            DateTime now = DateTime.Now; // 10.7.21
+
+            Assert.AreEqual(p.ParseAgeInYear("בת שנתיים וחודשיים."), now.AddYears(-2).AddMonths(-2).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן שנה וחודש."), now.AddYears(-1).AddMonths(-1).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן שנתיים ועשרה חודשים."), now.AddYears(-2).AddMonths(-10).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בת שנה וחודשיים."), now.AddYears(-1).AddMonths(-2).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בת 2 וחצי."), now.AddYears(-2).AddMonths(-6).Date);
+
+            Assert.AreEqual(p.ParseAgeInYear("בן שנה."), now.AddYears(-1).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בת שנתיים."), now.AddYears(-2).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בת שלוש."), now.AddYears(-3).Date);
             Debugger.Break();
         }
 

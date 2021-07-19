@@ -25,6 +25,8 @@ export class RegisterComponent implements OnInit {
   loading = false;
   hide = true;
 
+  filteredCities: Observable<ICity[]> = of({} as ICity[]);
+
   user: IUser = <IUser>{
     organization: <IOrganization>{}
   };
@@ -38,16 +40,11 @@ export class RegisterComponent implements OnInit {
     filterCity: new FormControl('', [Validators.required]),
   });
 
-
-  filteredCities: Observable<ICity[]> = of({} as ICity[]);
-
   private _filter(value: string): ICity[] {
-
     const filterValue = value.toLowerCase();
 
     return this.cities.filter(city => city.name.toLowerCase().indexOf(filterValue) === 0);
   }
-
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -64,8 +61,6 @@ export class RegisterComponent implements OnInit {
     this.cityService.Get(filter).subscribe(cities => {
       this.cities = cities;
     });
-
-
     this.formOnChanges();
   }
 
@@ -78,14 +73,12 @@ export class RegisterComponent implements OnInit {
       this.user.organization.name = formUser.organizationName;
       this.user.cityId = formUser.cityId;
       this.user.password = formUser.password;
-
     });
 
     this.filteredCities = this.form.controls.filterCity.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value))
     );
-
   }
 
   selectedCity(cityName: string) {
@@ -105,8 +98,7 @@ export class RegisterComponent implements OnInit {
         this.loading = false;
       });
   }
+
   onKey(event) {
-
   }
-
 }

@@ -13,6 +13,8 @@ namespace GetPet.BusinessLogic.Model
 
         public List<TraitOptionDto> TraitOptions { get; set; }
 
+        public bool IsBoolean { get; set; }
+
         public override string ToString()
         {
             return Name;

@@ -4,6 +4,7 @@ using GetPet.BusinessLogic.Repositories;
 using GetPet.WebApi.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 
@@ -30,15 +31,14 @@ namespace GetPet.WebApi.Controllers
         //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Get([FromBody] TraitFilter filter)
-        {
-
-            var user = HttpContext.Items["User"];
-
+        {            
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-            return Ok(await _traitRepository.SearchAsync(filter));
+            var traits = await _traitRepository.SearchAsync(filter);
+
+            return Ok(_mapper.Map<List<TraitDto>>(traits));
         }
     }
 }

@@ -11,9 +11,23 @@ export class SearchCriteriaComponent implements OnInit {
   @Input()
   trait: ITrait = {} as ITrait;
 
+  optionsSelected: number[] = [];
+
+  traitChecked = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  selectOption(value) {
+
+    const index = this.optionsSelected.findIndex(i => i === value);
+
+    if (index > -1) {
+      this.optionsSelected.splice(index, 1);
+    } else {
+      this.optionsSelected.push(value);
+    }
+  }
 }

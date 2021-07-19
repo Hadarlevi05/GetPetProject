@@ -48,9 +48,20 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            var dog = context.AnimalTypes.Add(new AnimalType { Name = "כלב", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            var cat = context.AnimalTypes.Add(new AnimalType { Name = "חתול", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
-            context.AnimalTypes.Add(new AnimalType { Name = "שפן", CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+            var animalTypeList = new[] {
+                "כלבים",
+                "חתולים",
+                "מכרסמים"
+            };
+
+            foreach (var item in animalTypeList)
+            {
+                context.AnimalTypes.Add(new AnimalType { Name = item, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow });
+                await context.SaveChangesAsync();
+            }
+
+            var dog = context.AnimalTypes.FirstOrDefault();
+            var cat = context.AnimalTypes.Skip(1).Take(1).FirstOrDefault();
 
             await context.SaveChangesAsync();
 
@@ -70,9 +81,9 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
-            context.TraitOptions.Add(new TraitOption { Option = "קטן", FemaleOption= "קטנה", TraitId = size.Entity.Id });
+            var traitOptionSmall = context.TraitOptions.Add(new TraitOption { Option = "קטן", FemaleOption= "קטנה", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "בינוני", FemaleOption = "בינונית", TraitId = size.Entity.Id });
-            var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", FemaleOption = "גדול", TraitId = size.Entity.Id });
+            var traitOptionBig = var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", FemaleOption = "גדול", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "ענק", FemaleOption = "ענקית", TraitId = size.Entity.Id });
 
             context.TraitOptions.Add(new TraitOption { Option = "לבן", FemaleOption = "לבנה", TraitId = color.Entity.Id });
@@ -162,7 +173,7 @@ namespace GetPet.Data
                 context.Pets.Add(new Pet
                 {
                     Name = names[i],
-                    AnimalTypeId = dog.Entity.Id,
+                    AnimalTypeId = dog.Id,
                     Birthday = DateTime.UtcNow.AddYears(-2),
                     Gender = Enums.Gender.Male,
                     Status = Enums.PetStatus.WaitingForAdoption,

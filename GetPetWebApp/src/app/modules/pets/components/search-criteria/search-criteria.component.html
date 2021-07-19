@@ -1,16 +1,16 @@
-<div>
-    <strong>{{trait.name }}</strong>
+<div *ngIf="trait.isBoolean">
+    <mat-checkbox [(ngModel)]="traitChecked">{{trait.name }}</mat-checkbox>
+</div>
+<div *ngIf="!trait.isBoolean">
 
-    <span *ngFor="let option of trait.traitOptions">
-        {{ option.option }}
-    </span>
-
-    <mat-chip-list selectable multiple>
-        <mat-chip #c="matChip" *ngFor="let option of trait.traitOptions" [value]="option.id">
-            <mat-icon *ngIf="true">check</mat-icon>
-            {{ option.option }}
-        </mat-chip>
-    </mat-chip-list>
-
-
+    <div class="trait-list">
+        <strong>{{trait.name }}</strong>
+        <mat-chip-list selectable multiple>
+            <mat-chip #c="matChip" *ngFor="let option of trait.traitOptions" [value]="option.id"
+                [selected]="optionsSelected.includes(option.id)" (click)="selectOption(option.id)">
+                <mat-icon *ngIf="optionsSelected.includes(option.id)">check</mat-icon>
+                {{ option.option }}
+            </mat-chip>
+        </mat-chip-list>
+    </div>
 </div>

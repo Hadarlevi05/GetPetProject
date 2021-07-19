@@ -6,6 +6,7 @@ namespace GetPet.BusinessLogic
     public interface IUnitOfWork
     {
         Task<int> SaveChangesAsync();        
+        void SaveChanges();        
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -20,6 +21,11 @@ namespace GetPet.BusinessLogic
         public async Task<int> SaveChangesAsync()
         {
             return await _getPetDbContext.SaveChangesAsync();
+        }
+
+        public void SaveChanges()
+        {
+            _getPetDbContext.SaveChanges();
         }
     }
 }

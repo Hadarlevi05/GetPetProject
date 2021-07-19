@@ -1,5 +1,4 @@
 ﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
@@ -7,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using AnimalType = GetPet.Data.Enums.AnimalType;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -30,11 +30,14 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
+            int animalTypeId = (int)ParseAnimalType(node, string.Empty);
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+
             string name = ParseName(node);
-            var year = ParseAgeInYear(node);
+            var birthday = ParseAgeInYear(node);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
-            var traits = ParseTraits(node, name, allTraits);
+            var traits = ParseTraits(node, name, allTraitsByAnimalType);
             var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
             var sourceLink = "http://rehovotspa.org.il/our-dogs/";
@@ -43,16 +46,15 @@ namespace GetPet.Crawler.Parsers
             {
                 Name = name,
                 Gender = gender,
-                AgeInYears = year,
+                Birthday = birthday,
                 Description = description,
                 Images = new List<string> {
                     image
                 },
-                Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
-                SourceLink = sourceLink
-
+                SourceLink = sourceLink,
+                AnimalTypeId = animalTypeId,
             };
             return pet;
         }
@@ -63,19 +65,11 @@ namespace GetPet.Crawler.Parsers
             return result;
         }
 
-        public override string ParseAgeInYear(HtmlNode node)
+        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
+
+        public override AnimalType ParseAnimalType(HtmlNode node, string name)
         {
-            var year = node.GetAttributeValue("title", "0");
-            var age = Regex.Match(year, @"(?<=בן)(.*?)(?=\.)");
-
-            if (!age.Success)
-            {
-                age = Regex.Match(year, @"(?<=בת)(.*?)(?=\.)");
-            }
-
-            int y = ParserUtils.ConvertYear(age.Value);
-
-            return y.ToString();
+            return AnimalType.Dog; // Rehovot API have 'dogs' stated within the url
         }
     }
 }

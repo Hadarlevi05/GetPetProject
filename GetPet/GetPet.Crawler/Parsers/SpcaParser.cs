@@ -1,8 +1,8 @@
 ﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,25 +18,32 @@ namespace GetPet.Crawler.Parsers
 
         public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
+            Data.Enums.AnimalType animalType = ParseAnimalType(node, "class");
+
+            int animalTypeId = (int)animalType;
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+
             string name = ParseName(node);
-            var year = ParseAgeInYear(node);
+            var birthday = ParseAgeInYear(node);
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
-            var traits = ParseTraits(node, name, allTraits);
+            var traits = ParseTraits(node, name, allTraitsByAnimalType);
             string sourceLink = node.SelectSingleNode("./a").Attributes["href"].Value;
-
-            // TODO: in all parsers: AnimalType, SourceWebsite, Images
+            var image = node.SelectSingleNode(".//img").GetAttributeValue("src", "");
 
             var pet = new PetDto
             {
                 Name = name,
                 Gender = gender,
-                AgeInYears = year,
+                Birthday = birthday,
                 Description = description,
-                Traits = traits.ToDictionary(k => k.Name, v => v.Name),
                 TraitDTOs = traits,
                 Source = PetSource.External,
-                SourceLink = sourceLink
+                SourceLink = sourceLink,
+                AnimalTypeId = animalTypeId,
+                Images = new List<string> {
+                    image
+                },
             };
 
             return pet;
@@ -47,18 +54,11 @@ namespace GetPet.Crawler.Parsers
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }
 
-        public override string ParseAgeInYear(HtmlNode node)
-        {
-            var year = node.GetAttributeValue("data-type", "none");
-
-            // int y = ParserUtils.ConvertYear(year.Split(" ")[0]);
-
-            return year;
-        }
+        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
 
         public override string ParseDescription(HtmlNode node, string name = "")
         {
-            return node.InnerText;
+            return node.SelectNodes("./a").FirstOrDefault().InnerText;
         }
     }
 }

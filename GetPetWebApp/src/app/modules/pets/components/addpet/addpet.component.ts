@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
@@ -11,6 +11,7 @@ import { TraitsService } from 'src/app/shared/services/traits.service';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
+import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
 
 @Component({
   selector: 'app-addpet',
@@ -21,17 +22,18 @@ import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 export class AddpetComponent 
   implements OnInit {
 
-  //@ViewChild(FileUploaderComponent) fileUploaderChild;
+  @ViewChildren('fileuploader') components!: QueryList<FileUploaderComponent>
 
   loading = false;
   success = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
+  petIdServer: number = 0; //to do- import its value from upload.service.ts
 
-  // ngAfterViewInit() {
-  //   this.fileUploader = this.fileUploaderChild.uploader;
-  // }
+  ngAfterViewInit() {
+  
+  }
 
   
   pet: IPet = {
@@ -215,9 +217,6 @@ export class AddpetComponent
 
     console.log("PET INFO: ", this.pet);
 
-    // //upload images
-    // this.fileUploader.uploadAll();
-
     try {
       this._petsService.addPet(this.pet);
       this.success = true;
@@ -225,5 +224,15 @@ export class AddpetComponent
       console.log(err);
     }
     this.loading = false;
+
+    //upload pictures and assign the pet id
+    this.components.forEach(uploader => {
+      console.log("%%%%%%",uploader);
+      if (uploader.file.data) {
+        uploader.sendFile(uploader.file);
+        console.log("sending file :" + uploader.fileName + " to server.");
+      }
+    })
+
   }
 }

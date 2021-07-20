@@ -49,13 +49,15 @@ namespace PetAdoption.WebApi.Controllers
 
 
         [HttpPost]
-        public async Task Post(PetDto pet)
+        public async Task<IActionResult> Post(PetDto pet)
         {
             var petToInsert = _mapper.Map<Pet>(pet);
 
             await _petRepository.AddAsync(petToInsert);
 
             await _unitOfWork.SaveChangesAsync();
+
+            return Ok(_mapper.Map<PetDto>(petToInsert));
         }
 
         //[HttpGet("{id}")]

@@ -14,6 +14,7 @@ export class FileUploaderComponent implements OnInit {
   @ViewChild("fileUpload", {static: false}) fileUpload!: ElementRef;
   
   file: any;
+  formData: FormData = {} as FormData;
   
   constructor(private uploadService: UploadService) {}
 
@@ -21,11 +22,41 @@ export class FileUploaderComponent implements OnInit {
 
   uploadFile(file) { 
     console.log("in uploadFile:", file);
+    this.file = file;
     this.fileName = file.data.name;
-    const formData = new FormData();  
-    formData.append('formFile', file.data);  
-    file.inProgress = true;  
-    this.uploadService.upload(formData).pipe(  
+    this.formData = new FormData();  
+    this.formData.set('formFile', file.data);  
+    this.file.inProgress = true;  
+    // this.uploadService.upload(formData).pipe(       //todo: move the upload itseld to the send button.
+    //   map(event => {  
+    //     switch (event.type) {  
+    //       case HttpEventType.UploadProgress:  
+    //         if (event.total) {
+    //           const total:number = event.total;
+    //           file.progress = Math.round(event.loaded * 100 / total);  
+    //         }
+    //         else {
+    //           //todo: throw error cannot read file
+    //         }
+    //         break;
+    //       case HttpEventType.Response:
+    //         console.log("RESPONSE FROM SERVER:", event);
+    //         break;
+    //       return event;
+    //     }  
+    //   }),  
+    //   catchError((error: HttpErrorResponse) => {  
+    //     file.inProgress = false;  
+    //     return of(`${file.data.name} upload failed.`);  
+    //   })).subscribe((event: any) => {  
+    //     if (typeof (event) === 'object') {  
+    //       console.log(event.body);  
+    //     }  
+    //   });  
+  }
+
+  sendFile(file) {
+    this.uploadService.upload(this.formData).pipe(
       map(event => {  
         switch (event.type) {  
           case HttpEventType.UploadProgress:  
@@ -40,7 +71,6 @@ export class FileUploaderComponent implements OnInit {
           case HttpEventType.Response:
             console.log("RESPONSE FROM SERVER:", event);
             break;
-          return event;
         }  
       }),  
       catchError((error: HttpErrorResponse) => {  

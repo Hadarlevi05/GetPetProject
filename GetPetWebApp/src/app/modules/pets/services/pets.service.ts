@@ -11,6 +11,8 @@ import { PetFilter } from '../models/pet-filter';
 })
 export class PetsService extends BaseService {
 
+  postPetId: number = 0;
+
   entPointUrl = `${this.BASE_URL}pets`;
 
   constructor(http: HttpClient) {
@@ -21,9 +23,13 @@ export class PetsService extends BaseService {
     return this.http.post<IPet[]>(`${this.entPointUrl}/search`, filter);
   }
 
-  addPet (pet: IPet) {
-    this.http.post(`${this.entPointUrl}`, pet).subscribe(
-      (response) => console.log(response),
+  public addPet (pet: IPet) {
+    return this.http.post(`${this.entPointUrl}`, pet).subscribe(
+      (response) => {
+        console.log("pet post response is",response);
+        this.postPetId = response['id'];
+        console.log(this.postPetId);
+      },
       (error) => console.log(error)
     );
   }

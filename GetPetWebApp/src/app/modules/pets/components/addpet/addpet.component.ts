@@ -29,7 +29,8 @@ export class AddpetComponent
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
-  petIdServer: number = 0; //to do- import its value from upload.service.ts
+  //petIdServer: number = 0; //to do- import its value from upload.service.ts
+  imgPath: string = '';
 
   ngAfterViewInit() {
   
@@ -43,13 +44,13 @@ export class AddpetComponent
     birthday: "",
     traits: new Map(),
     description: '',
-    images: [''],
+    images: [],
     creationTimestamp: new Date()
   }
 
 
   animaltypes_arr: IAnimalType[] = [];
-  city_arr: ICity[] = [];
+  //city_arr: ICity[] = [];
   traits_arr: ITrait[] = [];
   optionsForTrait: ITraitOption[] = [];
   traitsWithBooleanValue: ITrait[] = [];
@@ -209,6 +210,24 @@ export class AddpetComponent
       return mapAccumulator;
     }, new Map());
     console.log(traitsMap);
+    
+    //upload pictures to db
+    this.components.forEach(uploader => {
+      console.log("%%%%%%",uploader);
+      console.log("555uploader.file.data is: " + uploader.file.data);
+      if (uploader.file.data) {
+        uploader.sendFile(uploader.file).subscribe((pathResponse) => {  
+          console.log("SUBSCRIBE:response from server:" + pathResponse);
+          if (pathResponse) {
+            console.log("pathhhh - " + pathResponse);
+            this.pet.images.push(pathResponse);
+          }
+        });
+        //console.log("sending file :" + uploader.fileName + " to server.");
+        //console.log("2.IN ADDPET FORM - image path: " + this.imgPath);
+        //add path to images array
+      }
+    })
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
@@ -216,7 +235,7 @@ export class AddpetComponent
     this.pet.traits = traitsMap;
 
     console.log("PET INFO: ", this.pet);
-
+    
     try {
       this._petsService.addPet(this.pet);
       this.success = true;
@@ -225,14 +244,6 @@ export class AddpetComponent
     }
     this.loading = false;
 
-    //upload pictures and assign the pet id
-    this.components.forEach(uploader => {
-      console.log("%%%%%%",uploader);
-      if (uploader.file.data) {
-        uploader.sendFile(uploader.file);
-        console.log("sending file :" + uploader.fileName + " to server.");
-      }
-    })
 
   }
 }

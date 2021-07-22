@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
-import { HttpEventType, HttpErrorResponse } from '@angular/common/http';
+import { HttpEventType, HttpErrorResponse, JsonpClientBackend, HttpResponse } from '@angular/common/http';
 import { of } from 'rxjs';  
 import { catchError, map } from 'rxjs/operators';  
 import { UploadService } from '../../services/upload.service';
@@ -19,6 +19,7 @@ export class FileUploaderComponent implements OnInit {
   constructor(private uploadService: UploadService) {}
 
   fileName: string = '';
+  imgPath: string = '';
 
   uploadFile(file) { 
     console.log("in uploadFile:", file);
@@ -56,31 +57,32 @@ export class FileUploaderComponent implements OnInit {
   }
 
   sendFile(file) {
-    this.uploadService.upload(this.formData).pipe(
+    return this.uploadService.upload(this.formData).pipe(
       map(event => {  
-        switch (event.type) {  
-          case HttpEventType.UploadProgress:  
-            if (event.total) {
-              const total:number = event.total;
-              file.progress = Math.round(event.loaded * 100 / total);  
-            }
-            else {
-              //todo: throw error cannot read file
-            }
-            break;
-          case HttpEventType.Response:
+        // switch (event.type) {  
+        //   case HttpEventType.UploadProgress:  
+        //     if (event.total) {
+        //       const total:number = event.total;
+        //       file.progress = Math.round(event.loaded * 100 / total);  
+        //     }
+        //     else {
+        //       //todo: throw error cannot read file
+        //     }
+        //     break;
+          if (event.type == HttpEventType.Response) {
             console.log("RESPONSE FROM SERVER:", event);
-            break;
-        }  
-      }),  
+            this.imgPath = JSON.parse(JSON.stringify(event.body)).path;
+            console.log("1.IMAGE_PATH_RETURNED_FROM_SERVER: " + this.imgPath);
+            return this.imgPath;
+          } else {
+            return null;
+          }
+        } 
+      ),  
       catchError((error: HttpErrorResponse) => {  
         file.inProgress = false;  
         return of(`${file.data.name} upload failed.`);  
-      })).subscribe((event: any) => {  
-        if (typeof (event) === 'object') {  
-          console.log(event.body);  
-        }  
-      });  
+      }));  
   }
 
 //   private uploadFiles() {  

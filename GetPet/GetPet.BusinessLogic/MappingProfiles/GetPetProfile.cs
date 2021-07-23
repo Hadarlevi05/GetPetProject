@@ -99,7 +99,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.MetaFileLinks.Select(mfl => mfl.Path)))
                 .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.ToDictionary(t => t.Trait.Name, t => t.TraitOption != null ? t.TraitOption.Option : t.Description)))
                 .ForMember(dest => dest.AnimalTypeId, opt => opt.MapFrom(src => src.AnimalType.Id))
-                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.DateHumanize()));
+                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.ToLongDateString()));
 
             CreateMap<PetDto, Pet>();
         }
@@ -116,7 +116,9 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void TraitMapping()
         {
-            CreateMap<Trait, TraitDto>();
+            CreateMap<Trait, TraitDto>()
+                .ForMember(dest => dest.IsBoolean, opt => opt.MapFrom(src =>
+                    src.TraitOptions.Count == 2 && src.TraitOptions.Count(i => i.Option == "כן" || i.Option == "לא") == 2));
         }
 
         private void OrganizationMapping()

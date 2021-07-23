@@ -1,7 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
+import { IAnimalType } from 'src/app/shared/models/ianimal-type';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
+import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { TraitsService } from 'src/app/shared/services/traits.service';
+import { IPet } from '../../models/ipet';
+import { PetFilter } from '../../models/pet-filter';
+import { PetsService } from '../../services/pets.service';
 
 @Component({
   selector: 'app-search-pets',
@@ -10,24 +18,105 @@ import { TraitsService } from 'src/app/shared/services/traits.service';
 })
 export class SearchPetsComponent implements OnInit {
 
+  showFiller = true;
+
+  loading = false;
+
+  animalTypeId = 1;
+  animaltypes: IAnimalType[] = [];
   traits: ITrait[] = [];
 
-  constructor(private traitsService: TraitsService) { }
+  booleanTraits: ITrait[] = [];
+  nonBooleanTraits: ITrait[] = [];
+
+  pets: IPet[] = [];
+
+  gridColumns = 3;
+
+  form: FormGroup = new FormGroup({
+    animalType: new FormControl('')
+  });
+
+  constructor(
+    private traitsService: TraitsService,
+    private animalTypeService: AnimalTypeService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private petsService: PetsService) { }
 
   ngOnInit(): void {
 
-    this.loadTraits();
+    this.setFormSubscribers();
+    this.getQueryString();
+    this.loadAnimalTypes();
+    this.loadPets();
   }
 
-  loadTraits() {
-    let animalTypeId = 3;
+  setFormSubscribers() {
+    this.form.controls['animalType'].valueChanges.subscribe(value => {
+
+      const urlTree = this.router.parseUrl(this.router.url);
+      urlTree.queryParams['animalType'] = value;
+      this.router.navigateByUrl(urlTree);
+    });
+  }
+
+  getQueryString() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['animalType']) {
+        this.animalTypeId = +params['animalType'];
+      } else {
+        this.animalTypeId = 1;
+      }
+
+      if (this.form.controls['animalType'].value !== this.animalTypeId) {
+        this.form.controls['animalType'].setValue(this.animalTypeId);
+      }
+
+      this.loadTraits(this.animalTypeId);
+    });
+  }
+
+
+  loadAnimalTypes() {
+
+    let date = new Date();
+    date.setDate(date.getDate() - 20);
+
+    const filter = new AnimalTypeFilter(1, 100, date);
+
+    this.animalTypeService.Get(filter).subscribe(animaltypes => {
+      this.animaltypes = animaltypes;
+    });
+  }
+
+  loadTraits(animalTypeId: number) {
 
     let date = new Date();
     date.setDate(date.getDate() - 20);
     const filter = new TraitFilter(1, 100, date, animalTypeId);
 
     this.traitsService.Post(filter).subscribe(traits => {
-      this.traits = traits;
-    })
+      this.booleanTraits = traits.filter(t => t.isBoolean);
+      this.nonBooleanTraits = traits.filter(t => !t.isBoolean);
+    });
   }
+
+  loadPets() {
+
+    this.loading = false;
+
+    let date = new Date();
+    date.setDate(date.getDate() - 14);
+
+    let filter = new PetFilter(1, 10, date);
+
+    this.petsService.Search(filter).subscribe(pets => {
+      this.pets = pets;
+
+      this.loading = false;
+    });
+  }
+
+
 }

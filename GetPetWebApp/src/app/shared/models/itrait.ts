@@ -1,4 +1,4 @@
-import { ITraitOption } from "./iTraitOption";
+import { ITraitOption } from "./itraitoption";
 
 export interface ITrait {
     
@@ -9,5 +9,7 @@ export interface ITrait {
     animalTypeId: number;
 
     traitOptions: ITraitOption[];
+
+    isBoolean: boolean;
 
 }

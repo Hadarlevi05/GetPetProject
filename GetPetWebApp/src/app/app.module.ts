@@ -37,6 +37,7 @@ import { SearchCriteriaComponent } from './modules/pets/components/search-criter
 import { SelectComponent } from './modules/pets/components/select/select.component';
 import { FileUploaderComponent } from './modules/pets/components/file-uploader/file-uploader.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatDividerModule,
     MatCheckboxModule,
     FlexLayoutModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatSidenavModule
   ],
   providers: [],
   bootstrap: [AppComponent]

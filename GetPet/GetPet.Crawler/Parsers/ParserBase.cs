@@ -4,8 +4,10 @@ using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -23,7 +25,6 @@ namespace GetPet.Crawler.Parsers
             {
                 var pet = ParseSingleNode(node, allTraits);
                 pet.UserId = 1; // TODO: Find a better way to assign the default user
-                pet.AnimalTypeId = 2;
 
                 results.Add(pet);
             }
@@ -35,7 +36,7 @@ namespace GetPet.Crawler.Parsers
         public abstract PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null);
 
         public abstract string ParseName(HtmlNode node);
-        public abstract string ParseAgeInYear(HtmlNode node);
+        public abstract DateTime ParseAgeInYear(HtmlNode node);
 
         public Gender ParseGender(HtmlNode node, string name)
         {
@@ -44,11 +45,11 @@ namespace GetPet.Crawler.Parsers
             return ParserUtils.ConvertGender(gender);
         }
 
-        public Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name)
+        public virtual Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name)
         {
-            var gender = node.GetAttributeValue(name, "unknown");
+            var animalType = node.GetAttributeValue(name, "unknown");
 
-            return ParserUtils.ConvertAnimalType(gender);
+            return ParserUtils.ConvertAnimalType(animalType);
         }
 
         public virtual string ParseDescription(HtmlNode node, string name)
@@ -56,14 +57,80 @@ namespace GetPet.Crawler.Parsers
             return node.GetAttributeValue("title", "");
         }
 
-        public virtual List<Trait> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null)
+        public virtual Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null)
         {
+            var results = new Dictionary<Trait, TraitOption>();
             if (allTraits == null)
-                return new List<Trait>();
+                return results;
 
             var description = ParseDescription(node, name);
 
-            return allTraits.Where(t => description.Contains(t.Name)).ToList();
+            foreach (var trait in allTraits)
+            {
+                switch (trait.TraitType)
+                {
+                    case TraitType.Boolean:
+                        {
+                            var isTrue = description.Contains(trait.Name) && !description.Contains($"לא {trait.Name}");
+                            var isFalse = description.Contains($"לא {trait.Name}");
+
+                            var isTrueFemale = description.Contains(trait.FemaleName) && !description.Contains($"לא {trait.FemaleName}");
+                            var isFalseFemale = description.Contains($"לא {trait.FemaleName}");
+
+                            if (isTrue || isTrueFemale)
+                            {
+                                var yes = trait.TraitOptions.FirstOrDefault(t => t.Option == "כן");
+                                results[trait] = yes;
+                            }
+                            else if (isFalse || isFalseFemale)
+                            {
+                                var no = trait.TraitOptions.FirstOrDefault(t => t.Option == "לא");
+                                results[trait] = no;
+                            }
+                            break;
+                        };
+                    case TraitType.Values:
+                        {
+                            var result = trait.TraitOptions.FirstOrDefault(t => description.Contains(t.Option) || description.Contains(t.FemaleOption));
+
+                            if (result != null)
+                            {
+                                results[trait] = result;
+                            }
+                            break;
+                        };
+                }
+            }
+
+            return results;
+        }
+
+        public virtual DateTime ParseAgeInYear(string inputAge)
+        {
+            int year = 0;
+            int month = 0;
+
+            var ageByGender = Regex.Match(inputAge, @"(?<=בן)(.*?)(?=\.)");
+
+            if (!ageByGender.Success)
+            {
+                ageByGender = Regex.Match(inputAge, @"(?<=בת)(.*?)(?=\.)");
+            }
+
+            string age = (!ageByGender.Success) ? inputAge : ageByGender.Value;
+
+            if (age.Split(new string[] { " ו" }, StringSplitOptions.None).Length > 1)
+            {
+                string[] splitByAnd = age.Split(new[] { " ו" }, 2, StringSplitOptions.None);
+                year = ParserUtils.ConvertYear(splitByAnd[0]);
+                month = ParserUtils.ConvertMonth(splitByAnd[1]);
+            }
+            else
+            {
+                year = ParserUtils.ConvertYear(age);
+            }
+
+            return DateTime.Now.AddYears(-year).AddMonths(-month).Date;
         }
     }
 }

@@ -2,20 +2,15 @@ import { Component, OnInit, ViewChildren, AfterViewInit, QueryList} from '@angul
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { ITraitOption } from 'src/app/shared/models/iTraitOption';
-import { TraitOptionFilter } from 'src/app/shared/models/traitOptionFilter';
-import { TraitOptionsService } from 'src/app/shared/services/traitOptions.service';
-import { compileNgModule } from '@angular/compiler';
-import { compileNgModule } from '@angular/compiler';
-import { ICity } from 'src/app/shared/models/icity';
+import { ITraitOption } from 'src/app/shared/models/itraitoption';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { ITrait } from 'src/app/shared/models/itrait';
+import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import { TraitFilter } from 'src/app/shared/models/trait-filter';
 
 @Component({
   selector: 'app-addpet',
@@ -23,7 +18,7 @@ import { TraitFilter } from 'src/app/shared/models/trait-filter';
   styleUrls: ['./addpet.component.sass']
 })
 
-export class AddpetComponent
+export class AddpetComponent 
   implements OnInit {
 
   @ViewChildren('fileuploader') components!: QueryList<FileUploaderComponent>
@@ -35,11 +30,11 @@ export class AddpetComponent
   addPetFormGroup!: FormGroup;
   //petIdServer: number = 0; //to do- import its value from upload.service.ts
   imgPath: string = '';
+
   ngAfterViewInit() {
   
   }
 
-  
   
   pet: IPet = {
     name: '',
@@ -50,25 +45,24 @@ export class AddpetComponent
     description: '',
     images: [],
     creationTimestamp: new Date()
+  }
 
 
-  
   animaltypes_arr: IAnimalType[] = [];
-  //city_arr: ICity[] = [];
   traits_arr: ITrait[] = [];
   optionsForTrait: ITraitOption[] = [];
   traitsWithBooleanValue: ITrait[] = [];
   traitsWithSetOfValues: ITrait[] = [];
+  gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
   traitSelections: ITraitSelection[] = [];
   traitChipSelections: ITraitSelection[] = [];
   allSelectedTraits: ITraitSelection[] = [];
   minDate!: Date;
   maxDate!: Date;
   
-  
+  constructor(private _formBuilder: FormBuilder,
               private _animalTypeService: AnimalTypeService, 
               private _traitsService: TraitsService,
-              private _petsService: PetsService) { }
               private _petsService: PetsService) { }
 
   ngOnInit(): void {
@@ -82,14 +76,14 @@ export class AddpetComponent
           animalType: ['', [Validators.required]]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(10)]),
-          gender: ['', [Validators.required]],
-          dob: ['', [Validators.required]],
+          petName: new FormControl('', [Validators.required, 
+            Validators.minLength(2),
+            Validators.maxLength(10)]),
+          gender:['', [Validators.required]],
+          dob:['', [Validators.required]],
+          chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
           description:['', [Validators.required,
-                            Validators.maxLength(500)]],
                             Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
@@ -138,16 +132,16 @@ export class AddpetComponent
 
     console.log(this.traits_arr);
 
-    for (const trait of this.traits_arr) {
+    for(const trait of this.traits_arr) {
       this.optionsForTrait = trait.traitOptions;
       for (const option of this.optionsForTrait) {
+        if (this.isBooleanValue(option)) {
             this.traitsWithBooleanValue.push(trait);
             this.isMatChipsLoaded = true;
             break;
           } else {
             this.traitsWithSetOfValues.push(trait);
             break;
-          }
           }
       }
     }
@@ -158,9 +152,10 @@ export class AddpetComponent
     console.log(this.traitsWithSetOfValues);
   }
 
-  private isBooleanValue(op: ITraitOption): boolean {
+  private isBooleanValue(op: ITraitOption) : boolean {
     return (op.option == 'כן' || op.option == 'לא')
   }
+
   private deleteTraitsArrays() {
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
@@ -178,7 +173,6 @@ export class AddpetComponent
       this.traitSelections.push(traitSelection);
     }
   }
-  //           console.log("trait: " + trait.traitName + " has a Yes/No value!");
 
   eventHandler(event:ITraitSelection[]) {
     this.traitChipSelections = event;
@@ -201,7 +195,6 @@ export class AddpetComponent
   // status?: string;
   // userId: number;
   // user?: IUser;
-  // images: string[];
 
     //console.log('data from selections:', this.traitSelections)
     //console.log('data from child:',this.traitChipSelections);

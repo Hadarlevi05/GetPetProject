@@ -11,8 +11,7 @@ namespace GetPet.Data.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-        [ForeignKey("AnimalType")]
-        public int AnimalTypeId { get; set; }
-        public AnimalType AnimalType { get; set; }
+
+        public string PetFilterSerialized { get; set; }
     }
 }

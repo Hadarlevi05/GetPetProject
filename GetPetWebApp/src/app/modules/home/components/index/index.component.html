@@ -18,12 +18,10 @@
 
 <section>
     <h2>בעלי-חיים חדשים לאימוץ</h2>
-    <mat-tab-group mat-align-tabs="start" mat-stretch-tabs>
+    <mat-tab-group mat-align-tabs="start" mat-stretch-tabs (selectedTabChange)="tabChanged($event)">
         <mat-tab label="כלבים">
             <div class="pets-container">
-
                 <app-loader [Show]="petLoading"></app-loader>
-
                 <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
                         <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
@@ -32,26 +30,30 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </mat-tab>
         <mat-tab label="חתולים">
             <div class="pets-container">
-
-                <div class="content">
-                    <div fxLayout="row wrap" fxLayoutGap="16px">
-                        <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+                <app-loader [Show]="petLoading"></app-loader>
+                <div class="content" *ngIf="!petLoading">
+                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
+                            fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                            <app-pet-card [pet]="pet"></app-pet-card>
+                        </div>
                     </div>
                 </div>
-
-
             </div>
         </mat-tab>
         <mat-tab label="מכרסמים">
             <div class="pets-container">
-                <div class="content">
-                    <div fxLayout="row wrap" fxLayoutGap="16px">
-                        <app-pet-card *ngFor="let pet of pets" [pet]="pet"></app-pet-card>
+                <app-loader [Show]="petLoading"></app-loader>
+                <div class="content" *ngIf="!petLoading">
+                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
+                            fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                            <app-pet-card [pet]="pet"></app-pet-card>
+                        </div>
                     </div>
                 </div>
             </div>

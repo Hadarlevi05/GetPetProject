@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { IArticle } from 'src/app/modules/articles/models/iarticle';
 import { ArticleService } from 'src/app/modules/articles/services/article.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
@@ -21,6 +22,9 @@ export class IndexComponent implements OnInit {
 
   gridColumns = 3;
 
+  animalTypeId = 1;
+
+
   toggleGridColumns() {
     this.gridColumns = this.gridColumns === 3 ? 4 : 3;
   }
@@ -35,6 +39,13 @@ export class IndexComponent implements OnInit {
     this.loadArticles();
   }
 
+  tabChanged(tabChangeEvent: MatTabChangeEvent): void {
+    this.animalTypeId = tabChangeEvent.index + 1;
+
+    this.pets = [];
+    this.loadPets();
+  }
+
   loadArticles() {
 
     this.articleLoading = true;
@@ -44,7 +55,7 @@ export class IndexComponent implements OnInit {
 
     let filter = new BaseFilter(1, 10, date);
 
-    this.articleService.Search(filter).subscribe(articles => {
+    this.articleService.search(filter).subscribe(articles => {
       this.articles = articles;
 
       this.articleLoading = false;
@@ -58,9 +69,9 @@ export class IndexComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 100, date);
+    let filter = new PetFilter(1, 100, date, [this.animalTypeId]);
 
-    this.petsService.Search(filter).subscribe(pets => {
+    this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
 
       this.petLoading = false;

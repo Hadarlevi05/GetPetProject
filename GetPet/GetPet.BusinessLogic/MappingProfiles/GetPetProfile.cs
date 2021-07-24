@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model;
-using GetPet.Common;
 using GetPet.Data.Entities;
-using GetPet.Data.Enums;
-using System;
 using System.Linq;
 
 namespace GetPet.BusinessLogic.MappingProfiles
@@ -116,9 +113,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void TraitMapping()
         {
-            CreateMap<Trait, TraitDto>()
-                .ForMember(dest => dest.IsBoolean, opt => opt.MapFrom(src =>
-                    src.TraitOptions.Count == 2 && src.TraitOptions.Count(i => i.Option == "כן" || i.Option == "לא") == 2));
+            CreateMap<Trait, TraitDto>();                
         }
 
         private void OrganizationMapping()

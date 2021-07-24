@@ -17,7 +17,7 @@ namespace GetPet.Crawler.Crawlers
     public abstract class CrawlerBase<T> : ICrawler where T : IParser, new()
     {
         protected readonly HtmlDocument doc = new HtmlDocument();
-        protected readonly WebClient client = new WebClient();
+        protected static readonly WebClient client = new WebClient();
         protected readonly T parser = new T();
 
         protected readonly IPetHandler _petHandler;
@@ -64,14 +64,16 @@ namespace GetPet.Crawler.Crawlers
             Load(url);
         }
 
-        public virtual IList<PetDto> Parse()
+        public virtual IList<Pet> Parse()
         {
             var traits = GetListOfTraits();
 
-            return parser.Parse(traits);
+            var user = CreateUser();
+
+            return parser.Parse(traits, user);
         }
 
-        public virtual async void InsertToDB(IList<PetDto> animals)
+        public virtual async void InsertToDB(IList<Pet> animals)
         {
             var tasks = animals
                 .Where(p => !IsPetExists(p))
@@ -84,9 +86,11 @@ namespace GetPet.Crawler.Crawlers
             _unitOfWork.SaveChanges();
         }
 
-        private bool IsPetExists(PetDto pet)
+        private bool IsPetExists(Pet pet)
         {
             return pets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink); 
         }
+
+        public abstract User CreateUser();
     }
 }

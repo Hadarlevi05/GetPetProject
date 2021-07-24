@@ -15,16 +15,16 @@ namespace GetPet.Crawler.Parsers
     {
         public HtmlDocument Document { get; set; }
 
-        public virtual IList<PetDto> Parse(List<Trait> allTraits = null)
+        public virtual IList<Pet> Parse(List<Trait> allTraits, User user)
         {
-            var results = new List<PetDto>();
+            var results = new List<Pet>();
 
             var nodes = GetNodes();
 
             foreach (var node in nodes)
             {
                 var pet = ParseSingleNode(node, allTraits);
-                pet.UserId = 1; // TODO: Find a better way to assign the default user
+                pet.User = user;
 
                 results.Add(pet);
             }
@@ -33,7 +33,7 @@ namespace GetPet.Crawler.Parsers
         }
 
         public abstract HtmlNodeCollection GetNodes();
-        public abstract PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null);
+        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits);
 
         public abstract string ParseName(HtmlNode node);
         public abstract DateTime ParseAgeInYear(HtmlNode node);
@@ -57,7 +57,7 @@ namespace GetPet.Crawler.Parsers
             return node.GetAttributeValue("title", "");
         }
 
-        public virtual Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null)
+        public virtual Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits)
         {
             var results = new Dictionary<Trait, TraitOption>();
             if (allTraits == null)

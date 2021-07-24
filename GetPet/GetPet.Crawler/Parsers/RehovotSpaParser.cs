@@ -28,7 +28,7 @@ namespace GetPet.Crawler.Parsers
             return null;
         }
 
-        public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
+        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
             int animalTypeId = (int)ParseAnimalType(node, string.Empty);
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
@@ -42,20 +42,40 @@ namespace GetPet.Crawler.Parsers
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
             var sourceLink = "http://rehovotspa.org.il/our-dogs/";
 
-            var pet = new PetDto
+
+            var pet = new Pet
             {
                 Name = name,
                 Gender = gender,
                 Birthday = birthday,
                 Description = description,
-                Images = new List<string> {
-                    image
-                },
-                TraitDTOs = traits,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalTypeId = animalTypeId,
             };
+
+            pet.MetaFileLinks = new List<MetaFileLink>
+            {
+                new MetaFileLink
+                {
+                    Path = image,
+                    MimeType = image.Substring(image.LastIndexOf(".")),
+                    Size = 1000
+                }
+            };
+
+            pet.PetTraits = new List<PetTrait>();
+            foreach (var trait in traits)
+            {
+                pet.PetTraits.Add(
+                    new PetTrait()
+                    {
+                        Trait = trait.Key,
+                        TraitOption = trait.Value,
+                    }
+                );
+            }
+
             return pet;
         }
 

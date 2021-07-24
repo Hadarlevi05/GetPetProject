@@ -16,7 +16,7 @@ namespace GetPet.Crawler.Parsers
             return items;
         }
 
-        public override PetDto ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
+        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
         {
             Data.Enums.AnimalType animalType = ParseAnimalType(node, "class");
 
@@ -31,20 +31,38 @@ namespace GetPet.Crawler.Parsers
             string sourceLink = node.SelectSingleNode("./a").Attributes["href"].Value;
             var image = node.SelectSingleNode(".//img").GetAttributeValue("src", "");
 
-            var pet = new PetDto
+            var pet = new Pet
             {
                 Name = name,
                 Gender = gender,
                 Birthday = birthday,
                 Description = description,
-                TraitDTOs = traits,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalTypeId = animalTypeId,
-                Images = new List<string> {
-                    image
-                },
             };
+
+            pet.MetaFileLinks = new List<MetaFileLink>
+            {
+                new MetaFileLink
+                {
+                    Path = image,
+                    MimeType = image.Substring(image.LastIndexOf(".")),
+                    Size = 1000
+                }
+            };
+
+            pet.PetTraits = new List<PetTrait>();
+            foreach (var trait in traits)
+            {
+                pet.PetTraits.Add(
+                    new PetTrait()
+                    {
+                        Trait = trait.Key,
+                        TraitOption = trait.Value,
+                    }
+                );
+            }
 
             return pet;
         }

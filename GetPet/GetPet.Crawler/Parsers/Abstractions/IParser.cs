@@ -11,7 +11,7 @@ namespace GetPet.Crawler.Parsers.Abstractions
     public interface IParser
     {
         HtmlDocument Document { get; set; }
-        IList<PetDto> Parse(List<Trait> allTraits = null);
+        IList<Pet> Parse(List<Trait> allTraits = null, User user = null);
         string ParseName(HtmlNode node);
         DateTime ParseAgeInYear(HtmlNode node);
         Gender ParseGender(HtmlNode node, string name);

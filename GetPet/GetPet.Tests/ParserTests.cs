@@ -59,13 +59,15 @@ namespace GetPet.Tests
             Assert.AreEqual(firstPet.Birthday, DateTime.Now.AddYears(-2).AddMonths(-2).Date);
             Assert.AreEqual(firstPet.Gender, Gender.Female);
             Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
+            Assert.NotNull(firstPet.User);
 
             var lastPet = pets[1];
             Assert.AreEqual(lastPet.Name, "סקאי");
             Assert.AreEqual(lastPet.Birthday, DateTime.Now.AddYears(-5).Date);
             Assert.AreEqual(lastPet.Gender, Gender.Male);
-            Assert.IsNotNull(lastPet.TraitDTOs.FirstOrDefault());
-            Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
+            Assert.IsNotNull(lastPet.PetTraits.FirstOrDefault());
+            Assert.AreEqual(lastPet.AnimalTypeId, (int)AnimalType.Dog);
+            Assert.NotNull(lastPet.User);
         }
 
         [Test]

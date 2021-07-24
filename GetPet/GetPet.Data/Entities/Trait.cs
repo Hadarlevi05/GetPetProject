@@ -18,9 +18,6 @@ namespace GetPet.Data.Entities
 
         public TraitType TraitType { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public bool IsBoolean { get; set; }
     }
 }

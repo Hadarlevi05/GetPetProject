@@ -17,11 +17,11 @@ export class PetsService extends BaseService {
     super(http);
   }
 
-  Search(filter: PetFilter): Observable<IPet[]> {
+  search(filter: PetFilter): Observable<IPet[]> {
     return this.http.post<IPet[]>(`${this.entPointUrl}/search`, filter);
   }
 
-  addPet (pet: IPet) {
+  addPet(pet: IPet) {
     this.http.post(`${this.entPointUrl}`, pet).subscribe(
       (response) => console.log(response),
       (error) => console.log(error)

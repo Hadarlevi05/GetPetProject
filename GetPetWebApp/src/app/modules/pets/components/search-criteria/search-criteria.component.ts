@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ITrait } from 'src/app/shared/models/itrait';
 
 @Component({
@@ -11,6 +11,8 @@ export class SearchCriteriaComponent implements OnInit {
   @Input()
   trait: ITrait = {} as ITrait;
 
+  @Output() changed = new EventEmitter<{ traitId: number, options: number[] | boolean }>();
+
   optionsSelected: number[] = [];
 
   traitChecked = false;
@@ -20,8 +22,7 @@ export class SearchCriteriaComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectOption(value) {
-
+  selectOption(value: number) {
     const index = this.optionsSelected.findIndex(i => i === value);
 
     if (index > -1) {
@@ -29,5 +30,10 @@ export class SearchCriteriaComponent implements OnInit {
     } else {
       this.optionsSelected.push(value);
     }
+    this.changed.emit({ traitId: this.trait.id, options: [...this.optionsSelected] });
+  }
+
+  selectCheckbox() {
+    this.changed.emit({ traitId: this.trait.id, options: this.traitChecked });
   }
 }

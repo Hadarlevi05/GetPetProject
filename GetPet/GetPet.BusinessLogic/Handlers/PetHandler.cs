@@ -78,10 +78,5 @@ namespace GetPet.BusinessLogic.Handlers
         {
             return null;
         }
-
-        public async Task<IList<PetDto>> MyPets(PetFilter filter)
-        {
-            return null;
-        }
     }
 }

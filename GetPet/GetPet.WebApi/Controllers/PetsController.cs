@@ -47,7 +47,6 @@ namespace PetAdoption.WebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
 
-
         [HttpPost]
         public async Task Post(PetDto pet)
         {

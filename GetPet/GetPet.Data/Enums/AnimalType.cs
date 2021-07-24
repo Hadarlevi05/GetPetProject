@@ -7,9 +7,8 @@ namespace GetPet.Data.Enums
     public enum AnimalType
     {
         Unknown = 0,
-        Bunny = 1,
-        Cat = 2,
-        Dog = 3,
-        Snake = 4,
+        Dog = 1,
+        Cat = 2,        
+        Snake = 3
     }
 }

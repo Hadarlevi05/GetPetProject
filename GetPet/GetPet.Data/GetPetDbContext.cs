@@ -67,19 +67,6 @@ namespace GetPet.Data
             modelBuilder.Entity<Notification>()
                 .HasOne<User>(n => n.User);
 
-            modelBuilder.Entity<Notification>()
-                .HasOne<AnimalType>(n => n.AnimalType);
-
-            #endregion
-
-            #region NotificationTrait
-
-            modelBuilder.Entity<NotificationTrait>()
-                .HasOne<Notification>(nt => nt.Notification);
-
-            modelBuilder.Entity<NotificationTrait>()
-                .HasOne<Trait>(nt => nt.Trait);
-
             #endregion
 
             #region Pets                       
@@ -172,8 +159,7 @@ namespace GetPet.Data
         public DbSet<DataSource> DataSources { get; set; }
         public DbSet<EmailHistory> EmailHistories { get; set; }
         public DbSet<MetaFileLink> MetaFileLinks { get; set; }
-        public DbSet<Notification> Notifications { get; set; }
-        public DbSet<NotificationTrait> NotificationTraits { get; set; }
+        public DbSet<Notification> Notifications { get; set; }        
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<PetHistoryStatus> PetHistoryStatuses { get; set; }

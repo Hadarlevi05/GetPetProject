@@ -75,7 +75,7 @@ namespace GetPet.Crawler.Parsers
 
         public override string ParseDescription(HtmlNode node, string name = "")
         {
-            return node.SelectNodes("./a").FirstOrDefault().InnerText;
+            return System.Net.WebUtility.HtmlDecode(node.SelectNodes("./a/div")[1].InnerText);
         }
     }
 }

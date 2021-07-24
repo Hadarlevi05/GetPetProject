@@ -53,7 +53,7 @@ namespace GetPet.Crawler.Parsers
 
         public virtual string ParseDescription(HtmlNode node, string name)
         {
-            return node.GetAttributeValue("title", "");
+            return System.Net.WebUtility.HtmlDecode(node.GetAttributeValue("title", ""));
         }
 
         public virtual Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits)

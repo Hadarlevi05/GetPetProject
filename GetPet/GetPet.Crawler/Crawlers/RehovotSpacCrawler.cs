@@ -24,18 +24,20 @@ namespace GetPet.Crawler.Crawlers
         {
             return new User()
             {
-                Name = "RehovotSpca",
-                Email = "RehovotSpca@gmail.com",
+                Name = "צער בעלי חיים רחובות",
+                Email = "info@rehovotSpca.co.il",
                 UserType = Data.Enums.UserType.Organization,
-                Organization = new Organization()
-                {
-                    Name = "RehovotSpca",
-                    Email = "RehovotSpca@gmail.com",
-                },
                 CreationTimestamp = DateTime.Now,
                 UpdatedTimestamp = DateTime.Now,
                 PasswordHash = "1234",
                 CityId = 1,
+                PhoneNumber = "08-9460135",
+                Organization = new Organization()
+                {
+                    Name = "צער בעלי חיים רחובות",
+                    Email = "info@rehovotSpca.co.il",
+                    PhoneNumber = "08-9460135",
+                },
             };
         }
     }

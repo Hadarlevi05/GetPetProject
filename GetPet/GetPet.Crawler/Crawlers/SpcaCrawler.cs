@@ -24,18 +24,20 @@ namespace GetPet.Crawler.Crawlers
         {
             return new User()
             {
-                Name = "Spca",
-                Email = "Spca@gmail.com",
+                Name = "צער בעלי חיים ישראל",
+                Email = "info@spca.co.il",
                 UserType = Data.Enums.UserType.Organization,
-                Organization = new Organization()
-                {
-                    Name = "Spca",
-                    Email = "Spca@gmail.com",
-                },
                 CreationTimestamp = DateTime.Now,
                 UpdatedTimestamp = DateTime.Now,
                 PasswordHash = "1234",
                 CityId = 1,
+                PhoneNumber = "03-5136500",
+                Organization = new Organization()
+                {
+                    Name = "צער בעלי חיים ישראל",
+                    Email = "info@spca.co.il",
+                    PhoneNumber = "03-5136500",
+                },
             };
         }
     }

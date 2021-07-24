@@ -7,7 +7,7 @@ export interface IPet {
 
   description?: string;
 
-  birthday?: string;
+  birthday: string;
 
   gender?: string;
 

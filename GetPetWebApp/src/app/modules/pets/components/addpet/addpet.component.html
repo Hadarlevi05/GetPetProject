@@ -58,6 +58,7 @@
             <div class="row">
               <mat-label>בחר תכונות מיוחדות:</mat-label>
               <app-chips-multi-select 
+                  #chips
                   [options]="traitsWithBooleanValue"
                   [isMatChipsTraitsLoaded]="isMatChipsLoaded" 
                   (data)="eventHandler($event)"

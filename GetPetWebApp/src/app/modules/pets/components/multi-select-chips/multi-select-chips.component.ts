@@ -80,16 +80,19 @@ export class MultiSelectChipsComponent
     this.data.emit(this.traitChipSelections);
  }
 
-  // selectionChange(event: MatChipSelectionChange){
-
-  //   //canceled. delete this.
-  // }
-
   ngOnChanges() {
 
     console.log("in child: isMatChipsTraitsLoaded: " + this.isMatChipsTraitsLoaded);
 
-    //set all matchips to be false
+    this.setAllMatchipsFalse();
+
+    console.log('all matchips selections', this.traitChipSelections);
+  }
+
+  public setAllMatchipsFalse() {
+
+    this.traitChipSelections = [] as ITraitSelection[];
+
     this.options.forEach (op => {
       this.traitChipSelection = {} as ITraitSelection;      
       this.traitChipSelection.traitId = op.id;
@@ -97,7 +100,6 @@ export class MultiSelectChipsComponent
       (op.traitOptions[0].option === "לא") ? op.traitOptions[0].id : op.traitOptions[1].id;
       this.traitChipSelections.push(this.traitChipSelection);
     })
-    console.log('all matchips selections', this.traitChipSelections);
   }
 
   ngAfterViewInit() {

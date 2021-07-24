@@ -38,6 +38,7 @@ import { SelectComponent } from './modules/pets/components/select/select.compone
 import { FileUploaderComponent } from './modules/pets/components/file-uploader/file-uploader.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import {DatePipe} from '@angular/common';   
 
 @NgModule({
   declarations: [
@@ -89,7 +90,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatProgressBarModule,
     MatSidenavModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

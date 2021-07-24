@@ -26,8 +26,11 @@ namespace GetPet.Crawler.Crawlers
         protected readonly ITraitRepository _traitRepository;
         protected readonly ICityRepository _cityRepository;
         protected readonly IAnimalTypeRepository _animalTypeRepository;
+        protected readonly IUserRepository _userRepository;
 
-        private List<Pet> pets;
+        private List<Pet> _AllPets;
+        private List<User> _AllUsers;
+
         protected abstract string url { get; }
 
         public CrawlerBase(
@@ -36,7 +39,8 @@ namespace GetPet.Crawler.Crawlers
             IUnitOfWork unitOfWork,
             ITraitRepository traitRepository,
             ICityRepository cityRepository,
-            IAnimalTypeRepository animalTypeRepository          
+            IAnimalTypeRepository animalTypeRepository,          
+            IUserRepository userRepository
             )
         {
             _petHandler = petHandler;
@@ -45,6 +49,7 @@ namespace GetPet.Crawler.Crawlers
             _traitRepository = traitRepository;
             _cityRepository = cityRepository;
             _animalTypeRepository = animalTypeRepository;
+            _userRepository = userRepository;
         }
 
         protected virtual List<Trait> GetAllTraits()
@@ -84,7 +89,8 @@ namespace GetPet.Crawler.Crawlers
 
             parser.Document = doc;
 
-            pets = _petRepository.SearchAsync(new PetFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
+            _AllPets = _petRepository.SearchAsync(new PetFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
+            _AllUsers = _userRepository.SearchAsync(new UserFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
         }
 
         public virtual void Load()
@@ -115,9 +121,14 @@ namespace GetPet.Crawler.Crawlers
             _unitOfWork.SaveChanges();
         }
 
-        private bool IsPetExists(Pet pet)
+        protected bool IsPetExists(Pet pet)
         {
-            return pets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink); 
+            return _AllPets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink); 
+        }
+
+        protected User IsUserExists(string name, string phoneNember)
+        {
+            return _AllUsers.FirstOrDefault(u => u.Name.Equals(name) && u.PhoneNumber.Equals(phoneNember));
         }
 
         public abstract User CreateUser();

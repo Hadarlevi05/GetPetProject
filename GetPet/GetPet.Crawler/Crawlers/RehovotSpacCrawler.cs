@@ -19,9 +19,10 @@ namespace GetPet.Crawler.Crawlers
             IUnitOfWork unitOfWork,
             ITraitRepository traitRepository,
             ICityRepository cityRepository,
-            IAnimalTypeRepository animalTypeRepository
+            IAnimalTypeRepository animalTypeRepository,
+            IUserRepository userRepository
             ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository)
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository)
         { }
 
         public override User CreateUser()
@@ -29,7 +30,7 @@ namespace GetPet.Crawler.Crawlers
             var allCities = GetAllCities();
             var city = allCities.FirstOrDefault(x => x.Name == "רחובות");
 
-            return new User()
+            User user = new User()
             {
                 Name = "צער בעלי חיים רחובות",
                 Email = "info@rehovotSpca.co.il",
@@ -46,6 +47,10 @@ namespace GetPet.Crawler.Crawlers
                     PhoneNumber = "08-9460135",
                 },
             };
+
+            var existingUser = IsUserExists(user.Name, user.PhoneNumber);
+
+            return (existingUser != null) ? existingUser : user;
         }
     }
 }

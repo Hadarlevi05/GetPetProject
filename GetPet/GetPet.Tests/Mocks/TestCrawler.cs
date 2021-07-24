@@ -20,9 +20,10 @@ namespace GetPet.Tests.Mocks
             IUnitOfWork unitOfWork,
             ITraitRepository traitRepository,
             ICityRepository cityRepository,
-            IAnimalTypeRepository animalTypeRepository
+            IAnimalTypeRepository animalTypeRepository,
+            IUserRepository userRepository
             ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository)
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository)
         {
         }
 

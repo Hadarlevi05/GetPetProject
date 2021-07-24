@@ -17,7 +17,7 @@ export class ArticleService extends BaseService {
     super(http);
   }
 
-  Search(filter: BaseFilter): Observable<IArticle[]> {
+  search(filter: BaseFilter): Observable<IArticle[]> {
     let params: HttpParams = this.GetHttpParams(filter);
 
     return this.http.get<IArticle[]>(`${this.entPointUrl}`, { params });

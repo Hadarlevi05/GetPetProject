@@ -34,7 +34,7 @@ namespace PetAdoption.BusinessLogic.Repositories
                     .ThenInclude(q => q.Organization)
                 .Include(q => q.User)
                     .ThenInclude(q => q.City);
-             
+
             return query;
         }
 
@@ -52,11 +52,35 @@ namespace PetAdoption.BusinessLogic.Repositories
                 query = query.Where(p => p.CreationTimestamp > filter.CreatedSince.Value);
             }
 
-            if (filter.AnimalTypes != null && filter.AnimalTypes.Count() > 0)
+            if (filter.AnimalTypes != null && filter.AnimalTypes.Any())
             {
-                query = query.Where(p => filter.AnimalTypes.Contains(p.AnimalType));
+                query = query.Where(p => filter.AnimalTypes.Contains(p.AnimalType.Id));
             }
 
+            if (filter.TraitValues != null && filter.TraitValues.Any())
+            {
+                foreach (var traitValue in filter.TraitValues)
+                {
+                    if (traitValue.Value != null && traitValue.Value.Any())
+                    {
+                        query = query.Where(p =>
+                            p.PetTraits.Any(pt =>
+                                pt.TraitId == traitValue.Key &&
+                                pt.TraitOptionId.HasValue && traitValue.Value.Contains(pt.TraitOptionId.Value)
+                            )
+                        );
+                    }
+                }
+            }
+
+            if (filter.BooleanTraits != null && filter.BooleanTraits.Any())
+            {
+                foreach (var boolTrait in filter.BooleanTraits)
+                {
+                    query = query.Where(p =>
+                        p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
+                }
+            }
             return await query.ToListAsync();
         }
 

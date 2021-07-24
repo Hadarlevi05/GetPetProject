@@ -6,9 +6,11 @@ namespace GetPet.BusinessLogic.Model
 {
     public class PetFilter : BaseFilter
     {
-        public IEnumerable<AnimalType> AnimalTypes { get; set; }
+        public IEnumerable<int> AnimalTypes { get; set; }
 
-        public IDictionary<int, string> TraitValues { get; set; }
+        public IDictionary<int, IList<int>> TraitValues { get; set; }
+
+        public IList<int> BooleanTraits{ get; set; }
 
         public DateTime? CreatedSince { get; set; } = null;
     }

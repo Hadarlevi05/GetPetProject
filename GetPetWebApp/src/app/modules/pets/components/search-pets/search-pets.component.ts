@@ -33,6 +33,10 @@ export class SearchPetsComponent implements OnInit {
 
   gridColumns = 3;
 
+  searchTraitValues: {} = {};
+  searchBooleanTraits: number[] = [];
+
+
   form: FormGroup = new FormGroup({
     animalType: new FormControl('')
   });
@@ -109,14 +113,42 @@ export class SearchPetsComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 10, date);
+    let filter = new PetFilter(1, 10, date, [this.animalTypeId]);
 
-    this.petsService.Search(filter).subscribe(pets => {
+    this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
 
       this.loading = false;
     });
   }
 
+  onOptionsChanged(values: { traitId: number, options: number[] | boolean }) {
 
+    if (typeof values.options === 'boolean') {
+      if (values.options) {
+        this.searchBooleanTraits.push(values.traitId);
+      } else {
+        this.searchBooleanTraits.splice(this.searchBooleanTraits.indexOf(values.traitId), 1);
+      }
+    } else {
+      this.searchTraitValues[values.traitId] = values.options;
+    }
+
+  }
+
+  search() {
+
+
+    const date = new Date();
+    date.setDate(date.getDate() - 14);
+
+    const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
+
+    console.log(filter);
+
+    this.petsService.search(filter).subscribe(pets => {
+      this.pets = pets;
+
+    });
+  }
 }

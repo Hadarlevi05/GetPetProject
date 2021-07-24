@@ -4,14 +4,16 @@ using GetPet.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GetPet.Data.Migrations
 {
     [DbContext(typeof(GetPetDbContext))]
-    partial class GetPetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210723084701_IsBoolean")]
+    partial class IsBoolean
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,9 +225,6 @@ namespace GetPet.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NotificationId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
@@ -283,14 +282,14 @@ namespace GetPet.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int>("AnimalTypeId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreationTimestamp")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PetFilterSerialized")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
@@ -300,9 +299,46 @@ namespace GetPet.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AnimalTypeId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.NotificationTrait", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreationTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("NotificationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TraitId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedTimestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NotificationId");
+
+                    b.HasIndex("TraitId");
+
+                    b.ToTable("NotificationTraits");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.Organization", b =>
@@ -650,13 +686,40 @@ namespace GetPet.Data.Migrations
 
             modelBuilder.Entity("GetPet.Data.Entities.Notification", b =>
                 {
+                    b.HasOne("GetPet.Data.Entities.AnimalType", "AnimalType")
+                        .WithMany()
+                        .HasForeignKey("AnimalTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GetPet.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("AnimalType");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("GetPet.Data.Entities.NotificationTrait", b =>
+                {
+                    b.HasOne("GetPet.Data.Entities.Notification", "Notification")
+                        .WithMany()
+                        .HasForeignKey("NotificationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GetPet.Data.Entities.Trait", "Trait")
+                        .WithMany()
+                        .HasForeignKey("TraitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Notification");
+
+                    b.Navigation("Trait");
                 });
 
             modelBuilder.Entity("GetPet.Data.Entities.Pet", b =>

@@ -1,5 +1,5 @@
 <div *ngIf="trait.isBoolean">
-    <mat-checkbox [(ngModel)]="traitChecked">{{trait.name }}</mat-checkbox>
+    <mat-checkbox [(ngModel)]="traitChecked" (ngModelChange)="selectCheckbox()">{{trait.name }}</mat-checkbox>
 </div>
 <div *ngIf="!trait.isBoolean">
 

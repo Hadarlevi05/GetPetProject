@@ -14,13 +14,15 @@
 
             </section>
             <section class="row filter-list">
-                <app-search-criteria *ngFor="let trait of booleanTraits" [trait]="trait"></app-search-criteria>
+                <app-search-criteria *ngFor="let trait of booleanTraits" [trait]="trait"
+                    (changed)="onOptionsChanged($event)"></app-search-criteria>
             </section>
             <section class="row">
-                <app-search-criteria *ngFor="let trait of nonBooleanTraits" [trait]="trait"></app-search-criteria>
+                <app-search-criteria *ngFor="let trait of nonBooleanTraits" [trait]="trait"
+                    (changed)="onOptionsChanged($event)"></app-search-criteria>
             </section>
             <section class="row">
-                <button mat-raised-button color="primary">חפש</button>
+                <button mat-raised-button color="primary" (click)="search()">חפש</button>
             </section>
         </form>
     </aside>

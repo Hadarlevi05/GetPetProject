@@ -37,7 +37,7 @@ namespace GetPet.BusinessLogic.Handlers
             }
             catch (Exception ex)
             {
-                // TODO: Handle exception
+                Console.WriteLine($"Cannot insert pet {pet.Name}", ex);
             }
         }
 

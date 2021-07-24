@@ -1,5 +1,4 @@
-﻿using GetPet.Data.Entities;
-using GetPet.Data.Enums;
+﻿using GetPet.Data.Enums;
 using System;
 using System.Collections.Generic;
 
@@ -14,22 +13,17 @@ namespace GetPet.BusinessLogic.Model
         
         public Gender Gender { get; set; }
                 
-        //public AnimalType AnimalTypeEnum { get; set; } // TODO Later: Fix AnimalType in Mapper (PetProfile)
         public int AnimalTypeId { get; set; }
 
         public string Status { get; set; }
 
         public string Description { get; set; }
 
-        public UserDto User { get; set; } // TODO: How to convert it between Pet and PetDTO?        
-
         public int UserId { get; set; }
 
         public IList<string> Images { get; set; }
 
         public IDictionary<string, string> Traits { get; set; }
-
-        public IDictionary<Trait, TraitOption> TraitDTOs { get; set; }
 
         public PetSource Source { get; set; }
         /// <summary>

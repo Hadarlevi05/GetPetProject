@@ -131,7 +131,6 @@ namespace GetPet.Tests
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // TODO - read from tests config
             string sqlConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=GetPet;Integrated Security=True";
 
             services.AddDbContext<GetPetDbContext>(
@@ -148,7 +147,6 @@ namespace GetPet.Tests
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()
                 .AddScoped<ICrawler, SpcaCrawler>()
-                //.AddScoped<ICrawler, SpcaRamatGanCrawler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .BuildServiceProvider();
         }

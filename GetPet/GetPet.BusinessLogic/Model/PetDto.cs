@@ -21,6 +21,8 @@ namespace GetPet.BusinessLogic.Model
 
         public int UserId { get; set; }
 
+        public UserDto User { get; set; } 
+
         public IList<string> Images { get; set; }
 
         public IDictionary<string, string> Traits { get; set; }

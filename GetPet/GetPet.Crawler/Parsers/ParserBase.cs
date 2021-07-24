@@ -1,5 +1,4 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Parsers.Abstractions;
+﻿using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
@@ -15,7 +14,7 @@ namespace GetPet.Crawler.Parsers
     {
         public HtmlDocument Document { get; set; }
 
-        public virtual IList<Pet> Parse(List<Trait> allTraits, User user)
+        public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes)
         {
             var results = new List<Pet>();
 
@@ -23,7 +22,7 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits);
+                var pet = ParseSingleNode(node, allTraits, animalTypes);
                 pet.User = user;
 
                 results.Add(pet);
@@ -33,7 +32,7 @@ namespace GetPet.Crawler.Parsers
         }
 
         public abstract HtmlNodeCollection GetNodes();
-        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits);
+        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes);
 
         public abstract string ParseName(HtmlNode node);
         public abstract DateTime ParseAgeInYear(HtmlNode node);
@@ -45,11 +44,11 @@ namespace GetPet.Crawler.Parsers
             return ParserUtils.ConvertGender(gender);
         }
 
-        public virtual Data.Enums.AnimalType ParseAnimalType(HtmlNode node, string name)
+        public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
         {
             var animalType = node.GetAttributeValue(name, "unknown");
 
-            return ParserUtils.ConvertAnimalType(animalType);
+            return ParserUtils.ConvertAnimalType(animalType, animalTypes);
         }
 
         public virtual string ParseDescription(HtmlNode node, string name)

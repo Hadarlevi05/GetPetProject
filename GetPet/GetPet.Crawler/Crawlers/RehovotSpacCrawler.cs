@@ -5,6 +5,7 @@ using GetPet.Crawler.Parsers;
 using GetPet.Data.Entities;
 using PetAdoption.BusinessLogic.Repositories;
 using System;
+using System.Linq;
 
 namespace GetPet.Crawler.Crawlers
 {
@@ -16,12 +17,18 @@ namespace GetPet.Crawler.Crawlers
             IPetHandler petHandler,
             IPetRepository petRepository,
             IUnitOfWork unitOfWork,
-            ITraitRepository traitRepository) :
-            base(petHandler, petRepository, unitOfWork, traitRepository)
+            ITraitRepository traitRepository,
+            ICityRepository cityRepository,
+            IAnimalTypeRepository animalTypeRepository
+            ) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository)
         { }
 
         public override User CreateUser()
         {
+            var allCities = GetAllCities();
+            var city = allCities.FirstOrDefault(x => x.Name == "רחובות");
+
             return new User()
             {
                 Name = "צער בעלי חיים רחובות",
@@ -30,7 +37,7 @@ namespace GetPet.Crawler.Crawlers
                 CreationTimestamp = DateTime.Now,
                 UpdatedTimestamp = DateTime.Now,
                 PasswordHash = "1234",
-                CityId = 1,
+                CityId = city.Id,
                 PhoneNumber = "08-9460135",
                 Organization = new Organization()
                 {

@@ -18,8 +18,11 @@ namespace GetPet.Tests.Mocks
             IPetHandler petHandler,
             IPetRepository petRepository,
             IUnitOfWork unitOfWork,
-            ITraitRepository traitRepository) :
-            base(petHandler, petRepository, unitOfWork, traitRepository)
+            ITraitRepository traitRepository,
+            ICityRepository cityRepository,
+            IAnimalTypeRepository animalTypeRepository
+            ) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository)
         {
         }
 
@@ -54,6 +57,7 @@ namespace GetPet.Tests.Mocks
                 CreationTimestamp = DateTime.Now,
                 UpdatedTimestamp = DateTime.Now,
                 PasswordHash = "1234",
+                CityId = 1,
             };
         }
     }

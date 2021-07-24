@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
@@ -6,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using AnimalType = GetPet.Data.Enums.AnimalType;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -22,16 +22,17 @@ namespace GetPet.Crawler.Parsers
             }
             catch (Exception ex)
             {
-                // throw ex;
+                Console.WriteLine("Cannot parse nodes", ex);
             }
 
             return null;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
+        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
         {
-            int animalTypeId = (int)ParseAnimalType(node, string.Empty);
-            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
             string name = ParseName(node);
             var birthday = ParseAgeInYear(node);
@@ -51,7 +52,7 @@ namespace GetPet.Crawler.Parsers
                 Description = description,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
-                AnimalTypeId = animalTypeId,
+                AnimalType = animalType,
             };
 
             pet.MetaFileLinks = new List<MetaFileLink>
@@ -87,9 +88,12 @@ namespace GetPet.Crawler.Parsers
 
         public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
 
-        public override AnimalType ParseAnimalType(HtmlNode node, string name)
+        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
         {
-            return AnimalType.Dog; // Rehovot API have 'dogs' stated within the url
+            // Rehovot API have 'dogs' stated within the url
+            var animalType = "כלב";
+
+            return ParserUtils.ConvertAnimalType(animalType, animalTypes);
         }
     }
 }

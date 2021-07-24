@@ -16,12 +16,11 @@ namespace GetPet.Crawler.Parsers
             return items;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits = null)
+        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
         {
-            Data.Enums.AnimalType animalType = ParseAnimalType(node, "class");
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
 
-            int animalTypeId = (int)animalType;
-            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalTypeId).ToList();
+            var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
             string name = ParseName(node);
             var birthday = ParseAgeInYear(node);
@@ -39,7 +38,7 @@ namespace GetPet.Crawler.Parsers
                 Description = description,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
-                AnimalTypeId = animalTypeId,
+                AnimalType = animalType,
             };
 
             pet.MetaFileLinks = new List<MetaFileLink>

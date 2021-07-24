@@ -24,6 +24,8 @@ namespace GetPet.Crawler.Crawlers
         protected readonly IPetRepository _petRepository;
         protected readonly IUnitOfWork _unitOfWork;
         protected readonly ITraitRepository _traitRepository;
+        protected readonly ICityRepository _cityRepository;
+        protected readonly IAnimalTypeRepository _animalTypeRepository;
 
         private List<Pet> pets;
         protected abstract string url { get; }
@@ -32,18 +34,44 @@ namespace GetPet.Crawler.Crawlers
             IPetHandler petHandler,
             IPetRepository petRepository,
             IUnitOfWork unitOfWork,
-            ITraitRepository traitRepository)
+            ITraitRepository traitRepository,
+            ICityRepository cityRepository,
+            IAnimalTypeRepository animalTypeRepository          
+            )
         {
             _petHandler = petHandler;
             _petRepository = petRepository;
             _unitOfWork = unitOfWork;
             _traitRepository = traitRepository;
+            _cityRepository = cityRepository;
+            _animalTypeRepository = animalTypeRepository;
         }
 
-        protected virtual List<Trait> GetListOfTraits()
+        protected virtual List<Trait> GetAllTraits()
         {
             var filter = new TraitFilter();
             var results = _traitRepository.SearchAsync(filter).Result.ToList();
+
+            return results;
+        }
+
+        protected virtual List<City> GetAllCities()
+        {
+            var filter = new CityFilter()
+            {
+                Page = 1,
+                PerPage = 1000,
+            };
+
+            var results = _cityRepository.SearchAsync(filter).Result.ToList();
+
+            return results;
+        }
+
+        protected virtual List<AnimalType> GetAllAnimalTypes()
+        {
+            var filter = new BaseFilter();
+            var results = _animalTypeRepository.SearchAsync(filter).Result.ToList();
 
             return results;
         }
@@ -66,11 +94,12 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual IList<Pet> Parse()
         {
-            var traits = GetListOfTraits();
+            var traits = GetAllTraits();
+            var animalTypes = GetAllAnimalTypes();
 
             var user = CreateUser();
 
-            return parser.Parse(traits, user);
+            return parser.Parse(traits, user, animalTypes);
         }
 
         public virtual async void InsertToDB(IList<Pet> animals)

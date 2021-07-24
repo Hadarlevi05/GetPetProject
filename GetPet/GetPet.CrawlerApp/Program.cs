@@ -12,11 +12,14 @@ using Microsoft.Extensions.DependencyInjection;
 using PetAdoption.BusinessLogic.Repositories;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace GetPet.CrawlerApp
 {
     class Program
     {
+        private static int sleepingTimeBetweenIterationsInMinutes = 60;
+
         static void Main(string[] args)
         {
             ServiceProvider serviceProvider = Initialize();
@@ -62,13 +65,22 @@ namespace GetPet.CrawlerApp
         {
             var crawlers = serviceProvider.GetServices<ICrawler>();
 
-            foreach (var crawler in crawlers)
+            while (true)
             {
-                Console.WriteLine($"Working on {crawler.GetType()}");
+                foreach (var crawler in crawlers)
+                {
+                    Console.WriteLine($"Working on {crawler.GetType()}");
 
-                crawler.Load();
-                var result = crawler.Parse();
-                crawler.InsertToDB(result);
+                    crawler.Load();
+                    var result = crawler.Parse();
+                    crawler.InsertToDB(result);
+
+                    Console.WriteLine($"Done");
+                }
+
+                Console.WriteLine($"Sleeping for {sleepingTimeBetweenIterationsInMinutes} minutes");
+
+                Thread.Sleep(TimeSpan.FromMinutes(sleepingTimeBetweenIterationsInMinutes));
             }
         }
     }

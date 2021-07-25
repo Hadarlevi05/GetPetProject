@@ -1,22 +1,26 @@
+import { OnDestroy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { IPet } from '../../models/ipet';
 import { PetFilter } from '../../models/pet-filter';
 import { PetsService } from '../../services/pets.service';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
 @Component({
   selector: 'app-search-pets',
   templateUrl: './search-pets.component.html',
   styleUrls: ['./search-pets.component.sass']
 })
-export class SearchPetsComponent implements OnInit {
+export class SearchPetsComponent implements OnInit, OnDestroy {
 
   showFiller = true;
 
@@ -46,7 +50,15 @@ export class SearchPetsComponent implements OnInit {
     private animalTypeService: AnimalTypeService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private petsService: PetsService) { }
+    private petsService: PetsService,
+    private notificationService: NotificationService,
+    private authenticationService: AuthenticationService,
+    //private snackBar: MatSnackBar
+  ) { }
+
+  ngOnDestroy(): void {
+
+  }
 
   ngOnInit(): void {
 
@@ -137,8 +149,6 @@ export class SearchPetsComponent implements OnInit {
   }
 
   search() {
-
-
     const date = new Date();
     date.setDate(date.getDate() - 14);
 
@@ -150,5 +160,31 @@ export class SearchPetsComponent implements OnInit {
       this.pets = pets;
 
     });
+  }
+
+  openSnackBar(message: string, action: string) {
+    // this.snackBar.open(message, action);
+    alert(message);
+  }
+
+  addSearchNotification() {
+
+
+    const user = this.authenticationService.currentUserValue;
+
+    if (!user.id) {
+      this.openSnackBar('אתה חייב להרשם לבצע פעולה זו', 'סגור');
+    } else {
+
+      const date = new Date();
+      date.setDate(date.getDate() - 14);
+
+      const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
+
+      this.notificationService.Upsert(filter).subscribe(result => {
+
+      });
+    }
+
   }
 }

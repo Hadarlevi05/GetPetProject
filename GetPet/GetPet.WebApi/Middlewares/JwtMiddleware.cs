@@ -24,15 +24,15 @@ namespace GetPet.WebApi.Middlewares
 
         public async Task Invoke(HttpContext context, IUserRepository userRepository)
         {
-            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+            var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last().Trim("\"".ToCharArray());
 
             if (token != null)
-                attachUserToContext(context, userRepository, token);
+                AttachUserToContext(context, userRepository, token);
 
             await _next(context);
         }
 
-        private void attachUserToContext(HttpContext context, IUserRepository userRepository, string token)
+        private void AttachUserToContext(HttpContext context, IUserRepository userRepository, string token)
         {
             try
             {

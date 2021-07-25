@@ -7,7 +7,7 @@ export interface IPet {
 
   description?: string;
 
-  birthday?: string;
+  birthday: string;
 
   gender?: string;
 
@@ -23,7 +23,7 @@ export interface IPet {
 
   images: string[];
 
-  traits?: Map<string, string>;
+  traits: Map<string, string>;
 
   creationTimestamp: Date;
 }

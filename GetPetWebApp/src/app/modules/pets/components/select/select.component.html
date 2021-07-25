@@ -1,0 +1,8 @@
+<mat-form-field appearance="outline">
+    <mat-label>{{trait.name}}</mat-label>
+    <mat-select (selectionChange)="selectionChange($event.value)">
+      <mat-option *ngFor="let op of trait.traitOptions" [value]="op.id">
+        {{ op.option }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>

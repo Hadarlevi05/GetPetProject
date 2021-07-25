@@ -1,21 +1,18 @@
-import { CityService } from '../../../../shared/services/city.service';
-import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
+import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { TraitOptionFilter } from 'src/app/shared/models/traitOptionFilter';
-import { TraitOptionsService } from 'src/app/shared/services/traitOptions.service';
-import { compileNgModule } from '@angular/compiler';
-import { ICity } from 'src/app/shared/models/icity';
+import { ITraitOption } from 'src/app/shared/models/itraitoption';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
-import { CityFilter } from 'src/app/shared/models/city-filter';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
-import { MatChip } from '@angular/material/chips';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
-import { ITraitOption } from 'src/app/shared/models/itraitoption';
+import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
+import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
+import {DatePipe} from '@angular/common';
+import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
 
 @Component({
   selector: 'app-addpet',
@@ -23,43 +20,58 @@ import { ITraitOption } from 'src/app/shared/models/itraitoption';
   styleUrls: ['./addpet.component.sass']
 })
 
-export class AddpetComponent
+export class AddpetComponent 
   implements OnInit {
+
+  @ViewChildren('fileuploader') components!: QueryList<FileUploaderComponent>
+  @ViewChild('chips') multiSelectChipsChild!: MultiSelectChipsComponent;
 
   loading = false;
   success = false;
   optionBooleanVal = false;
+  isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
+  imgPath: string = '';
 
+  ngAfterViewInit() {
 
+  }
+
+  
   pet: IPet = {
     name: '',
-    images: [''],
-    description: '',
     animalTypeId: 0,
     userId: 1,
+    birthday: "",
+    traits: new Map(),
+    description: '',
+    images: [],
     creationTimestamp: new Date()
   }
 
+
   animaltypes_arr: IAnimalType[] = [];
-  city_arr: ICity[] = [];
   traits_arr: ITrait[] = [];
   optionsForTrait: ITraitOption[] = [];
   traitsWithBooleanValue: ITrait[] = [];
   traitsWithSetOfValues: ITrait[] = [];
   gender_arr: string[] = ['לא ידוע', 'זכר', 'נקבה'];
-
+  traitSelections: ITraitSelection[] = [];
+  traitChipSelections: ITraitSelection[] = [];
+  allSelectedTraits: ITraitSelection[] = [];
+  minDate!: Date;
+  maxDate!: Date;
+  
   constructor(private _formBuilder: FormBuilder,
-    private _animalTypeService: AnimalTypeService,
-    private _cityService: CityService,
-    private _traitsService: TraitsService,
-    private _traitOptionsService: TraitOptionsService,
-    private _petsService: PetsService) { }
+              private _animalTypeService: AnimalTypeService, 
+              private _traitsService: TraitsService,
+              private _petsService: PetsService,
+              public datepipe: DatePipe) { }
 
   ngOnInit(): void {
 
     this.loadAnimalTypes();
-    this.loadCities();
+    this.setAllowedDatePickerRange();
 
     this.addPetFormGroup = this._formBuilder.group({
       formArray: this._formBuilder.array([
@@ -67,53 +79,33 @@ export class AddpetComponent
           animalType: ['', [Validators.required]]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(10)]),
-          gender: ['', [Validators.required]],
-          dob: ['', [Validators.required]],
+          petName: new FormControl('', [Validators.required, 
+            Validators.minLength(2),
+            Validators.maxLength(10)]),
+          gender:['', [Validators.required]],
+          dob:['', [Validators.required]],
           chipsControl: new FormControl(['']),
-          description: ['', [Validators.required,
-          Validators.maxLength(500)]],
+          traits: this._formBuilder.array([]),
+          description:['', [Validators.required,
+                            Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
-          //upload picture control?
+          //upload pictures
         }),
         this._formBuilder.group({
-          city: ['', [Validators.required]],
-        }),
-        this._formBuilder.group({
-          //preview and send
+          //send button
         }),
       ])
     });
   }
 
-  afuConfig = {
-    multiple: false,
-    formatsAllowed: ".jpg, .jpeg, .png",
-    maxSize: 10,    //in MB
-    uploadAPI: {
-      url: "https://example-file-upload-api" //TODO: change this url
-    },
-    hideProgressBar: false,
-    hideResetBtn: true,
-    replaceTexts: {
-      selectFileBtn: 'בחר קובץ',
-      uploadBtn: 'שלח',
-      afterUploadMsg_success: 'העלאה הצליחה',
-      afterUploadMsg_error: 'העלאת הקובץ נכשלה',
-      sizeLimit: 'גודל מירבי'
-    }
-  };
-
   get formArray(): AbstractControl | null {
     return this.addPetFormGroup.get('formArray');
   }
 
-  // get traitsFormArray() {
-  //   return this.addPetFormGroup.controls.animalTraits as FormArray;
-  // }
+  get traits() : FormArray {
+    return this.addPetFormGroup.get('traits') as FormArray;
+  }
 
   loadAnimalTypes() {
 
@@ -125,16 +117,9 @@ export class AddpetComponent
     });
   }
 
-  loadCities() {
-    let date = new Date();
-    date.setDate(date.getDate() - 20);
-    let filter = new CityFilter(1, 100, date);
-    this._cityService.Get(filter).subscribe(cities => {
-      this.city_arr = cities;
-    });
-  }
-
   loadUniqueTraits(event) {
+
+    this.deleteTraitsArrays();
     let animalTypeId = event.value;
     console.log("animaltype changed to: " + animalTypeId);
     let date = new Date();
@@ -150,84 +135,119 @@ export class AddpetComponent
 
     console.log(this.traits_arr);
 
-    for (const trait of this.traits_arr) {
+    for(const trait of this.traits_arr) {
       this.optionsForTrait = trait.traitOptions;
       for (const option of this.optionsForTrait) {
         if (this.isBooleanValue(option)) {
-          this.traitsWithBooleanValue.push(trait);
-          break;
-        } else {
-          this.traitsWithSetOfValues.push(trait);
-        }
+            this.traitsWithBooleanValue.push(trait);
+            this.isMatChipsLoaded = true;
+            break;
+          } else {
+            this.traitsWithSetOfValues.push(trait);
+            break;
+          }
       }
+    }
+
+    console.log("traits with boolean value:");
+    console.log(this.traitsWithBooleanValue);
+    console.log("trait with set of value:");
+    console.log(this.traitsWithSetOfValues);
+  }
+
+  private isBooleanValue(op: ITraitOption) : boolean {
+    return (op.option == 'כן' || op.option == 'לא')
+  }
+
+  private deleteTraitsArrays() {
+
+    this.multiSelectChipsChild.setAllMatchipsFalse();
+    this.traits_arr = [];
+    this.traitsWithBooleanValue = [];
+    this.traitsWithSetOfValues = [];
+    this.traitSelections = [];
+    this.traitChipSelections = [];
+    this.allSelectedTraits = [];
+    this.isMatChipsLoaded = false;
+
+  }
+
+  onTraitSelection(traitSelection: ITraitSelection) {
+    console.log('traitSelections', this.traitSelections);
+    const item = this.traitSelections.find(i => i.traitId === traitSelection.traitId);
+    if (item) {
+      item.traitOptionId = traitSelection.traitOptionId;
+      item.description = traitSelection.description;
+    } else {
+      this.traitSelections.push(traitSelection);
     }
   }
 
-  private isBooleanValue(op: ITraitOption): boolean {
-    return (op.option == 'כן' || op.option == 'לא')
+  eventHandler(event:ITraitSelection[]) {
+    this.traitChipSelections = event;
   }
-  // private getOptionsForTrait() {
 
-  //   let date = new Date();
-  //   date.setDate(date.getDate() - 20);
-  //   let filter = new TraitOptionFilter(1,100,date);
-
-  //   for(const trait of this.traits_arr) {
-
-  //     filter.traitId = trait.traitId;
-  //     console.log("iteration for trait id " + trait.traitId + "and name: " + trait.traitName);
-  //     this._traitOptionsService.Post(filter).subscribe(options => {
-  //       this.options_arr = options;
-
-  //       for (const option of this.options_arr) {
-  //           console.log("trait name: " + trait.traitName + " and the option is: " + option.option);
-  //           if (this.isBooleanValue(option)) {
-  //             this.optionBooleanVal = true;
-  //             this.traitsWithBooleanValue.push(trait);
-  //             break;
-  //           } else { //trait has several option values
-  //             //create selection: traitname and all of its options (in options_arr right now) needed.
-  //             this.optionsForTrait.push(option);
-  //           }
-
-  //       }
-
-  //         if (this.optionBooleanVal) {  
-  //           //create chip: traitName needed.
-  //           console.log("trait: " + trait.traitName + " has a Yes/No value!");
-
-
-  //         } else {
-  //           //create selection: traitname and all of its options (in options_arr right now) needed.
-  //           console.log("trait: " + trait.traitName + " has several values!");
-
-
-  //         }
-  //         this.optionBooleanVal = false;
-  //     })
-  //   }
-  // }
-
-
-
+  //Date picker allows users to select date of birth range from
+  //20 years ago until today.
+  setAllowedDatePickerRange() {
+    const currentYear = new Date().getFullYear();
+    this.minDate = new Date(currentYear - 20, 0, 1);
+    this.maxDate = new Date();
+    }
 
   onSubmit(postData) {
-    console.log(postData);
+
+  // birthday?: string;
+  // status?: string;   ???
+  // userId: number;    
+  // user?: IUser;
+
+    //console.log('data from selections:', this.traitSelections)
+    //console.log('data from child:',this.traitChipSelections);
+
+    this.allSelectedTraits = this.traitSelections.concat(this.traitChipSelections);
+    console.log("allSelectedTraits: ", this.allSelectedTraits);
+
+    let traitsMap = this.allSelectedTraits.reduce((mapAccumulator, obj) => {
+      mapAccumulator.set(obj.traitId, obj.traitOptionId);
+      return mapAccumulator;
+    }, new Map());
+    console.log("All traits: ",traitsMap);
+    
+    //upload pictures to db
+    this.components.forEach(uploader => {
+      //console.log("%%%%%%",uploader);
+      console.log("uploader.file.data is: " + uploader.file.data);
+      if (uploader.file.data) {
+        uploader.sendFile(uploader.file).subscribe((pathResponse) => {  
+          //console.log("SUBSCRIBE:response from server:" + pathResponse);
+          if (pathResponse) {
+            console.log("img path - " + pathResponse);
+            this.pet.images.push(pathResponse);
+          }
+        });
+      }
+    })
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
+    this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
+    //let myDate = this.formArray?.get([1])?.get('bd')?.value;
+    //this.pet.birthday = this.datepipe.transform(myDate, 'yyyy-mm-dd');
+    this.pet.birthday = Date.now().toString();  //test
+    this.pet.traits = traitsMap;
 
-    console.log("PET INFO IS:")
-    console.log(this.pet);
-
+    console.log("PET INFO: ", this.pet);
+    
     try {
       this._petsService.addPet(this.pet);
       this.success = true;
     } catch (err) {
-      console.log(err);
+      console.log("Error, can't add pet!",err);
     }
     this.loading = false;
-  }
 
+
+  }
 }

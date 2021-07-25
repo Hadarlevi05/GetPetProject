@@ -6,6 +6,7 @@ import { IUser } from 'src/app/shared/models/iuser';
 import { BaseService } from './base-service';
 import { IUserLogin } from '../models/user-login';
 import { ILoginResponse } from '../models/ilogin-response';
+import { Router } from '@angular/router';
 
 
 @Injectable({ providedIn: 'root' })
@@ -17,7 +18,8 @@ export class AuthenticationService extends BaseService {
     public currentUser: Observable<IUser>;
     public token: Observable<string>;
 
-    constructor(protected http: HttpClient) {
+    constructor(protected http: HttpClient,
+                private router: Router) {
         super(http);
         let user: IUser = {} as IUser;
         let token = '';
@@ -32,7 +34,6 @@ export class AuthenticationService extends BaseService {
         }
 
         this.tokenSubject = new BehaviorSubject<string>(token);
-
         this.currentUser = this.currentUserSubject.asObservable();
         this.token = this.tokenSubject.asObservable();
 
@@ -75,7 +76,8 @@ export class AuthenticationService extends BaseService {
 
         this.currentUserSubject.next({} as IUser);
         this.tokenSubject.next('');
-
+        
+        this.router.navigate(['']);
     }
 }
 

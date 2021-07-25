@@ -34,7 +34,13 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ArticleCardComponent } from './modules/articles/components/article-card/article-card.component';
 import { SearchPetsComponent } from './modules/pets/components/search-pets/search-pets.component';
 import { SearchCriteriaComponent } from './modules/pets/components/search-criteria/search-criteria.component';
+import { SelectComponent } from './modules/pets/components/select/select.component';
+import { FileUploaderComponent } from './modules/pets/components/file-uploader/file-uploader.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import {DatePipe} from '@angular/common';   
+import { AuthGuard } from './shared/guards/auth-guard';
+import { AuthenticationService } from './shared/services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -45,11 +51,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     PetCardComponent,
     LoaderComponent,
     AddpetComponent,
-    MultiSelectChipsComponent,
+    MultiSelectChipsComponent,    
+    SelectComponent,
     ArticleCardComponent,
     SearchPetsComponent,
-    SearchCriteriaComponent
-  ],
+    SearchCriteriaComponent,
+    FileUploaderComponent,
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -78,13 +86,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
-    MatToolbarModule,
     MatDividerModule,
     MatCheckboxModule,
     FlexLayoutModule,
+    MatProgressBarModule,
     MatSidenavModule
   ],
-  providers: [],
+  providers: [DatePipe, AuthGuard, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

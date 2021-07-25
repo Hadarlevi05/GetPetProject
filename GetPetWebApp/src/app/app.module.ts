@@ -39,6 +39,8 @@ import { FileUploaderComponent } from './modules/pets/components/file-uploader/f
 import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {DatePipe} from '@angular/common';   
+import { AuthGuard } from './shared/guards/auth-guard';
+import { AuthenticationService } from './shared/services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -90,7 +92,7 @@ import {DatePipe} from '@angular/common';
     MatProgressBarModule,
     MatSidenavModule
   ],
-  providers: [DatePipe],
+  providers: [DatePipe, AuthGuard, AuthenticationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

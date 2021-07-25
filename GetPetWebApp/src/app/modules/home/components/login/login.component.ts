@@ -18,13 +18,16 @@ export class LoginComponent implements OnInit {
 
   loading = false;
   hide = true;
+  returnUrl: string = '';
 
   constructor(
     private authenticationService: AuthenticationService,
-    private route: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   form: FormGroup = new FormGroup({
@@ -38,7 +41,7 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(this.form.value.email, this.form.value.password)
       .subscribe((res) => {
-        this.route.navigate(['']);
+        this.router.navigate([this.returnUrl]);
 
         this.loading = false;
       },

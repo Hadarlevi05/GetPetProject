@@ -197,7 +197,8 @@ namespace GetPet.Data
                         images[i]
                     },
                     CreationTimestamp = DateTime.UtcNow,
-                    UpdatedTimestamp = DateTime.UtcNow
+                    UpdatedTimestamp = DateTime.UtcNow,
+                    Source = Enums.PetSource.Internal,
                 });
             }
 

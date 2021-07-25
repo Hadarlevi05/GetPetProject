@@ -12,8 +12,10 @@ namespace GetPet.Crawler.Crawlers.Abstractions
 
         void Load();
 
-        IList<PetDto> Parse();
+        IList<Pet> Parse();
 
-        void InsertToDB(IList<PetDto> input);
+        void InsertToDB(IList<Pet> input);
+
+        User CreateUser();
     }
 }

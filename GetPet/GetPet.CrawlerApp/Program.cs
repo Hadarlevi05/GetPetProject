@@ -3,7 +3,6 @@ using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
-using GetPet.Crawler;
 using GetPet.Crawler.Crawlers;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Data;
@@ -11,12 +10,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PetAdoption.BusinessLogic.Repositories;
+using System;
 using System.IO;
+using System.Threading;
 
 namespace GetPet.CrawlerApp
 {
     class Program
     {
+        private static int sleepingTimeBetweenIterationsInMinutes = 60;
+
         static void Main(string[] args)
         {
             ServiceProvider serviceProvider = Initialize();
@@ -47,11 +50,12 @@ namespace GetPet.CrawlerApp
                 .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
-                .AddScoped<ITraitRepository, TraitRepository>()                
+                .AddScoped<ITraitRepository, TraitRepository>()
+                .AddScoped<ICityRepository, CityRepository>()
+                .AddScoped<IAnimalTypeRepository, AnimalTypeRepository>()
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()
                 .AddScoped<ICrawler, SpcaCrawler>()
-                //.AddScoped<ICrawler, SpcaRamatGanCrawler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .BuildServiceProvider();
             return serviceProvider;
@@ -61,11 +65,22 @@ namespace GetPet.CrawlerApp
         {
             var crawlers = serviceProvider.GetServices<ICrawler>();
 
-            foreach (var crawler in crawlers)
+            while (true)
             {
-                crawler.Load();
-                var result = crawler.Parse();
-                crawler.InsertToDB(result);
+                foreach (var crawler in crawlers)
+                {
+                    Console.WriteLine($"Working on {crawler.GetType()}");
+
+                    crawler.Load();
+                    var result = crawler.Parse();
+                    crawler.InsertToDB(result);
+
+                    Console.WriteLine($"Done");
+                }
+
+                Console.WriteLine($"Sleeping for {sleepingTimeBetweenIterationsInMinutes} minutes");
+
+                Thread.Sleep(TimeSpan.FromMinutes(sleepingTimeBetweenIterationsInMinutes));
             }
         }
     }

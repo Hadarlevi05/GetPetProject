@@ -3,6 +3,7 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Crawlers;
 using GetPet.Crawler.Parsers.Abstractions;
+using GetPet.Data.Entities;
 using PetAdoption.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,12 @@ namespace GetPet.Tests.Mocks
             IPetHandler petHandler,
             IPetRepository petRepository,
             IUnitOfWork unitOfWork,
-            ITraitRepository traitRepository) :
-            base(petHandler, petRepository, unitOfWork, traitRepository)
+            ITraitRepository traitRepository,
+            ICityRepository cityRepository,
+            IAnimalTypeRepository animalTypeRepository,
+            IUserRepository userRepository
+            ) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository)
         {
         }
 
@@ -36,6 +41,25 @@ namespace GetPet.Tests.Mocks
                 doc.Load(file);
                 parser.Document = doc;
             }
+        }
+
+        public override User CreateUser()
+        {
+            return new User()
+            {
+                Name = "Testing",
+                Email = "Testing@gmail.com",
+                UserType = Data.Enums.UserType.Organization,
+                Organization = new Organization()
+                {
+                    Name = "Testing",
+                    Email = "Testing@gmail.com",
+                },
+                CreationTimestamp = DateTime.Now,
+                UpdatedTimestamp = DateTime.Now,
+                PasswordHash = "1234",
+                CityId = 1,
+            };
         }
     }
 }

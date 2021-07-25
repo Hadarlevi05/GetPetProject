@@ -26,6 +26,10 @@ namespace GetPet.Tests
         private static IPetRepository petRepository;
         private static IUnitOfWork unitOfWork;
         private static ITraitRepository traitRepository;
+        private static ICityRepository cityRepository;
+        private static IAnimalTypeRepository animalTypeRepository;
+        private static IUserRepository userRepository;
+
 
         [SetUp]
         public void Setup()
@@ -39,13 +43,16 @@ namespace GetPet.Tests
             petHandler = serviceProvider.GetService<IPetHandler>();
             unitOfWork = serviceProvider.GetService<IUnitOfWork>();
             traitRepository = serviceProvider.GetService<ITraitRepository>();
+            cityRepository = serviceProvider.GetService<ICityRepository>();
+            animalTypeRepository = serviceProvider.GetService<IAnimalTypeRepository>();
+            userRepository = serviceProvider.GetService<IUserRepository>();
         }
 
         [Test]
         public void MockTest()
         {
             // ctrl r+t
-            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository);
+            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
             crawler.Load(file);
@@ -58,21 +65,23 @@ namespace GetPet.Tests
             Assert.AreEqual(firstPet.Name, "פרייה");
             Assert.AreEqual(firstPet.Birthday, DateTime.Now.AddYears(-2).AddMonths(-2).Date);
             Assert.AreEqual(firstPet.Gender, Gender.Female);
-            Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
+            Assert.NotNull(firstPet.AnimalType);
+            Assert.NotNull(firstPet.User);
 
             var lastPet = pets[1];
             Assert.AreEqual(lastPet.Name, "סקאי");
             Assert.AreEqual(lastPet.Birthday, DateTime.Now.AddYears(-5).Date);
             Assert.AreEqual(lastPet.Gender, Gender.Male);
-            Assert.IsNotNull(lastPet.TraitDTOs.FirstOrDefault());
-            Assert.AreEqual(firstPet.AnimalTypeId, (int)AnimalType.Dog);
+            Assert.IsNotNull(lastPet.PetTraits.FirstOrDefault());
+            Assert.NotNull(firstPet.AnimalType);
+            Assert.NotNull(lastPet.User);
         }
 
         [Test]
         public void SpcaTest()
         {
             // ctrl r+t
-            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository);
+            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
             spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
 
             var pets = spca.Parse();
@@ -84,14 +93,13 @@ namespace GetPet.Tests
         public void RehovotSpa()
         {
             // ctrl r+t
-            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository);
+            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
             spca.Load(@"http://rehovotspa.org.il/our-dogs/");
 
             var pets = spca.Parse();
 
             Debugger.Break();
         }
-
 
         [Test]
         public void TestRehovotBirthday()
@@ -113,23 +121,8 @@ namespace GetPet.Tests
             Debugger.Break();
         }
 
-
-        //[Test]
-        //[Ignore("Wix is doing troubles")]
-        //public void SpcaRamatGanTest()
-        //{
-        //    // ctrl r+t
-        //    SpcaRamatGanCrawler spca = new SpcaRamatGanCrawler();
-        //    spca.Load(@"https://www.spca.org.il/adopt-a-dog");
-
-        //    var pets = spca.Parse();
-
-        //    Debugger.Break();
-        //}
-
         private void ConfigureServices(IServiceCollection services)
         {
-            // TODO - read from tests config
             string sqlConnectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;Initial Catalog=GetPet;Integrated Security=True";
 
             services.AddDbContext<GetPetDbContext>(
@@ -142,11 +135,12 @@ namespace GetPet.Tests
                 .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ITraitRepository, TraitRepository>()
+                .AddScoped<ICityRepository, CityRepository>()
+                .AddScoped<IAnimalTypeRepository, AnimalTypeRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<ICrawler, RehovotSpaCrawler>()
                 .AddScoped<ICrawler, SpcaCrawler>()
-                //.AddScoped<ICrawler, SpcaRamatGanCrawler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .BuildServiceProvider();
         }

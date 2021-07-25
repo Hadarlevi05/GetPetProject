@@ -119,6 +119,7 @@ namespace GetPet.BusinessLogic.Repositories
                 PasswordHash = SecurePasswordHasher.Hash(registeredUser.Password),
                 Email = registeredUser.Email,
                 Name = registeredUser.Name,
+                PhoneNumber = registeredUser.PhoneNumber,
                 EmailSubscription = registeredUser.EmailSubscription,
                 CreationTimestamp = DateTime.UtcNow,
                 UpdatedTimestamp = DateTime.UtcNow,
@@ -130,6 +131,7 @@ namespace GetPet.BusinessLogic.Repositories
                 {
                     Name = registeredUser.Organization.Name,
                     Email = registeredUser.Email,
+                    PhoneNumber = registeredUser.PhoneNumber,
                     CreationTimestamp = DateTime.UtcNow,
                     UpdatedTimestamp = DateTime.UtcNow
                 };

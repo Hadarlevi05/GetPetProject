@@ -1,4 +1,5 @@
-﻿using GetPet.Data.Enums;
+﻿using GetPet.Data.Entities;
+using GetPet.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,22 +118,22 @@ namespace GetPet.Crawler.Utils
             return 0;
         }
 
-        private static List<string> _dog = new List<string>() { "כלב", "dog" };
-        private static List<string> _cat = new List<string>() { "חתול", "cat" };
+        private static List<string> _dog = new List<string>() { "כלב", "dog", "dogs", "כלבים" };
+        private static List<string> _cat = new List<string>() { "חתול", "cat", "cats", "חתולים" };
 
-        public static AnimalType ConvertAnimalType(string input)
+        public static AnimalType ConvertAnimalType(string input, List<AnimalType> animalTypes)
         {
             if (_dog.Any(x => input.Contains(x)))
             {
-                return AnimalType.Dog;
+                return animalTypes.FirstOrDefault(x => _dog.Contains(x.Name));
             }
             else if (_cat.Any(x => input.Contains(x)))
             {
-                return AnimalType.Cat;
+                return animalTypes.FirstOrDefault(x => _cat.Contains(x.Name));
             }
             else
             {
-                return AnimalType.Unknown; // Handle missing case
+                return null;
             }
         }
     }

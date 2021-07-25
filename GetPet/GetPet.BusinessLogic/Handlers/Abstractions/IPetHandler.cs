@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,6 @@ namespace GetPet.BusinessLogic.Handlers.Abstractions
 {
     public interface IPetHandler
     {
-        Task AddPet(PetDto pet);
+        Task AddPet(Pet pet);
     }
 }

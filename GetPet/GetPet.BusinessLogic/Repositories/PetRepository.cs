@@ -81,7 +81,9 @@ namespace PetAdoption.BusinessLogic.Repositories
                         p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
                 }
             }
-            return await query.ToListAsync();
+
+            // AsSplitQuery => To avoid performance penalty due to EF joining behaviour https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
+            return await query.AsSplitQuery().ToListAsync();
         }
 
         public new async Task<Pet> GetByIdAsync(int id)

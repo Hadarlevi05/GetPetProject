@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { IndexComponent } from './modules/home/components/index/index.component';
@@ -36,11 +36,13 @@ import { SearchPetsComponent } from './modules/pets/components/search-pets/searc
 import { SearchCriteriaComponent } from './modules/pets/components/search-criteria/search-criteria.component';
 import { SelectComponent } from './modules/pets/components/select/select.component';
 import { FileUploaderComponent } from './modules/pets/components/file-uploader/file-uploader.component';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {DatePipe} from '@angular/common';   
+import { DatePipe } from '@angular/common';
 import { AuthGuard } from './shared/guards/auth-guard';
 import { AuthenticationService } from './shared/services/authentication.service';
+import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
+
 
 @NgModule({
   declarations: [
@@ -51,13 +53,13 @@ import { AuthenticationService } from './shared/services/authentication.service'
     PetCardComponent,
     LoaderComponent,
     AddpetComponent,
-    MultiSelectChipsComponent,    
+    MultiSelectChipsComponent,
     SelectComponent,
     ArticleCardComponent,
     SearchPetsComponent,
     SearchCriteriaComponent,
     FileUploaderComponent,
-    ],
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -92,7 +94,11 @@ import { AuthenticationService } from './shared/services/authentication.service'
     MatProgressBarModule,
     MatSidenavModule
   ],
-  providers: [DatePipe, AuthGuard, AuthenticationService],
+  providers: [
+    DatePipe,
+    AuthGuard,
+    AuthenticationService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

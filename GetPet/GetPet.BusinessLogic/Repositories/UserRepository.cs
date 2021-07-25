@@ -28,6 +28,7 @@ namespace GetPet.BusinessLogic.Repositories
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
         public UserRepository(
             GetPetDbContext getPetDbContext,
             IUnitOfWork unitOfWork,

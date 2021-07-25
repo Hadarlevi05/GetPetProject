@@ -1,16 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using GetPet.Data.Entities;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace GetPet.WebApi.Controllers
 {
     public class BaseController: ControllerBase
     {
+        protected User CurrentUser => HttpContext.Items["User"] as User;
 
-        //var user = HttpContext.Items["User"];
-
-
+        protected bool IsLogin => CurrentUser != null;        
     }
 }

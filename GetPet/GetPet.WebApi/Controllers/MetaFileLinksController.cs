@@ -17,7 +17,7 @@ namespace GetPet.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MetaFileLinksController : ControllerBase
+    public class MetaFileLinksController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly ILogger<MetaFileLinksController> _logger;

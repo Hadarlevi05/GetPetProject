@@ -2,6 +2,7 @@
 using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
+using GetPet.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,13 +14,12 @@ namespace PetAdoption.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PetsController : ControllerBase
+    public class PetsController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly ILogger<PetsController> _logger;
         private readonly IPetRepository _petRepository;
         private readonly IUnitOfWork _unitOfWork;
-
 
         public PetsController(
             ILogger<PetsController> logger,
@@ -58,22 +58,5 @@ namespace PetAdoption.WebApi.Controllers
 
             return Ok(_mapper.Map<PetDto>(petToInsert));
         }
-
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> Get(int id)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    var pet = await _petRepository.GetByIdAsync(id);
-        //    if (pet == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(pet);
-        //}
     }
 }

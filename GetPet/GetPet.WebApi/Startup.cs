@@ -1,4 +1,6 @@
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Handlers;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
@@ -35,10 +37,11 @@ namespace GetPet.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(options => {
+                .AddNewtonsoftJson(options =>
+                {
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
-                
+
             // services.AddNewtonsoftJson();
 
             string sqlConnectionString = Configuration.GetConnectionString("GetPetConnectionString");
@@ -76,7 +79,9 @@ namespace GetPet.WebApi
                 .AddScoped<IArticleRepository, ArticleRepository>()
                 .AddScoped<IMetaFileLinkRepository, MetaFileLinkRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
-                .AddScoped<IUnitOfWork, UnitOfWork>();
+                .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddScoped<INotificationHandler, NotificationHandler>()
+                .AddScoped<INotificationRepository, NotificationRepository>();            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)
@@ -89,7 +94,7 @@ namespace GetPet.WebApi
             }
 
             app.UseCors("CorsPolicy");
-            
+
             app.UseStaticFiles();
 
             app.UseHttpsRedirection();

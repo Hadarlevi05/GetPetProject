@@ -14,7 +14,7 @@ namespace GetPet.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CitiesController : ControllerBase
+    public class CitiesController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly ILogger<CitiesController> _logger;

@@ -2,11 +2,12 @@
     <!-- <mat-card-header>
         <mat-card-title>{{ pet.name }}</mat-card-title>
     </mat-card-header> -->
-
-    <span class="image-container">
-        <img mat-card-image [src]="pet.images[0]" [alt]="pet.name">
-        <mat-card-title class="text-block">{{ pet.name }}</mat-card-title>
-    </span>
+    <a [href]="pet.sourceLink" target="_blank">
+        <span class="image-container">
+            <img mat-card-image [src]="pet.images[0]" [alt]="pet.name">
+            <mat-card-title class="text-block">{{ pet.name }}</mat-card-title>
+        </span>
+    </a>
 
 
     <mat-card-content>
@@ -21,8 +22,8 @@
             </mat-chip-list>
         </p>
     </mat-card-content>
-    <mat-card-actions>
+    <!-- <mat-card-actions>
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
-    </mat-card-actions>
+    </mat-card-actions> -->
 </mat-card>

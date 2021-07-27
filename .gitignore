@@ -24,3 +24,11 @@
 /GetPet/.vs
 /GetPet/GetPet.CrawlerApp/bin/Debug/netcoreapp3.1
 /GetPet/GetPet.CrawlerApp/obj
+/GetPet/GetPet.BusinessLogic/bin/Debug/net5.0
+/GetPet/GetPet.Common/bin/Debug/net5.0
+/GetPet/GetPet.Crawler/bin/Debug/net5.0
+/GetPet/GetPet.CrawlerApp/bin/Debug/net5.0
+/GetPet/GetPet.Data/bin/Debug/net5.0
+/GetPet/GetPet.Tests/bin/Debug/net5.0
+/GetPet/GetPet.Scheduler/obj
+/GetPet/GetPet.Scheduler/bin/Debug/net5.0

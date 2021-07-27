@@ -12,11 +12,12 @@ using GetPet.Tests.Mocks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetPet.Tests
 {
@@ -49,15 +50,15 @@ namespace GetPet.Tests
         }
 
         [Test]
-        public void MockTest()
+        public async Task MockTest()
         {
             // ctrl r+t
             var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
-            crawler.Load(file);
+            await crawler.Load(file);
 
-            var pets = crawler.Parse();
+            var pets = await crawler.Parse();
 
             Assert.AreEqual(pets.Count, 22);
 
@@ -78,11 +79,11 @@ namespace GetPet.Tests
         }
 
         [Test]
-        public void SpcaTest()
+        public async Task SpcaTest()
         {
             // ctrl r+t
             SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
-            spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
+            await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
 
             var pets = spca.Parse();
 

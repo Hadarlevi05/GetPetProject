@@ -58,7 +58,7 @@ export class RegisterComponent implements OnInit {
     date.setDate(date.getDate() - 20);
     let filter = new CityFilter(1, 1000, date);
 
-    this.cityService.Get(filter).subscribe(cities => {
+    this.cityService.get(filter).subscribe(cities => {
       this.cities = cities;
     });
     this.formOnChanges();

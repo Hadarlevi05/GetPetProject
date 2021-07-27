@@ -3,7 +3,7 @@ using GetPet.BusinessLogic.Model;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

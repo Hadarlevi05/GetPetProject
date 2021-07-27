@@ -3,9 +3,10 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Parsers;
 using GetPet.Data.Entities;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Crawlers
 {
@@ -25,9 +26,9 @@ namespace GetPet.Crawler.Crawlers
             base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository)
         { }
 
-        public override User CreateUser()
+        public override async Task<User> CreateUser()
         {
-            var allCities = GetAllCities();
+            var allCities = await GetAllCities();
             var city = allCities.FirstOrDefault(x => x.Name == "רמת גן");
 
             var user = new User()

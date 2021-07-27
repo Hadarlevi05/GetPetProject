@@ -101,7 +101,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
     const filter = new AnimalTypeFilter(1, 100, date);
 
-    this.animalTypeService.Get(filter).subscribe(animaltypes => {
+    this.animalTypeService.get(filter).subscribe(animaltypes => {
       this.animaltypes = animaltypes;
     });
   }
@@ -112,7 +112,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     date.setDate(date.getDate() - 20);
     const filter = new TraitFilter(1, 100, date, animalTypeId);
 
-    this.traitsService.Post(filter).subscribe(traits => {
+    this.traitsService.post(filter).subscribe(traits => {
       this.booleanTraits = traits.filter(t => t.isBoolean);
       this.nonBooleanTraits = traits.filter(t => !t.isBoolean);
     });
@@ -181,7 +181,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
       const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
 
-      this.notificationService.Upsert(filter).subscribe(result => {
+      this.notificationService.upsert(filter).subscribe(result => {
 
       });
     }

@@ -6,11 +6,11 @@ using GetPet.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PetAdoption.WebApi.Controllers
+namespace GetPet.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

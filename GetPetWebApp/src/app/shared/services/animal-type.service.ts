@@ -16,7 +16,7 @@ export class AnimalTypeService extends BaseService {
     super(http);
   }
 
-  Get(filter: AnimalTypeFilter): Observable<IAnimalType[]> {
+  get(filter: AnimalTypeFilter): Observable<IAnimalType[]> {
     return this.http.get<IAnimalType[]>(`${this.entPointUrl}animaltypes`);
   }
 }

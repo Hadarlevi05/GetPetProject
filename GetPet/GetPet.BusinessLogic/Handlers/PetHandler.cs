@@ -3,7 +3,7 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

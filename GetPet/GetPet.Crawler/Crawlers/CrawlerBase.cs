@@ -6,7 +6,7 @@ using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Data.Entities;
 using HtmlAgilityPack;
-using PetAdoption.BusinessLogic.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -39,7 +39,7 @@ namespace GetPet.Crawler.Crawlers
             IUnitOfWork unitOfWork,
             ITraitRepository traitRepository,
             ICityRepository cityRepository,
-            IAnimalTypeRepository animalTypeRepository,          
+            IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository
             )
         {
@@ -52,15 +52,15 @@ namespace GetPet.Crawler.Crawlers
             _userRepository = userRepository;
         }
 
-        protected virtual List<Trait> GetAllTraits()
+        protected virtual async Task<List<Trait>> GetAllTraits()
         {
             var filter = new TraitFilter();
-            var results = _traitRepository.SearchAsync(filter).Result.ToList();
+            var results = await _traitRepository.SearchAsync(filter);
 
-            return results;
+            return results.ToList();
         }
 
-        protected virtual List<City> GetAllCities()
+        protected virtual async Task<List<City>> GetAllCities()
         {
             var filter = new CityFilter()
             {
@@ -68,22 +68,22 @@ namespace GetPet.Crawler.Crawlers
                 PerPage = 1000,
             };
 
-            var results = _cityRepository.SearchAsync(filter).Result.ToList();
+            var results = await _cityRepository.SearchAsync(filter);
 
-            return results;
+            return results.ToList();
         }
 
-        protected virtual List<AnimalType> GetAllAnimalTypes()
+        protected virtual async Task<List<AnimalType>> GetAllAnimalTypes()
         {
             var filter = new BaseFilter();
-            var results = _animalTypeRepository.SearchAsync(filter).Result.ToList();
+            var results = await _animalTypeRepository.SearchAsync(filter);
 
-            return results;
+            return results.ToList();
         }
 
-        public virtual void Load(string url)
+        public virtual async Task Load(string url)
         {
-            string html = client.DownloadString(url);
+            string html = await client.DownloadStringTaskAsync(new Uri(url));
 
             doc.LoadHtml(html);
 
@@ -93,22 +93,22 @@ namespace GetPet.Crawler.Crawlers
             _AllUsers = _userRepository.SearchAsync(new UserFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
         }
 
-        public virtual void Load()
+        public virtual async Task Load()
         {
-            Load(url);
+            await Load(url);
         }
 
-        public virtual IList<Pet> Parse()
+        public virtual async Task<IList<Pet>> Parse()
         {
-            var traits = GetAllTraits();
-            var animalTypes = GetAllAnimalTypes();
+            var traits = await GetAllTraits();
+            var animalTypes = await GetAllAnimalTypes();
 
-            var user = CreateUser();
+            var user = await CreateUser();
 
             return parser.Parse(traits, user, animalTypes);
         }
 
-        public virtual async void InsertToDB(IList<Pet> animals)
+        public virtual async Task InsertToDB(IList<Pet> animals)
         {
             var tasks = animals
                 .Where(p => !IsPetExists(p))
@@ -118,12 +118,12 @@ namespace GetPet.Crawler.Crawlers
 
             // There is an async/await bug here. Need to investigate. Foir know, lets use the sync version
             // await _unitOfWork.SaveChangesAsync();
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         protected bool IsPetExists(Pet pet)
         {
-            return _AllPets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink); 
+            return _AllPets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink);
         }
 
         protected User IsUserExists(string name, string phoneNember)
@@ -131,6 +131,6 @@ namespace GetPet.Crawler.Crawlers
             return _AllUsers.FirstOrDefault(u => u.Name.Equals(name) && u.PhoneNumber.Equals(phoneNember));
         }
 
-        public abstract User CreateUser();
+        public abstract Task<User> CreateUser();
     }
 }

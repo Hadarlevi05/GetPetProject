@@ -1,4 +1,4 @@
-import { ITraitOption } from "./itraitoption";
+import { ITraitOption } from "./itrait-option";
 
 export interface ITrait {
 

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PetAdoption.BusinessLogic.Repositories
+namespace GetPet.BusinessLogic.Repositories
 {
     public interface IPetRepository : IBaseRepository<Pet>
     {

@@ -5,6 +5,6 @@ namespace GetPet.BusinessLogic.Handlers.Abstractions
 {
     public interface INotificationHandler
     {
-        Task UpsertNotification(int userId, PetFilter filter);
+        Task UpsertNotificationAsync(int userId, PetFilter filter);
     }
 }

@@ -10,7 +10,7 @@ export class BaseService {
     constructor(
         protected http: HttpClient) { }
 
-    protected GetHttpParams(filter: BaseFilter) {
+    protected getHttpParams(filter: BaseFilter) {
         let params: HttpParams = new HttpParams();
         params = params.append('page', `${filter.page}`);
         params = params.append('perPage', `${filter.perPage}`);

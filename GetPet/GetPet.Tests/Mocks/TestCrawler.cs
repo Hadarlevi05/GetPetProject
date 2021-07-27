@@ -4,11 +4,9 @@ using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Crawlers;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Data.Entities;
-using PetAdoption.BusinessLogic.Repositories;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace GetPet.Tests.Mocks
 {
@@ -29,8 +27,10 @@ namespace GetPet.Tests.Mocks
 
         protected override string url => throw new NotImplementedException();
 
-        public override void Load(string url)
+        public override async Task Load(string url)
         {
+            await Task.Delay(0);
+            
             if (!File.Exists(url))
             {
                 throw new Exception("Cannot find file");
@@ -43,9 +43,9 @@ namespace GetPet.Tests.Mocks
             }
         }
 
-        public override User CreateUser()
+        public override async Task<User> CreateUser()
         {
-            return new User()
+            return await _userRepository.AddAsync(new User()
             {
                 Name = "Testing",
                 Email = "Testing@gmail.com",
@@ -59,7 +59,7 @@ namespace GetPet.Tests.Mocks
                 UpdatedTimestamp = DateTime.Now,
                 PasswordHash = "1234",
                 CityId = 1,
-            };
+            });
         }
     }
 }

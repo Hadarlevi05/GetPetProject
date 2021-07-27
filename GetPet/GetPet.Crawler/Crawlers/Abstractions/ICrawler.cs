@@ -1,21 +1,19 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Data.Entities;
-using System;
+﻿using GetPet.Data.Entities;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Crawlers.Abstractions
 {
     public interface ICrawler
     {
-        void Load(string url);
+        Task Load(string url);
 
-        void Load();
+        Task Load();
 
-        IList<Pet> Parse();
+        Task<IList<Pet>> Parse();
 
-        void InsertToDB(IList<Pet> input);
+        Task InsertToDB(IList<Pet> input);
 
-        User CreateUser();
+        Task<User> CreateUser();
     }
 }

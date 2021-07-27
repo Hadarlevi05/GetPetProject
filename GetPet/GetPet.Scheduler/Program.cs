@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace GetPet.WebApi
+namespace GetPet.Scheduler
 {
     public class Program
     {

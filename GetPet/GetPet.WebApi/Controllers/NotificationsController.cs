@@ -38,7 +38,7 @@ namespace GetPet.WebApi.Controllers
             {
                 return BadRequest();
             }           
-            await _notificationHandler.UpsertNotification(CurrentUser.Id, filter);
+            await _notificationHandler.UpsertNotificationAsync(CurrentUser.Id, filter);
 
             return Ok();
         }

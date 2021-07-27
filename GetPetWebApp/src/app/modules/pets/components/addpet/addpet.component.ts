@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
-import { ITraitOption } from 'src/app/shared/models/itraitoption';
+import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
@@ -11,7 +11,7 @@ import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import {DatePipe} from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
 
 @Component({
@@ -20,7 +20,7 @@ import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-ch
   styleUrls: ['./addpet.component.sass']
 })
 
-export class AddpetComponent 
+export class AddpetComponent
   implements OnInit {
 
   @ViewChildren('fileuploader') components!: QueryList<FileUploaderComponent>
@@ -37,7 +37,7 @@ export class AddpetComponent
 
   }
 
-  
+
   pet: IPet = {
     name: '',
     animalTypeId: 0,
@@ -61,12 +61,12 @@ export class AddpetComponent
   allSelectedTraits: ITraitSelection[] = [];
   minDate!: Date;
   maxDate!: Date;
-  
+
   constructor(private _formBuilder: FormBuilder,
-              private _animalTypeService: AnimalTypeService, 
-              private _traitsService: TraitsService,
-              private _petsService: PetsService,
-              public datepipe: DatePipe) { }
+    private _animalTypeService: AnimalTypeService,
+    private _traitsService: TraitsService,
+    private _petsService: PetsService,
+    public datepipe: DatePipe) { }
 
   ngOnInit(): void {
 
@@ -79,15 +79,15 @@ export class AddpetComponent
           animalType: ['', [Validators.required]]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required, 
-            Validators.minLength(2),
-            Validators.maxLength(10)]),
-          gender:['', [Validators.required]],
-          dob:['', [Validators.required]],
+          petName: new FormControl('', [Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(10)]),
+          gender: ['', [Validators.required]],
+          dob: ['', [Validators.required]],
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
-          description:['', [Validators.required,
-                            Validators.maxLength(500)]],
+          description: ['', [Validators.required,
+          Validators.maxLength(500)]],
         }),
         this._formBuilder.group({
           //upload pictures
@@ -103,7 +103,7 @@ export class AddpetComponent
     return this.addPetFormGroup.get('formArray');
   }
 
-  get traits() : FormArray {
+  get traits(): FormArray {
     return this.addPetFormGroup.get('traits') as FormArray;
   }
 
@@ -112,7 +112,7 @@ export class AddpetComponent
     let date = new Date();
     date.setDate(date.getDate() - 20);
     let filter = new AnimalTypeFilter(1, 100, date);
-    this._animalTypeService.Get(filter).subscribe(types => {
+    this._animalTypeService.get(filter).subscribe(types => {
       this.animaltypes_arr = types;
     });
   }
@@ -125,7 +125,7 @@ export class AddpetComponent
     let date = new Date();
     date.setDate(date.getDate() - 20);
     let filter = new TraitFilter(1, 100, date, animalTypeId);
-    this._traitsService.Post(filter).subscribe(traits => {
+    this._traitsService.post(filter).subscribe(traits => {
       this.traits_arr = traits;
       this.classifyTraits();
     })
@@ -135,17 +135,17 @@ export class AddpetComponent
 
     console.log(this.traits_arr);
 
-    for(const trait of this.traits_arr) {
+    for (const trait of this.traits_arr) {
       this.optionsForTrait = trait.traitOptions;
       for (const option of this.optionsForTrait) {
         if (this.isBooleanValue(option)) {
-            this.traitsWithBooleanValue.push(trait);
-            this.isMatChipsLoaded = true;
-            break;
-          } else {
-            this.traitsWithSetOfValues.push(trait);
-            break;
-          }
+          this.traitsWithBooleanValue.push(trait);
+          this.isMatChipsLoaded = true;
+          break;
+        } else {
+          this.traitsWithSetOfValues.push(trait);
+          break;
+        }
       }
     }
 
@@ -155,7 +155,7 @@ export class AddpetComponent
     console.log(this.traitsWithSetOfValues);
   }
 
-  private isBooleanValue(op: ITraitOption) : boolean {
+  private isBooleanValue(op: ITraitOption): boolean {
     return (op.option == 'כן' || op.option == 'לא')
   }
 
@@ -183,7 +183,7 @@ export class AddpetComponent
     }
   }
 
-  eventHandler(event:ITraitSelection[]) {
+  eventHandler(event: ITraitSelection[]) {
     this.traitChipSelections = event;
   }
 
@@ -193,14 +193,14 @@ export class AddpetComponent
     const currentYear = new Date().getFullYear();
     this.minDate = new Date(currentYear - 20, 0, 1);
     this.maxDate = new Date();
-    }
+  }
 
   onSubmit(postData) {
 
-  // birthday?: string;
-  // status?: string;   ???
-  // userId: number;    
-  // user?: IUser;
+    // birthday?: string;
+    // status?: string;   ???
+    // userId: number;    
+    // user?: IUser;
 
     //console.log('data from selections:', this.traitSelections)
     //console.log('data from child:',this.traitChipSelections);
@@ -212,14 +212,14 @@ export class AddpetComponent
       mapAccumulator.set(obj.traitId, obj.traitOptionId);
       return mapAccumulator;
     }, new Map());
-    console.log("All traits: ",traitsMap);
-    
+    console.log("All traits: ", traitsMap);
+
     //upload pictures to db
     this.components.forEach(uploader => {
       //console.log("%%%%%%",uploader);
       console.log("uploader.file.data is: " + uploader.file.data);
       if (uploader.file.data) {
-        uploader.sendFile(uploader.file).subscribe((pathResponse) => {  
+        uploader.sendFile(uploader.file).subscribe((pathResponse) => {
           //console.log("SUBSCRIBE:response from server:" + pathResponse);
           if (pathResponse) {
             console.log("img path - " + pathResponse);
@@ -239,12 +239,12 @@ export class AddpetComponent
     this.pet.traits = traitsMap;
 
     console.log("PET INFO: ", this.pet);
-    
+
     try {
       this._petsService.addPet(this.pet);
       this.success = true;
     } catch (err) {
-      console.log("Error, can't add pet!",err);
+      console.log("Error, can't add pet!", err);
     }
     this.loading = false;
 

@@ -18,7 +18,7 @@ export class TraitsService extends BaseService {
     super(http);
   }
 
-  Post(filter: TraitFilter): Observable<ITrait[]> {
+  post(filter: TraitFilter): Observable<ITrait[]> {
     return this.http.post<ITrait[]>(`${this.entPointUrl}traits`, filter);
   }
 }

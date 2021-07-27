@@ -1,10 +1,8 @@
 ﻿using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
@@ -15,7 +13,6 @@ namespace GetPet.WebApi.Middlewares
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-
 
         public JwtMiddleware(RequestDelegate next)
         {

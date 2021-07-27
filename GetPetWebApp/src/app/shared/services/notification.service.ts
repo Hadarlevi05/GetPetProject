@@ -15,7 +15,7 @@ export class NotificationService extends BaseService {
     super(http);
   }
 
-  Upsert(filter: PetFilter): Observable<any> {
+  upsert(filter: PetFilter): Observable<any> {
     return this.http.post<any>(`${this.entPointUrl}notifications`, filter);
   }
 }

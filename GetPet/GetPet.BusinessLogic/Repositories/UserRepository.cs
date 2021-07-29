@@ -5,7 +5,7 @@ using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,6 +28,7 @@ namespace GetPet.BusinessLogic.Repositories
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+
         public UserRepository(
             GetPetDbContext getPetDbContext,
             IUnitOfWork unitOfWork,
@@ -119,6 +120,7 @@ namespace GetPet.BusinessLogic.Repositories
                 PasswordHash = SecurePasswordHasher.Hash(registeredUser.Password),
                 Email = registeredUser.Email,
                 Name = registeredUser.Name,
+                PhoneNumber = registeredUser.PhoneNumber,
                 EmailSubscription = registeredUser.EmailSubscription,
                 CreationTimestamp = DateTime.UtcNow,
                 UpdatedTimestamp = DateTime.UtcNow,
@@ -130,6 +132,7 @@ namespace GetPet.BusinessLogic.Repositories
                 {
                     Name = registeredUser.Organization.Name,
                     Email = registeredUser.Email,
+                    PhoneNumber = registeredUser.PhoneNumber,
                     CreationTimestamp = DateTime.UtcNow,
                     UpdatedTimestamp = DateTime.UtcNow
                 };

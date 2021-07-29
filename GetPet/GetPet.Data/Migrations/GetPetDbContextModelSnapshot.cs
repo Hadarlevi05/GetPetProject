@@ -326,6 +326,10 @@ namespace GetPet.Data.Migrations
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
                     b.Property<DateTime>("UpdatedTimestamp")
                         .HasColumnType("datetime2");
 
@@ -564,6 +568,10 @@ namespace GetPet.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<string>("PhoneNumber")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
 

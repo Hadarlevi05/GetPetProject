@@ -1,4 +1,6 @@
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Handlers;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.BusinessLogic.Handlers;
@@ -13,7 +15,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using PetAdoption.BusinessLogic.Repositories;
 
 namespace GetPet.WebApi
 {
@@ -36,38 +37,34 @@ namespace GetPet.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers()
-                .AddNewtonsoftJson(options => {
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                });
-                
-            // services.AddNewtonsoftJson();
-
             string sqlConnectionString = Configuration.GetConnectionString("GetPetConnectionString");
 
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
+
             services.AddDbContext<GetPetDbContext>(options =>
-            {
-                options.UseSqlServer(sqlConnectionString);
-                options.EnableSensitiveDataLogging();
-            });
+                {
+                    options.UseSqlServer(sqlConnectionString);
+                    options.EnableSensitiveDataLogging();
+                })
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "GetPet.WebApi", Version = "v1" });
-            });
+                .AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GetPet.WebApi", Version = "v1" });
+                })
+                .AddRouting(options => options.LowercaseUrls = true)
 
-            services.AddRouting(options => options.LowercaseUrls = true);
-
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
-            }));
-
-            services.AddAutoMapper(typeof(GetPetProfile));
-
-            services.AddScoped<IPetRepository, PetRepository>()
+                .AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                }))
+                .AddAutoMapper(typeof(GetPetProfile))
+                .AddScoped<IPetRepository, PetRepository>()
                 .AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<ICityRepository, CityRepository>()
                 .AddScoped<IAnimalTypeRepository, AnimalTypeRepository>()
@@ -78,8 +75,13 @@ namespace GetPet.WebApi
                 .AddScoped<IArticleRepository, ArticleRepository>()
                 .AddScoped<IMetaFileLinkRepository, MetaFileLinkRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
-                .AddScoped<IPetHandler,PetHandler>()
-                .AddScoped<IUnitOfWork, UnitOfWork>();
+                .AddScoped<IUnitOfWork, UnitOfWork>()
+                .AddScoped<INotificationHandler, NotificationHandler>()
+                .AddScoped<INotificationRepository, NotificationRepository>()                
+                .AddScoped<IMailHandler, MailHandler>()
+                .AddScoped<IUserHandler, UserHandler>()
+                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>();
+                .AddScoped<IPetHandler, PetHandler>()
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)
@@ -90,15 +92,10 @@ namespace GetPet.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GetPet.WebApi v1"));
             }
-
             app.UseCors("CorsPolicy");
-            
-            app.UseStaticFiles();
-
+          app.UseStaticFiles();
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             // custom jwt auth middleware
@@ -108,7 +105,6 @@ namespace GetPet.WebApi
             {
                 endpoints.MapControllers();
             });
-
             getPetDbContext.Database.Migrate();
             getPetDbContextSeed.Seed();
         }

@@ -10,7 +10,7 @@ namespace GetPet.WebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AnimalTypesController : ControllerBase
+    public class AnimalTypesController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly ILogger<AnimalTypesController> _logger;

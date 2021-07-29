@@ -3,7 +3,7 @@ using GetPet.Data.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PetAdoption.BusinessLogic.Repositories
+namespace GetPet.BusinessLogic.Repositories
 {
     public interface IBaseRepository<T> where T : BaseEntity
     {

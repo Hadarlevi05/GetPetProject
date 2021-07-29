@@ -10,7 +10,10 @@ namespace GetPet.Data.Entities
     {
         [StringLength(400)]
         public string Email { get; set; }
-        
+
+        [StringLength(400)]
+        public string PhoneNumber { get; set; }
+
         [StringLength(400)]
         public string PasswordHash { get; set; }
 

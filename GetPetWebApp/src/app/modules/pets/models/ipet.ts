@@ -21,6 +21,8 @@ export interface IPet {
 
   user?: IUser;
 
+  sourceLink?: string;
+
   images: string[];
 
   traits: Map<string, string>;

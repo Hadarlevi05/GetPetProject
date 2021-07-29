@@ -18,9 +18,12 @@ export class AuthenticationService extends BaseService {
     public currentUser: Observable<IUser>;
     public token: Observable<string>;
 
-    constructor(protected http: HttpClient,
-                private router: Router) {
+    constructor(
+        protected http: HttpClient,
+        private router: Router) {
+
         super(http);
+
         let user: IUser = {} as IUser;
         let token = '';
 
@@ -76,7 +79,7 @@ export class AuthenticationService extends BaseService {
 
         this.currentUserSubject.next({} as IUser);
         this.tokenSubject.next('');
-        
+
         this.router.navigate(['']);
     }
 }

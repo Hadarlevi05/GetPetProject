@@ -11,7 +11,6 @@ namespace GetPet.Data.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-
         public string PetFilterSerialized { get; set; }
     }
 }

@@ -124,7 +124,7 @@ export class AddpetComponent
     let date = new Date();
     date.setDate(date.getDate() - 20);
     let filter = new AnimalTypeFilter(1, 100, date);
-    this._animalTypeService.Get(filter).subscribe(types => {
+    this._animalTypeService.get(filter).subscribe(types => {
       this.animaltypes_arr = types;
     });
   }
@@ -137,7 +137,7 @@ export class AddpetComponent
     let date = new Date();
     date.setDate(date.getDate() - 20);
     let filter = new TraitFilter(1, 100, date, animalTypeId);
-    this._traitsService.Post(filter).subscribe(traits => {
+    this._traitsService.post(filter).subscribe(traits => {
       this.traits_arr = traits;
       this.classifyTraits();
     })

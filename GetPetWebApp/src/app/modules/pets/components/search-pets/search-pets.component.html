@@ -24,7 +24,18 @@
             <section class="row">
                 <button mat-raised-button color="primary" (click)="search()">חפש</button>
             </section>
+            <section class="row">
+                <button mat-raised-button color="accent" (click)="addSearchNotification()">
+                    <mat-icon>notifications</mat-icon>
+                    הרשם להתראות
+                </button>
+            </section>
+
         </form>
+
+
+
+
     </aside>
     <main>
         <div class="content" *ngIf="!loading">

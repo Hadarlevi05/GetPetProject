@@ -17,9 +17,9 @@ export class CityService extends BaseService {
     super(http);
   }
 
-  Get(filter: CityFilter): Observable<ICity[]> {
+  get(filter: CityFilter): Observable<ICity[]> {
 
-    let params: HttpParams = this.GetHttpParams(filter);
+    let params: HttpParams = this.getHttpParams(filter);
 
     return this.http.get<ICity[]>(`${this.entPointUrl}cities`, { params });
   }

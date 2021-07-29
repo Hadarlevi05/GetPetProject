@@ -3,7 +3,7 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
-using PetAdoption.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,43 +29,15 @@ namespace GetPet.BusinessLogic.Handlers
 
         }
 
-        public async Task AddPet(PetDto pet)
+        public async Task AddPet(Pet pet)
         {
             try
             {
-                var images = pet.Images ?? new List<string>();
-
-                var petToInsert = _mapper.Map<Pet>(pet);
-
-                petToInsert.MetaFileLinks = new List<MetaFileLink>();
-                foreach (var imageSource in images)
-                {
-                    petToInsert.MetaFileLinks.Add(
-                        new MetaFileLink
-                        {
-                            Path = imageSource,
-                            MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
-                            Size = 1000
-                        });
-                }
-
-                petToInsert.PetTraits = new List<PetTrait>();
-                foreach (var trait in pet.TraitDTOs)
-                {
-                    petToInsert.PetTraits.Add(
-                        new PetTrait()
-                        {
-                            Trait = trait.Key,
-                            TraitOption = trait.Value,                           
-                        }
-                    );
-                }               
-
-                await _petRepository.AddAsync(petToInsert);
+                await _petRepository.AddAsync(pet);
             }
             catch (Exception ex)
             {
-                // TODO: Handle exception
+                Console.WriteLine($"Cannot insert pet {pet.Name}", ex);
             }
         }
 

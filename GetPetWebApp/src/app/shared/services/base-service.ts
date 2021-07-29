@@ -7,9 +7,10 @@ export class BaseService {
 
     protected IMAGE_BASE_URL = 'https://localhost:44345/api/';
 
-    constructor(protected http: HttpClient) { }
+    constructor(
+        protected http: HttpClient) { }
 
-    protected GetHttpParams(filter: BaseFilter) {
+    protected getHttpParams(filter: BaseFilter) {
         let params: HttpParams = new HttpParams();
         params = params.append('page', `${filter.page}`);
         params = params.append('perPage', `${filter.perPage}`);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using PetAdoption.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
+using GetPet.BusinessLogic.Repositories;
 
 namespace PetAdoption.WebApi.Controllers
 {
@@ -15,6 +18,8 @@ namespace PetAdoption.WebApi.Controllers
     [Route("api/[controller]")]
     public class PetsController : ControllerBase
     {
+        private readonly ITraitRepository _traitRepository;
+        private readonly IPetHandler _petHandler;
         private readonly IMapper _mapper;
         private readonly ILogger<PetsController> _logger;
         private readonly IPetRepository _petRepository;
@@ -22,11 +27,15 @@ namespace PetAdoption.WebApi.Controllers
 
 
         public PetsController(
+            ITraitRepository traitRepository,
+            IPetHandler petHandler,
             ILogger<PetsController> logger,
             IMapper mapper,
             IPetRepository petRepository,
             IUnitOfWork unitOfWork)
         {
+            _traitRepository = traitRepository;
+            _petHandler = petHandler;
             _logger = logger;
             _mapper = mapper;
             _petRepository = petRepository;
@@ -50,13 +59,32 @@ namespace PetAdoption.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(PetDto pet)
         {
-            var petToInsert = _mapper.Map<Pet>(pet);
+            //var petToInsert = _mapper.Map<Pet>(pet);
 
-            await _petRepository.AddAsync(petToInsert);
+            //get list of all traits
+            var filter = new TraitFilter();
+            var allTraits = _traitRepository.SearchAsync(filter).Result.ToList();
+
+            //process traits - convert map of traitId's and traitOptionId's to Dictionary of <Trait, TraitOption>
+            List<Trait> allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == pet.AnimalTypeId).ToList();
+            var traitsDict = new Dictionary<Trait, TraitOption>();
+
+            foreach (KeyValuePair<string, string> entry in pet.Traits)
+            {
+                //Use entry.Value & entry.Key
+                var foundTrait = allTraitsByAnimalType.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
+                var foundTraitOption = foundTrait.TraitOptions.FirstOrDefault(op => op.Id == int.Parse(entry.Value));
+
+                traitsDict[foundTrait] = foundTraitOption;
+            }
+            pet.TraitDTOs = traitsDict;
+
+            await _petHandler.AddPet(pet);
 
             await _unitOfWork.SaveChangesAsync();
 
-            return Ok(_mapper.Map<PetDto>(petToInsert));
+            //return Ok(_mapper.Map<PetDto>(petToInsert));
+            return Ok(pet);
         }
 
         //[HttpGet("{id}")]

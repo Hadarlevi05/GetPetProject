@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseService } from 'src/app/shared/services/base-service';
 import { IPet } from '../models/ipet';
+import { Pet } from '../models/pet';
 import { PetFilter } from '../models/pet-filter';
 
 
@@ -21,8 +22,9 @@ export class PetsService extends BaseService {
     return this.http.post<IPet[]>(`${this.entPointUrl}/search`, filter);
   }
 
-  addPet(pet: IPet) {
-    this.http.post(`${this.entPointUrl}`, pet).subscribe(
+  addPet(pet: Pet) {
+    console.log("in add pet");
+    return this.http.post(`${this.entPointUrl}`, pet).subscribe(
       (response) => console.log(response),
       (error) => console.log(error)
     );

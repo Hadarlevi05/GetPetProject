@@ -1,6 +1,8 @@
 using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.BusinessLogic.Handlers;
+using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.Common;
 using GetPet.Data;
 using GetPet.WebApi.Middlewares;
@@ -76,6 +78,7 @@ namespace GetPet.WebApi
                 .AddScoped<IArticleRepository, ArticleRepository>()
                 .AddScoped<IMetaFileLinkRepository, MetaFileLinkRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
+                .AddScoped<IPetHandler,PetHandler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>();
         }
 

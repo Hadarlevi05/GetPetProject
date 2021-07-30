@@ -21,7 +21,7 @@ export class FileUploaderComponent implements OnInit {
   fileName: string = '';
   imgPath: string = '';
 
-  uploadFile(file) { 
+  uploadFile(file) {    //delete this method
     console.log("in uploadFile:", file);
     this.file = file;
     this.fileName = file.data.name;
@@ -56,34 +56,34 @@ export class FileUploaderComponent implements OnInit {
     //   });  
   }
 
-  sendFile(file) {
-    return this.uploadService.upload(this.formData).pipe(
-      map(event => {  
-        // switch (event.type) {  
-        //   case HttpEventType.UploadProgress:  
-        //     if (event.total) {
-        //       const total:number = event.total;
-        //       file.progress = Math.round(event.loaded * 100 / total);  
-        //     }
-        //     else {
-        //       //todo: throw error cannot read file
-        //     }
-        //     break;
-          if (event.type == HttpEventType.Response) {
-            console.log("RESPONSE FROM SERVER:", event);
-            this.imgPath = JSON.parse(JSON.stringify(event.body)).path;
-            console.log("1.IMAGE_PATH_RETURNED_FROM_SERVER: " + this.imgPath);
-            return this.imgPath;
-          } else {
-            return null;
-          }
-        } 
-      ),  
-      catchError((error: HttpErrorResponse) => {  
-        file.inProgress = false;  
-        return of(`${file.data.name} upload failed.`);  
-      }));  
-  }
+  // sendFile(file) {
+  //   return this.uploadService.uploadData(this.formData).pipe(
+  //     map(event => {  
+  //       // switch (event.type) {  
+  //       //   case HttpEventType.UploadProgress:  
+  //       //     if (event.total) {
+  //       //       const total:number = event.total;
+  //       //       file.progress = Math.round(event.loaded * 100 / total);  
+  //       //     }
+  //       //     else {
+  //       //       //todo: throw error cannot read file
+  //       //     }
+  //       //     break;
+  //         if (event.type == HttpEventType.Response) {
+  //           console.log("RESPONSE FROM SERVER:", event);
+  //           this.imgPath = JSON.parse(JSON.stringify(event.body)).path;
+  //           console.log("1.IMAGE_PATH_RETURNED_FROM_SERVER: " + this.imgPath);
+  //           return this.imgPath;
+  //         } else {
+  //           return null;
+  //         }
+  //       } 
+  //     ),  
+  //     catchError((error: HttpErrorResponse) => {  
+  //       file.inProgress = false;  
+  //       return of(`${file.data.name} upload failed.`);  
+  //     }));  
+  // }
 
 //   private uploadFiles() {  
 //     this.fileUpload.nativeElement.value = '';  

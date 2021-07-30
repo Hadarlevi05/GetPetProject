@@ -2,6 +2,7 @@ using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
+using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
 using GetPet.Data;
@@ -78,7 +79,8 @@ namespace GetPet.WebApi
                 .AddScoped<INotificationRepository, NotificationRepository>()                
                 .AddScoped<IMailHandler, MailHandler>()
                 .AddScoped<IUserHandler, UserHandler>()
-                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>();
+                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
+                .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>());
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

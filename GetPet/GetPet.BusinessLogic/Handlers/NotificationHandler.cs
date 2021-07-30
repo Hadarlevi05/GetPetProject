@@ -3,9 +3,16 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Handlers
@@ -20,6 +27,7 @@ namespace GetPet.BusinessLogic.Handlers
         protected readonly IUserHandler _userHandler;
         protected readonly IUserRepository _userRepository;
         protected readonly IEmailHistoryRepository _emailHistoryRepository;
+        protected readonly MailSettings _mailSettings;
 
         public NotificationHandler(
             IPetRepository petRepository,
@@ -29,7 +37,8 @@ namespace GetPet.BusinessLogic.Handlers
             IMailHandler mailHandler,
             IUserHandler userHandler,
             IUserRepository userRepository,
-            IEmailHistoryRepository emailHistoryRepository)
+            IEmailHistoryRepository emailHistoryRepository,
+            MailSettings mailSettings)
         {
             _petRepository = petRepository;
             _notificationRepository = notificationRepository;
@@ -41,6 +50,7 @@ namespace GetPet.BusinessLogic.Handlers
             _userHandler = userHandler;
             _userRepository = userRepository;
             _emailHistoryRepository = emailHistoryRepository;
+            _mailSettings = mailSettings;
         }
 
 
@@ -68,45 +78,65 @@ namespace GetPet.BusinessLogic.Handlers
 
         public async Task SendNotificationAsync()
         {
-            var userId = 3;
-            var user = await _userRepository.GetByIdAsync(userId);
-            var notificationFilter = new BusinessLogic.Model.NotificationFilter()
-            {
-                UserId = userId
-            };
-
-            var notifications = await _notificationRepository.SearchAsync(notificationFilter);
+            var notifications = await _notificationRepository.SearchAsync(new NotificationFilter());
+            var users = (await _userRepository.GetByIdAsync(notifications.Select(n => n.UserId))).ToDictionary(i => i.Id, i => i);
 
             foreach (var notification in notifications)
             {
                 var filter = JsonConvert.DeserializeObject<PetFilter>(notification.PetFilterSerialized);
                 filter.CreatedSince = DateTime.UtcNow.Date;
 
+                var user = users[notification.UserId];
+
                 var pets = await _petRepository.SearchAsync(filter);
-                if (pets.Any())
+                var attachment = new List<Attachment>();
+                if (mailAlreadySent())
                 {
-                    if (!mailAlreadySent())
-                    {
-                        var mail = new MailRequest()
-                        {
-                            ToEmail = user.Email,
-                            Subject = "test hadar",
-                            Body = "test hadar"
-
-                        };
-                        await _mailHandler.SendEmailAsync(mail);
-                        var emailHistory = new EmailHistory()
-                        {
-                            UpdatedTimestamp = DateTime.UtcNow,
-                            UserId = userId,
-                            NotificationId = notification.Id,
-                            CreationTimestamp = DateTime.UtcNow
-                        };
-
-                        await _emailHistoryRepository.AddAsync(emailHistory);
-                    }
-
+                    continue;
                 }
+
+                string mailTemplate = GetResource("notification-email.html")
+                    .Replace("{{user.Name}}", user.Name);
+                string petRowTemplate = GetResource("notification-pet-row.html");
+
+                StringBuilder sbPets = new StringBuilder();
+
+                foreach (var pet in pets)
+                {
+                    sbPets.AppendLine(petRowTemplate.Replace("{{pet.Name}}", pet.Name));
+
+                    int fileCount = 0;
+                    using (var client = new WebClient())
+                    {
+                        var content = client.DownloadData(pet.MetaFileLinks.First().Path);
+                        using (var ms = new MemoryStream(content))
+                        {
+                            var fileBytes = ms.ToArray();
+                            attachment.Add(new Attachment(new MemoryStream(fileBytes), $"image{fileCount++}.jpg"));
+                        }
+                    }
+                }
+
+                var bodyHtml = mailTemplate.Replace("{{pets-html}}", sbPets.ToString());
+
+                var mail = new MailRequest()
+                {
+                    To = user.Email,
+                    Subject = "בעלי חיים חדשים מחכים לאימוץ!",
+                    Body = bodyHtml,
+                    Attachments = attachment
+                };
+                await _mailHandler.SendEmailAsync(mail);
+
+                var emailHistory = new EmailHistory()
+                {
+                    UpdatedTimestamp = DateTime.UtcNow,
+                    UserId = user.Id,
+                    NotificationId = notification.Id,
+                    CreationTimestamp = DateTime.UtcNow
+                };
+                await _emailHistoryRepository.AddAsync(emailHistory);
+                await _unitOfWork.SaveChangesAsync();
 
             }
         }
@@ -114,6 +144,19 @@ namespace GetPet.BusinessLogic.Handlers
         private bool mailAlreadySent()
         {
             return false;
+        }
+
+        private string GetResource(string filename)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = $"GetPet.BusinessLogic.Resources.{filename}";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                string result = reader.ReadToEnd();
+                return result;
+            }
         }
     }
 }

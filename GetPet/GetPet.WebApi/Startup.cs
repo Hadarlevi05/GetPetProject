@@ -77,11 +77,11 @@ namespace GetPet.WebApi
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<INotificationHandler, NotificationHandler>()
-                .AddScoped<INotificationRepository, NotificationRepository>()                
+                .AddScoped<INotificationRepository, NotificationRepository>()
                 .AddScoped<IMailHandler, MailHandler>()
                 .AddScoped<IUserHandler, UserHandler>()
-                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>();
-                .AddScoped<IPetHandler, PetHandler>()
+                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
+                .AddScoped<IPetHandler, PetHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

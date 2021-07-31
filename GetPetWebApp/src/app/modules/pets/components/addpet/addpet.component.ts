@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
-import { ITraitOption } from 'src/app/shared/models/itraitoption';
+import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';

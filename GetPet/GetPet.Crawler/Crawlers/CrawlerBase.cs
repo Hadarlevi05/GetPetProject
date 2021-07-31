@@ -16,8 +16,7 @@ namespace GetPet.Crawler.Crawlers
 {
     public abstract class CrawlerBase<T> : ICrawler where T : IParser, new()
     {
-        protected readonly HtmlDocument doc = new HtmlDocument();
-        protected static readonly WebClient client = new WebClient();
+        protected readonly HtmlDocument doc = new HtmlDocument();        
         protected readonly T parser = new T();
 
         protected readonly IPetHandler _petHandler;
@@ -83,7 +82,7 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual async Task Load(string url)
         {
-            string html = await client.DownloadStringTaskAsync(new Uri(url));
+            string html = await new WebClient().DownloadStringTaskAsync(new Uri(url));
 
             doc.LoadHtml(html);
 

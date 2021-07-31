@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
-import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
@@ -14,6 +13,7 @@ import { DatePipe } from '@angular/common';
 import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
 import { Pet } from '../../models/pet';
 import { UploadService } from '../../services/upload.service';
+import { ITraitOption } from 'src/app/shared/models/itrait-option';
 
 @Component({
   selector: 'app-addpet',
@@ -38,7 +38,7 @@ export class AddpetComponent
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
-  
+
 
   ngAfterViewInit() {
 
@@ -145,7 +145,7 @@ export class AddpetComponent
 
   private classifyTraits() {
 
-    console.log("traits_arr: ",this.traits_arr);
+    console.log("traits_arr: ", this.traits_arr);
 
     for (const trait of this.traits_arr) {
       this.optionsForTrait = trait.traitOptions;
@@ -172,7 +172,7 @@ export class AddpetComponent
   }
 
   private deleteTraitsArrays() {
-    
+
     this.multiSelectChipsChild.setAllMatchipsFalse();
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
@@ -208,7 +208,7 @@ export class AddpetComponent
 
   getCurrentUserId(): number {
     var userString = localStorage.getItem('currentUser');
-    var user = JSON.parse(userString?? '');
+    var user = JSON.parse(userString ?? '');
     return user.id;
   }
 
@@ -223,7 +223,7 @@ export class AddpetComponent
     this.pet.images = this.imagesURLs;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
-    let traitsDict = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {})     //convert array to dictionary
+    let traitsDict = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
     this.pet.traits = traitsDict;
     this.pet.petSource = 1; //Internal
 
@@ -258,19 +258,19 @@ export class AddpetComponent
 
     console.log(this.filesToUpload.length);
 
-    //upload pictures to db
+    // upload pictures to db
     this._uploadService.uploadData(this.filesToUpload)
-    .subscribe(res => {
-      console.log(res);
-      for (const element of res) {
-        this.imagesURLs.push(element['path']);
-    }
-    console.log("THE IMAGES URLS:",this.imagesURLs);
+      .subscribe(res => {
+        console.log(res);
+        for (const element of res) {
+          this.imagesURLs.push(element['path']);
+        }
+        console.log("THE IMAGES URLS:", this.imagesURLs);
 
-    this.collectDataAndAddPet();
-    }, err => {
-      console.log(err);
-    });
+        this.collectDataAndAddPet();
+      }, err => {
+        console.log(err);
+      });
 
 
 

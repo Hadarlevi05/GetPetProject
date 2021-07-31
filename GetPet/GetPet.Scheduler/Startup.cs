@@ -2,10 +2,10 @@ using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
+using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
 using GetPet.Crawler.Crawlers;
-using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Data;
 using GetPet.Scheduler.Jobs;
 using Hangfire;
@@ -32,7 +32,7 @@ namespace GetPet.Scheduler
 
         private void SetEnvironmentVariables()
         {
-            Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
+            Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");            
         }
 
         public IConfiguration Configuration { get; }
@@ -70,8 +70,11 @@ namespace GetPet.Scheduler
             JobStorage.Current = sqlStorage;
 
             // Add the processing server as IHostedService
-            services.AddHangfireServer();
-           
+            services.AddHangfireServer(options => {
+                options.ServerName = "GetPet HangFire Server";
+                // options.WorkerCount = 1;
+            });
+
             var serviceProvider = services
                 .AddDbContext<GetPetDbContext>(options =>
                 {
@@ -92,6 +95,8 @@ namespace GetPet.Scheduler
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
                 .AddScoped<INotificationRepository, NotificationRepository>()
+                .AddScoped<INotificationHandler, NotificationHandler>()
+                .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())                
                 .AddTransient<IMailHandler, MailHandler>();
 
             SetBackgroundJobs();
@@ -124,9 +129,11 @@ namespace GetPet.Scheduler
 
         public void SetBackgroundJobs()
         {
-            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), Cron.Minutely);
-            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), Cron.Minutely);
-            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), Cron.Minutely);
+            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: "0 8,10,12,14,16,18,20 * * *");
+            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 7,9,11,13,15,17,19 * * *");
+            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
+
+            RecurringJob.Trigger("NotificationSenderJob");
         }
     }
 }

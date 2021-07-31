@@ -36,7 +36,8 @@ namespace GetPet.BusinessLogic.Repositories
         {
             var query = base.SearchAsync(entities.AsQueryable(), filter);
 
-            query = query.Where(i => i.UserId == filter.UserId);
+            if (filter.UserId > 0)            
+                query = query.Where(i => i.UserId == filter.UserId);
             
             return await query.ToListAsync();
         }

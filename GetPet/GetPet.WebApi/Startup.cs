@@ -82,9 +82,9 @@ namespace GetPet.WebApi
                 .AddScoped<IMailHandler, MailHandler>()
                 .AddScoped<IUserHandler, UserHandler>()
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
-                .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>());
-                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>();
-                .AddScoped<IPetHandler, PetHandler>()
+                .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())
+                .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
+                .AddScoped<IPetHandler, PetHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

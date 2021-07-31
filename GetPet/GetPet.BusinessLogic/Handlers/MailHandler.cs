@@ -36,11 +36,9 @@ namespace GetPet.BusinessLogic.Handlers
                 foreach (var attachment in mailRequest.Attachments)
                 {
                     attachment.ContentDisposition.Inline = true;
-                    string imageName = $"{Guid.NewGuid()}.jpg";
+                    string imageName = attachment.Name;
                     attachment.ContentId = imageName;
-                    message.Attachments.Add(attachment);
-
-                    message.Body = message.Body.Replace("{{pet-image}}", $"cid:{imageName}");                    
+                    message.Attachments.Add(attachment);                    
                 }
             }
 

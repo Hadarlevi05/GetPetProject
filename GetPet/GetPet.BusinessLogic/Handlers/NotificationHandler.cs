@@ -101,20 +101,29 @@ namespace GetPet.BusinessLogic.Handlers
 
                 StringBuilder sbPets = new StringBuilder();
 
+                int fileCount = 0;
+
                 foreach (var pet in pets)
                 {
-                    sbPets.AppendLine(petRowTemplate.Replace("{{pet.Name}}", pet.Name));
+                    string html = petRowTemplate
+                        .Replace("{{pet.Name}}", pet.Name)
+                        .Replace("{{pet.Description}}", pet.Description)
+                        .Replace("{{pet.SourceLink}}", pet.SourceLink);
 
-                    int fileCount = 0;
                     using (var client = new WebClient())
                     {
                         var content = client.DownloadData(pet.MetaFileLinks.First().Path);
                         using (var ms = new MemoryStream(content))
                         {
+                            string imageName = $"image{fileCount++}.jpg";
+
                             var fileBytes = ms.ToArray();
-                            attachment.Add(new Attachment(new MemoryStream(fileBytes), $"image{fileCount++}.jpg"));
+                            attachment.Add(new Attachment(new MemoryStream(fileBytes), imageName));
+
+                            html = html.Replace("{{pet-image}}", $"cid:{imageName}");
                         }
                     }
+                    sbPets.AppendLine(html);
                 }
 
                 var bodyHtml = mailTemplate.Replace("{{pets-html}}", sbPets.ToString());

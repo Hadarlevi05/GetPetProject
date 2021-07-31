@@ -1,5 +1,5 @@
 import { ITrait } from "src/app/shared/models/itrait";
-import { ITraitOption } from "src/app/shared/models/itraitoption";
+import { ITraitOption } from "src/app/shared/models/itrait-option";
 import { IUser } from "src/app/shared/models/iuser";
 
 export interface Pet {
@@ -25,7 +25,7 @@ export interface Pet {
 
   images: string[];
 
-  traits: {[key: string]: string; };
+  traits: { [key: string]: string; };
 
   traitsDTOs?: Map<ITrait, ITraitOption>;
 

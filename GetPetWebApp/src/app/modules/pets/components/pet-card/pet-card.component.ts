@@ -15,5 +15,4 @@ export class PetCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

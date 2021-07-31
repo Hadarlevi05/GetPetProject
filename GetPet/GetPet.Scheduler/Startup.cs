@@ -129,9 +129,11 @@ namespace GetPet.Scheduler
 
         public void SetBackgroundJobs()
         {
-            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: Cron.Minutely);
-            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: Cron.Minutely);
-            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: Cron.Minutely);
+            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: "0 8,10,12,14,16,18,20 * * *");
+            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 7,9,11,13,15,17,19 * * *");
+            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
+
+            RecurringJob.Trigger("NotificationSenderJob");
         }
     }
 }

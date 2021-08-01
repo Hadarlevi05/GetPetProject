@@ -16,6 +16,7 @@ import { Pet } from '../../models/pet';
 import { PetSource } from 'src/app/shared/enums/pet-source';
 import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
+import { ITraitOption } from 'src/app/shared/models/itrait-option';
 
 @Component({
   selector: 'app-addpet',
@@ -38,7 +39,7 @@ export class AddpetComponent
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
-  
+
   ngAfterViewInit() {
   }
 
@@ -49,7 +50,7 @@ export class AddpetComponent
     birthday: new Date(),
     gender: Gender.Unknown,
     animalTypeId: 0,
-    status: PetStatus.WaitingForAdoption,
+    status: +PetStatus.WaitingForAdoption,
     userId: 0,
     traits: {},
     source: PetSource.Internal,
@@ -208,8 +209,8 @@ export class AddpetComponent
     this.pet.images = this.imagesURLs;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
-    this.pet.traits = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {})     //convert array to dictionary
-    
+    this.pet.traits = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
+
     console.log("PET TO SEND INFO: ", this.pet);
 
     try {
@@ -252,11 +253,11 @@ export class AddpetComponent
         }
         console.log("THE IMAGES URLS:", this.imagesURLs);
 
-    this.AddPet();
-    }, err => {
-      console.log("pet upload failed!",err);
-      this.formUploaded = true;
-      this.success = false;
-    });
+        this.AddPet();
+      }, err => {
+        console.log("pet upload failed!", err);
+        this.formUploaded = true;
+        this.success = false;
+      });
   }
 }

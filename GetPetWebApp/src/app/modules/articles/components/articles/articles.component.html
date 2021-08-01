@@ -1,3 +1,17 @@
-<h1>
-    מאמרים אחרונים
-</h1>
+<section>
+    <h2>מאמרים אחרונים</h2>
+    <div class="pets-container">
+
+        <app-loader [Show]="articleLoading"></app-loader>
+
+        <div class="content" *ngIf="!articleLoading">
+            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
+                    fxFlex.xl="20%" fx *ngFor="let article of articles">
+                    <app-article-card [article]="article"></app-article-card>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

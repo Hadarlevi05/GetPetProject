@@ -11,9 +11,11 @@ import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
 import { DatePipe } from '@angular/common';
 import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
-import { Pet } from '../../models/pet';
 import { UploadService } from '../../services/upload.service';
-import { ITraitOption } from 'src/app/shared/models/itrait-option';
+import { Pet } from '../../models/pet';
+import { PetSource } from 'src/app/shared/enums/pet-source';
+import { Gender } from 'src/app/shared/enums/gender';
+import { PetStatus } from 'src/app/shared/enums/pet-status';
 
 @Component({
   selector: 'app-addpet',
@@ -29,34 +31,30 @@ export class AddpetComponent
 
   loading = false;
   success = false;
+  formUploaded = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
-  res0: string = '';
-  res1: string = '';
-  res2: string = '';
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
-
-
+  
   ngAfterViewInit() {
-
   }
 
 
   pet: Pet = {
     name: '',
-    animalTypeId: 0,
-    userId: 1,
-    birthday: new Date(),
-    traits: {},
     description: '',
+    birthday: new Date(),
+    gender: Gender.Unknown,
+    animalTypeId: 0,
+    status: PetStatus.WaitingForAdoption,
+    userId: 0,
+    traits: {},
+    source: PetSource.Internal,
     images: [],
     creationTimestamp: new Date(),
-    petSource: 1,
-    sourceLink: '',
-    gender: 1
   }
 
 
@@ -77,7 +75,6 @@ export class AddpetComponent
     private _animalTypeService: AnimalTypeService,
     private _traitsService: TraitsService,
     private _petsService: PetsService,
-    public datepipe: DatePipe,
     private _uploadService: UploadService) { }
 
   ngOnInit(): void {
@@ -99,7 +96,7 @@ export class AddpetComponent
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
           description: ['', [Validators.required,
-          Validators.maxLength(500)]],
+          Validators.maxLength(1000)]],
         }),
         this._formBuilder.group({
           //upload pictures
@@ -148,27 +145,16 @@ export class AddpetComponent
     console.log("traits_arr: ", this.traits_arr);
 
     for (const trait of this.traits_arr) {
-      this.optionsForTrait = trait.traitOptions;
-      for (const option of this.optionsForTrait) {
-        if (this.isBooleanValue(option)) {
-          this.traitsWithBooleanValue.push(trait);
-          this.isMatChipsLoaded = true;
-          break;
-        } else {
-          this.traitsWithSetOfValues.push(trait);
-          break;
-        }
+      if (trait.isBoolean) {
+        this.traitsWithBooleanValue.push(trait);
+      } else {
+        this.traitsWithSetOfValues.push(trait)
       }
     }
+    this.isMatChipsLoaded = true;
 
-    console.log("traits with boolean value:");
-    console.log(this.traitsWithBooleanValue);
-    console.log("trait with set of value:");
-    console.log(this.traitsWithSetOfValues);
-  }
-
-  private isBooleanValue(op: ITraitOption): boolean {
-    return (op.option == 'כן' || op.option == 'לא')
+    console.log("traits with boolean value:", this.traitsWithBooleanValue);
+    console.log("trait with set of values:", this.traitsWithSetOfValues);
   }
 
   private deleteTraitsArrays() {
@@ -198,11 +184,10 @@ export class AddpetComponent
     this.traitChipSelections = event;
   }
 
-  //Date picker allows users to select date of birth range from
-  //20 years ago until today.
+  //Date picker allows users to select date of birth in range of 15 years
   setAllowedDatePickerRange() {
     const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 20, 0, 1);
+    this.minDate = new Date(currentYear - 15, 0, 1);
     this.maxDate = new Date();
   }
 
@@ -212,7 +197,7 @@ export class AddpetComponent
     return user.id;
   }
 
-  collectDataAndAddPet() {
+  AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
@@ -223,17 +208,17 @@ export class AddpetComponent
     this.pet.images = this.imagesURLs;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
-    let traitsDict = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
-    this.pet.traits = traitsDict;
-    this.pet.petSource = 1; //Internal
-
+    this.pet.traits = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {})     //convert array to dictionary
+    
     console.log("PET TO SEND INFO: ", this.pet);
 
     try {
       this._petsService.addPet(this.pet);
+      this.formUploaded = true;
       this.success = true;
     } catch (err) {
-      console.log("Error, can't add pet!", err);
+      this.success = false;
+      console.log("Error, can't add pet!, success changed to false", err);
     }
     this.loading = false;
   }
@@ -267,46 +252,11 @@ export class AddpetComponent
         }
         console.log("THE IMAGES URLS:", this.imagesURLs);
 
-        this.collectDataAndAddPet();
-      }, err => {
-        console.log(err);
-      });
-
-
-
-
-    //console.log('data from selections:', this.traitSelections)
-    //console.log('data from child:',this.traitChipSelections);
-
-
-    // let traitsMap = this.allSelectedTraits.reduce((mapAccumulator, obj) => {
-    //   mapAccumulator.set(obj.traitId, obj.traitOptionId);
-    //   return mapAccumulator;
-    // }, new Map());
-    // console.log("All traits: ",traitsMap);
-
-    // const allTraitsDict = {};
-    // this.allSelectedTraits.forEach(([traitId, traitOptionId]) => allTraitsDict[traitId] = traitOptionId);
-    // const allTraitsDict = this.allSelectedTraits.reduce((dict, [traitId, traitOptionId]) => Object.assign(dict, {[traitId]: traitOptionId}), {});
-
-
-    // //upload pictures to db (old)
-    // this.components.forEach(uploader => {
-    //   //console.log("%%%%%%",uploader);
-    //   console.log("uploader.file.data is: ", uploader.file.data);
-    //   if (uploader.file.data) {
-    //     uploader.sendFile(uploader.file)
-    //     .subscribe((pathResponse) => {  
-    //       //console.log("SUBSCRIBE:response from server:" + pathResponse);
-    //       if (pathResponse) {
-    //         console.log("img path - " + pathResponse);
-    //         this.pet.images.push(pathResponse);
-    //       }
-    //     });
-    //   }
-    // })
-
-
-
+    this.AddPet();
+    }, err => {
+      console.log("pet upload failed!",err);
+      this.formUploaded = true;
+      this.success = false;
+    });
   }
 }

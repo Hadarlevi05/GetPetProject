@@ -113,7 +113,6 @@ namespace GetPet.WebApi.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             return Ok(_mapper.Map<PetDto>(petToInsert));
-            //return Ok(pet);
         }
     }
 }

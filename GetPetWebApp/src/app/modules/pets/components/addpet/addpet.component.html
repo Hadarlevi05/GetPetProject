@@ -6,7 +6,7 @@
   <mat-card-content>
     <div class="container">
       <!--Add pet form starts-->
-      <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="success">
+      <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="formUploaded">
         <mat-vertical-stepper dir="rtl" #stepper [linear]="true" formArrayName="formArray">
           <mat-step formGroupName="0" [stepControl]="formArray?.get([0])!" label="בחר סוג חיה">
             <!--Select animal type-->
@@ -57,12 +57,9 @@
             <!--Unique traits for chosen animal type-->
             <div class="row">
               <mat-label>בחר תכונות מיוחדות:</mat-label>
-              <app-chips-multi-select 
-                  #chips
-                  [options]="traitsWithBooleanValue"
-                  [isMatChipsTraitsLoaded]="isMatChipsLoaded" 
-                  (data)="eventHandler($event)"
-                  formControlName="chipsControl">
+              <app-chips-multi-select #chips [options]="traitsWithBooleanValue"
+                [isMatChipsTraitsLoaded]="isMatChipsLoaded" (data)="eventHandler($event)"
+                formControlName="chipsControl">
               </app-chips-multi-select>
             </div>
 
@@ -106,8 +103,28 @@
     </div>
     <!--Add pet form ends-->
 
+    <div *ngIf="formUploaded" class="notification is-success">
+      <div *ngIf="success; else failed">
+        <div>
+          בעל החיים הוסף בהצלחה!
+        </div>
+        <div>
+          <a routerLink="/">חזרו לעמוד הראשי</a>
+        </div>
+      </div>
+      <ng-template #failed>
+        <div>
+          אנחנו מצטערים:( חלה שגיאה בהעלאת בעל החיים.
+          אנא
+          <a routerLink="/pets/add">נסו שוב</a>
+          או
+          <a routerLink="/">חזרו לעמוד הראשי</a>
+        </div>
+      </ng-template>
+    </div>
 
-    <div *ngIf="success" class="notification is-success">
+
+    <!-- <div *ngIf="success; else failed" class="notification is-success">
       <div>
         בעל החיים הוסף בהצלחה!
       </div>
@@ -115,13 +132,12 @@
         <a routerLink="/">חזרו לעמוד הראשי</a>
       </div>
     </div>
-
-    <!-- <div dir="ltr" align="left">
-      <hr />
-      <h1>JSON</h1>
-      <p>Form value: {{ addPetFormGroup.value | json }}</p> -->
-
-
-
-    <hr>
-
+    <ng-template #failed>
+      <div>
+        אנחנו מצטערים:( חלה שגיאה בהעלאת בעל החיים.
+        אנא
+        <a routerLink="/pets/add">נסו שוב</a>
+        או
+        <a routerLink="/">חזרו לעמוד הראשי</a>
+      </div>
+    </ng-template> -->

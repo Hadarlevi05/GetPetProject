@@ -17,7 +17,7 @@ export interface Pet {
 
   animalType?: string;
 
-  status?: string;
+  status: number;
 
   userId: number;
 
@@ -27,9 +27,9 @@ export interface Pet {
 
   traits: {[key: string]: string; };
 
-  traitsDTOs?: Map<ITrait, ITraitOption>;
+  //traitsDTOs?: Map<ITrait, ITraitOption>;
 
-  petSource: number;
+  source: number;
 
   sourceLink?: string;
 

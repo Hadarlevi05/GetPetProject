@@ -47,8 +47,7 @@ import { DonationsComponent } from './modules/home/components/donations/donation
 import { ArticleViewComponent } from './modules/articles/components/article-view/article-view.component';
 import { ArticlesComponent } from './modules/articles/components/articles/articles.component';
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
-
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -76,10 +75,6 @@ import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
     MatTabsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -99,11 +94,10 @@ import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
-    MatDividerModule,
-    MatCheckboxModule,
     FlexLayoutModule,
     MatProgressBarModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatDialogModule
   ],
   providers: [
     DatePipe,

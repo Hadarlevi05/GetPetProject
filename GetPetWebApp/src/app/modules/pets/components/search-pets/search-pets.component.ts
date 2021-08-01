@@ -9,12 +9,14 @@ import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { IPet } from '../../models/ipet';
 import { PetFilter } from '../../models/pet-filter';
 import { PetsService } from '../../services/pets.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PetViewComponent } from '../pet-view/pet-view.component';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 @Component({
   selector: 'app-search-pets',
   templateUrl: './search-pets.component.html',
@@ -53,8 +55,18 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     private petsService: PetsService,
     private notificationService: NotificationService,
     private authenticationService: AuthenticationService,
-    //private snackBar: MatSnackBar
+    private dialog: MatDialog
   ) { }
+
+
+
+  openPetDialog(pet: IPet) {
+    this.dialog.open(PetViewComponent, {
+      data: {
+        pet: pet
+      }
+    });
+  }
 
   ngOnDestroy(): void {
 

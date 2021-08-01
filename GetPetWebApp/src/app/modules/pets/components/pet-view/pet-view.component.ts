@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IPet } from '../../models/ipet';
 
 @Component({
   selector: 'app-pet-view',
@@ -7,7 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PetViewComponent implements OnInit {
 
-  constructor() { }
+
+  @Input()
+  pet: IPet = {} as IPet;
+
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {
+    this.pet = data.pet;
+  }
 
   ngOnInit(): void {
   }

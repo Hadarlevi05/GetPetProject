@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { Router } from '@angular/router';
 import { IArticle } from 'src/app/modules/articles/models/iarticle';
 import { ArticleService } from 'src/app/modules/articles/services/article.service';
 import { IPet } from 'src/app/modules/pets/models/ipet';
 import { PetFilter } from 'src/app/modules/pets/models/pet-filter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
+import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { BaseFilter } from 'src/app/shared/models/base-filter';
+import { IAnimalType } from 'src/app/shared/models/ianimal-type';
+import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 
 @Component({
   selector: 'app-index',
@@ -21,8 +26,12 @@ export class IndexComponent implements OnInit {
   articles: IArticle[] = [];
 
   gridColumns = 3;
-
   animalTypeId = 1;
+  animaltypes: IAnimalType[] = [];
+
+  form: FormGroup = new FormGroup({
+    animalType: new FormControl('')
+  });
 
 
   toggleGridColumns() {
@@ -32,11 +41,37 @@ export class IndexComponent implements OnInit {
 
   constructor(
     private petsService: PetsService,
-    private articleService: ArticleService) { }
+    private articleService: ArticleService,
+    private animalTypeService: AnimalTypeService,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.loadPets();
     this.loadArticles();
+    this.loadAnimalTypes();
+    this.setFormSubscribers();
+  }
+
+
+  setFormSubscribers() {
+    this.form.controls['animalType'].valueChanges.subscribe(value => {
+
+      const urlTree = this.router.parseUrl('pets/search');
+      urlTree.queryParams['animalType'] = value;
+      this.router.navigateByUrl(urlTree);
+    });
+  }
+
+  loadAnimalTypes() {
+
+    let date = new Date();
+    date.setDate(date.getDate() - 20);
+
+    const filter = new AnimalTypeFilter(1, 100, date);
+
+    this.animalTypeService.get(filter).subscribe(animaltypes => {
+      this.animaltypes = animaltypes;
+    });
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {

@@ -41,7 +41,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { DatePipe } from '@angular/common';
 import { AuthGuard } from './shared/guards/auth-guard';
 import { AuthenticationService } from './shared/services/authentication.service';
+import { PetViewComponent } from './modules/pets/components/pet-view/pet-view.component';
+import { AboutUsComponent } from './modules/home/components/about-us/about-us.component';
+import { DonationsComponent } from './modules/home/components/donations/donations.component';
+import { ArticleViewComponent } from './modules/articles/components/article-view/article-view.component';
+import { ArticlesComponent } from './modules/articles/components/articles/articles.component';
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
+
 
 
 @NgModule({
@@ -59,6 +65,11 @@ import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
     SearchPetsComponent,
     SearchCriteriaComponent,
     FileUploaderComponent,
+    PetViewComponent,
+    ArticleViewComponent,
+    AboutUsComponent,
+    DonationsComponent,
+    ArticlesComponent,
   ],
   imports: [
     BrowserModule,

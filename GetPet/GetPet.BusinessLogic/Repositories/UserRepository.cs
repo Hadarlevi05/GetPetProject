@@ -18,6 +18,7 @@ namespace GetPet.BusinessLogic.Repositories
 {
     public interface IUserRepository : IBaseRepository<User>
     {
+        Task<IEnumerable<User>> GetByIdAsync(IEnumerable<int> ids);
         Task<IEnumerable<User>> SearchAsync(UserFilter filter);
         Task<User> GetByEmailAsync(string email);
         Task<User> Register(UserDto user);
@@ -87,6 +88,13 @@ namespace GetPet.BusinessLogic.Repositories
         {
             return await base.GetByIdAsync(id);
         }
+
+
+        public new async Task<IEnumerable<User>> GetByIdAsync(IEnumerable<int> ids)
+        {
+            return await entities.Where(p => ids.Contains(p.Id)).ToListAsync();
+        }
+
 
         public new async Task AddAsync(User obj)
         {

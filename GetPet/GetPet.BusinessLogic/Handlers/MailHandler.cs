@@ -13,54 +13,43 @@ namespace GetPet.BusinessLogic.Handlers
     {
         private readonly MailSettings _mailSettings;
 
-        public MailHandler(IOptions<MailSettings> mailSettings)
+        public MailHandler(MailSettings mailSettings)
         {
-            _mailSettings = mailSettings.Value;
-
+            _mailSettings = mailSettings;
         }
 
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
+            MailAddress to = new MailAddress(mailRequest.To);
 
-            MailAddress to = new MailAddress(mailRequest.ToEmail);
+            to = new MailAddress("hadarlevi05@gmail.com");
+
             MailAddress from = new MailAddress(_mailSettings.Mail);
 
             MailMessage message = new MailMessage(from, to);
             message.Subject = mailRequest.Subject;
-            message.Body = "Elizabeth, as requested, sending you the invoice for Harry and Meghan's wedding. Any questions? Let me know.;";
+            message.Body = mailRequest.Body;
+            message.IsBodyHtml = true;
 
-            // get attachment by URL
-            //String filePath = "wedding_invoice.pdf";
-            //Attachment data = new Attachment(filePath, MediaTypeNames.Application.Octet);
             if (mailRequest.Attachments != null)
             {
-                byte[] fileBytes;
-                foreach (var file in mailRequest.Attachments)
+                foreach (var attachment in mailRequest.Attachments)
                 {
-                    if (file.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            file.CopyTo(ms);
-                            fileBytes = ms.ToArray();
-                            var attachment = new Attachment(ms, MediaTypeNames.Application.Octet);
-                            message.Attachments.Add(attachment);
-
-                        }
-                        //builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-                    }
+                    attachment.ContentDisposition.Inline = true;
+                    string imageName = attachment.Name;
+                    attachment.ContentId = imageName;
+                    message.Attachments.Add(attachment);                    
                 }
             }
-            //builder.HtmlBody = mailRequest.Body;
-            //email.Body = builder.ToMessageBody();
 
-            SmtpClient client = new SmtpClient(_mailSettings.Host, _mailSettings.Port)
+            SmtpClient client = new(_mailSettings.Host, _mailSettings.Port)
             {
                 Credentials = new NetworkCredential(_mailSettings.Mail, _mailSettings.Password),
-                EnableSsl = true
+                EnableSsl = true,
+                UseDefaultCredentials = false,                 
             };
-            // code in brackets above needed if authentication required
 
+            // code in brackets above needed if authentication required
             try
             {
                 client.SendAsync(message, null);
@@ -70,40 +59,8 @@ namespace GetPet.BusinessLogic.Handlers
                 Console.WriteLine(ex.ToString());
             }
 
-
-
-
-            //var email = new MimeMessage();
-            //email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
-            //email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));
-            //email.Subject = mailRequest.Subject;
-            //var builder = new BodyBuilder();
-            //if (mailRequest.Attachments != null)
-            //{
-            //    byte[] fileBytes;
-            //    foreach (var file in mailRequest.Attachments)
-            //    {
-            //        if (file.Length > 0)
-            //        {
-            //            using (var ms = new MemoryStream())
-            //            {
-            //                file.CopyTo(ms);
-            //                fileBytes = ms.ToArray();
-            //            }
-            //            builder.Attachments.Add(file.FileName, fileBytes, ContentType.Parse(file.ContentType));
-            //        }
-            //    }
-            //}
-            //builder.HtmlBody = mailRequest.Body;
-            //email.Body = builder.ToMessageBody();
-            //using var smtp = new SmtpClient();
-
-
-
-            //smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-            //smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
-            //await smtp.SendAsync(email);
-            //smtp.Disconnect(true);
         }
+
+
     }
 }

@@ -1,3 +1,21 @@
+<section dir="rtl" class="adopt-pet">
+    <h2>איזה בעל חיים את/ם רוצים לאמץ?</h2>
+    <form [formGroup]="form">
+
+        <section class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>סוג</mat-label>
+                <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
+                    <mat-option *ngFor="let type of animaltypes" [value]="type.id">
+                        {{ type.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </section>
+    </form>
+</section>
+
+
 <section>
     <h2>מאמרים אחרונים</h2>
     <div class="pets-container">

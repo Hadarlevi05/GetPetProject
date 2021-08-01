@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
-import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
@@ -143,7 +142,7 @@ export class AddpetComponent
 
   private classifyTraits() {
 
-    console.log("traits_arr: ",this.traits_arr);
+    console.log("traits_arr: ", this.traits_arr);
 
     for (const trait of this.traits_arr) {
       if (trait.isBoolean) {
@@ -159,7 +158,7 @@ export class AddpetComponent
   }
 
   private deleteTraitsArrays() {
-    
+
     this.multiSelectChipsChild.setAllMatchipsFalse();
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
@@ -194,7 +193,7 @@ export class AddpetComponent
 
   getCurrentUserId(): number {
     var userString = localStorage.getItem('currentUser');
-    var user = JSON.parse(userString?? '');
+    var user = JSON.parse(userString ?? '');
     return user.id;
   }
 
@@ -244,14 +243,14 @@ export class AddpetComponent
 
     console.log(this.filesToUpload.length);
 
-    //upload pictures to db
+    // upload pictures to db
     this._uploadService.uploadData(this.filesToUpload)
-    .subscribe(res => {
-      console.log(res);
-      for (const element of res) {
-        this.imagesURLs.push(element['path']);
-    }
-    console.log("THE IMAGES URLS:",this.imagesURLs);
+      .subscribe(res => {
+        console.log(res);
+        for (const element of res) {
+          this.imagesURLs.push(element['path']);
+        }
+        console.log("THE IMAGES URLS:", this.imagesURLs);
 
     this.AddPet();
     }, err => {

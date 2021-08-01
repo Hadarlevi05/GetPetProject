@@ -25,7 +25,7 @@ export interface Pet {
 
   images: string[];
 
-  traits: {[key: string]: string; };
+  traits: { [key: string]: string; };
 
   //traitsDTOs?: Map<ITrait, ITraitOption>;
 

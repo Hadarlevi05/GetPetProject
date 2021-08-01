@@ -32,19 +32,15 @@ export class AddpetComponent
 
   loading = false;
   success = false;
+  formUploaded = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
-  res0: string = '';
-  res1: string = '';
-  res2: string = '';
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
   
-
   ngAfterViewInit() {
-
   }
 
 
@@ -80,7 +76,6 @@ export class AddpetComponent
     private _animalTypeService: AnimalTypeService,
     private _traitsService: TraitsService,
     private _petsService: PetsService,
-    public datepipe: DatePipe,
     private _uploadService: UploadService) { }
 
   ngOnInit(): void {
@@ -102,7 +97,7 @@ export class AddpetComponent
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
           description: ['', [Validators.required,
-          Validators.maxLength(500)]],
+          Validators.maxLength(1000)]],
         }),
         this._formBuilder.group({
           //upload pictures
@@ -159,27 +154,9 @@ export class AddpetComponent
     }
     this.isMatChipsLoaded = true;
 
-    // for (const trait of this.traits_arr) {
-    //   this.optionsForTrait = trait.traitOptions;
-    //   for (const option of this.optionsForTrait) {
-    //     if (this.isBooleanValue(option)) {
-    //       this.traitsWithBooleanValue.push(trait);
-    //       this.isMatChipsLoaded = true;
-    //       break;
-    //     } else {
-    //       this.traitsWithSetOfValues.push(trait);
-    //       break;
-    //     }
-    //   }
-    // }
-
     console.log("traits with boolean value:", this.traitsWithBooleanValue);
     console.log("trait with set of values:", this.traitsWithSetOfValues);
   }
-
-  // private isBooleanValue(op: ITraitOption): boolean {
-  //   return (op.option == 'כן' || op.option == 'לא')
-  // }
 
   private deleteTraitsArrays() {
     
@@ -221,7 +198,7 @@ export class AddpetComponent
     return user.id;
   }
 
-  collectDataAndAddPet() {
+  AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
@@ -234,14 +211,15 @@ export class AddpetComponent
     console.log("allSelectedTraits: ", this.allSelectedTraits);
     this.pet.traits = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {})     //convert array to dictionary
     
-
     console.log("PET TO SEND INFO: ", this.pet);
 
     try {
       this._petsService.addPet(this.pet);
+      this.formUploaded = true;
       this.success = true;
     } catch (err) {
-      console.log("Error, can't add pet!", err);
+      this.success = false;
+      console.log("Error, can't add pet!, success changed to false", err);
     }
     this.loading = false;
   }
@@ -275,9 +253,11 @@ export class AddpetComponent
     }
     console.log("THE IMAGES URLS:",this.imagesURLs);
 
-    this.collectDataAndAddPet();
+    this.AddPet();
     }, err => {
-      console.log(err);
+      console.log("pet upload failed!",err);
+      this.formUploaded = true;
+      this.success = false;
     });
   }
 }

@@ -140,8 +140,8 @@ export class MultiSelectChipsComponent
   //value is of type iTrait
   toggleSelection(chip: MatChip) {
     if (!this.disabled) chip.toggleSelected();
-    console.log("1. chip changed! : Property no. " + chip.value.id + " changed to : " + chip.selected);
-    console.log("2. CHIP DETAILS: name" + chip.value.name + " traitOptions: " + chip.value.traitOptions);
+    console.log("chip changed! : Property no. " + chip.value.id + " changed to : " + chip.selected);
+    console.log("CHIP DETAILS: name" + chip.value.name + " traitOptions: " + chip.value.traitOptions);
 
     //strategy: all mats are "no" and then update to change
     var optionId;

@@ -133,7 +133,7 @@ namespace GetPet.Scheduler
             RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 7,9,11,13,15,17,19 * * *");
             RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
 
-            RecurringJob.Trigger("NotificationSenderJob");
+            RecurringJob.Trigger("SpcaJob");
         }
     }
 }

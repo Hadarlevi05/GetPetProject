@@ -47,6 +47,7 @@ import { DonationsComponent } from './modules/home/components/donations/donation
 import { ArticleViewComponent } from './modules/articles/components/article-view/article-view.component';
 import { ArticlesComponent } from './modules/articles/components/articles/articles.component';
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
+import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 
 
@@ -103,13 +104,16 @@ import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
     MatCheckboxModule,
     FlexLayoutModule,
     MatProgressBarModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatMomentDateModule
   ],
   providers: [
     DatePipe,
     AuthGuard,
     AuthenticationService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

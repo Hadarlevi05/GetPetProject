@@ -9,13 +9,13 @@ import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import { DatePipe } from '@angular/common';
 import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
 import { UploadService } from '../../services/upload.service';
 import { Pet } from '../../models/pet';
 import { PetSource } from 'src/app/shared/enums/pet-source';
 import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
+import { ITraitOption } from 'src/app/shared/models/itrait-option';
 
 @Component({
   selector: 'app-addpet',
@@ -197,18 +197,26 @@ export class AddpetComponent
     return user.id;
   }
 
+  convertGMTtoUTC(date: Date): Date {
+    var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+    return new Date(now_utc);
+  }
+
   AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([1])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
+    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
     this.pet.images = this.imagesURLs;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
-    this.pet.traits = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {})     //convert array to dictionary
+    this.pet.traits = this.allSelectedTraits.reduce((a,x) => ({...a, [x.traitId]: x.traitOptionId}), {});    //convert array to dictionary
     
     console.log("PET TO SEND INFO: ", this.pet);
 

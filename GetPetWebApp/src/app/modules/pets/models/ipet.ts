@@ -27,5 +27,7 @@ export interface IPet {
 
   traits: Map<string, string>;
 
+  booleanTraits: Map<string, string>;
+
   creationTimestamp: Date;
 }

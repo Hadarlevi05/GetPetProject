@@ -55,16 +55,13 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     private petsService: PetsService,
     private notificationService: NotificationService,
     private authenticationService: AuthenticationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
-
-
 
   openPetDialog(pet: IPet) {
     this.dialog.open(PetViewComponent, {
-      data: {
-        pet: pet
-      }
+      data: { pet }
     });
   }
 
@@ -137,7 +134,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 10, date, [this.animalTypeId]);
+    let filter = new PetFilter(1, 100, date, [this.animalTypeId]);
 
     this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
@@ -175,13 +172,10 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
   }
 
   openSnackBar(message: string, action: string) {
-    // this.snackBar.open(message, action);
-    alert(message);
+    this.snackBar.open(message, action, { duration: 3_000 });
   }
 
   addSearchNotification() {
-
-
     const user = this.authenticationService.currentUserValue;
 
     if (!user.id) {
@@ -194,7 +188,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
       const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
 
       this.notificationService.upsert(filter).subscribe(result => {
-
+        this.openSnackBar('התראה נוספה בהצלחה!', 'סגור');
       });
     }
 

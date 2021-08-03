@@ -56,8 +56,8 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<T> AddAsync(T entity)
         {
-            entity.CreationTimestamp = 
-                entity.UpdatedTimestamp = 
+            entity.CreationTimestamp =
+                entity.UpdatedTimestamp =
                     DateTime.UtcNow;
 
             await entities.AddAsync(entity);
@@ -76,5 +76,13 @@ namespace GetPet.BusinessLogic.Repositories
 
         public abstract IQueryable<T> LoadNavigationProperties(IQueryable<T> query);
 
+
+        public async Task<IEnumerable<Trait>> SearchByQueryString(string stringquery)
+        {
+           return _context.Traits.FromSqlRaw(stringquery).ToList();
+        }
     }
+
+
+
 }

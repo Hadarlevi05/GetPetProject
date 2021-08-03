@@ -48,6 +48,7 @@ import { ArticleViewComponent } from './modules/articles/components/article-view
 import { ArticlesComponent } from './modules/articles/components/articles/articles.component';
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     FlexLayoutModule,
     MatProgressBarModule,
     MatSidenavModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   providers: [
     DatePipe,

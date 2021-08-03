@@ -2,7 +2,7 @@
     <!-- <a [href]="pet.sourceLink" target="_blank"> -->
     <span class="image-container">
         <img mat-card-image [src]="pet.images[0]" [alt]="pet.name">
-        <mat-card-title class="text-block">{{ pet.name }}</mat-card-title>
+        <mat-card-title class="text-block">{{ pet.name }}, {{getAge(pet.birthday)}}</mat-card-title>
     </span>
     <!-- </a> -->
     <mat-card-content>
@@ -13,7 +13,10 @@
         <p>
             <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">
                 <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
-                    {{ trait.key }}: {{ trait.value }}
+                    {{ trait.value }}
+                </mat-chip>
+                <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.booleanTraits | keyvalue">
+                    {{ trait.key }}
                 </mat-chip>
             </mat-chip-list>
         </p>

@@ -96,6 +96,8 @@ namespace GetPet.Scheduler
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
                 .AddScoped<INotificationRepository, NotificationRepository>()
                 .AddScoped<INotificationHandler, NotificationHandler>()
+                .AddScoped<ITraitOptionRepository, TraitOptionRepository>()
+
                 .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())                
                 .AddTransient<IMailHandler, MailHandler>();
 
@@ -133,7 +135,7 @@ namespace GetPet.Scheduler
             RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 7,9,11,13,15,17,19 * * *");
             RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
 
-            RecurringJob.Trigger("NotificationSenderJob");
+            RecurringJob.Trigger("RehovotSpaJob");
         }
     }
 }

@@ -97,11 +97,12 @@ namespace GetPet.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PetTrait>()
-                .HasOne<Trait>(pt => pt.Trait);                     
+                .HasOne<Trait>(pt => pt.Trait);
 
             #endregion
 
             #region Trait
+
 
             modelBuilder.Entity<Trait>()
                 .HasMany<TraitOption>(pt => pt.TraitOptions)

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
+import { ArticleViewComponent } from 'src/app/modules/articles/components/article-view/article-view.component';
 import { IArticle } from 'src/app/modules/articles/models/iarticle';
 import { ArticleService } from 'src/app/modules/articles/services/article.service';
+import { PetViewComponent } from 'src/app/modules/pets/components/pet-view/pet-view.component';
 import { IPet } from 'src/app/modules/pets/models/ipet';
 import { PetFilter } from 'src/app/modules/pets/models/pet-filter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
@@ -43,7 +46,8 @@ export class IndexComponent implements OnInit {
     private petsService: PetsService,
     private articleService: ArticleService,
     private animalTypeService: AnimalTypeService,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadPets();
@@ -88,7 +92,7 @@ export class IndexComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new BaseFilter(1, 10, date);
+    let filter = new BaseFilter(1, 100, date);
 
     this.articleService.search(filter).subscribe(articles => {
       this.articles = articles;
@@ -112,4 +116,17 @@ export class IndexComponent implements OnInit {
       this.petLoading = false;
     });
   }
+
+  openArticleDialog(article: IArticle) {
+    this.dialog.open(ArticleViewComponent, {
+      data: { article }
+    });
+  }
+
+  openPetDialog(pet: IPet) {
+    this.dialog.open(PetViewComponent, {
+      data: { pet }
+    });
+  }
+
 }

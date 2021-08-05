@@ -104,6 +104,52 @@ namespace GetPet.Crawler.Parsers
             return results;
         }
 
+        public virtual Dictionary<Trait, TraitOption> ParseTraits(string description, List<Trait> allTraits)
+        {
+            var results = new Dictionary<Trait, TraitOption>();
+            if (allTraits == null)
+                return results;
+
+            foreach (var trait in allTraits)
+            {
+                switch (trait.TraitType)
+                {
+                    case TraitType.Boolean:
+                        {
+                            var isTrue = description.Contains(trait.Name) && !description.Contains($"לא {trait.Name}");
+                            var isFalse = description.Contains($"לא {trait.Name}");
+
+                            var isTrueFemale = description.Contains(trait.FemaleName) && !description.Contains($"לא {trait.FemaleName}");
+                            var isFalseFemale = description.Contains($"לא {trait.FemaleName}");
+
+                            if (isTrue || isTrueFemale)
+                            {
+                                var yes = trait.TraitOptions.FirstOrDefault(t => t.Option == "כן");
+                                results[trait] = yes;
+                            }
+                            else if (isFalse || isFalseFemale)
+                            {
+                                var no = trait.TraitOptions.FirstOrDefault(t => t.Option == "לא");
+                                results[trait] = no;
+                            }
+                            break;
+                        };
+                    case TraitType.Values:
+                        {
+                            var result = trait.TraitOptions.FirstOrDefault(t => description.Contains(t.Option) || description.Contains(t.FemaleOption));
+
+                            if (result != null)
+                            {
+                                results[trait] = result;
+                            }
+                            break;
+                        };
+                }
+            }
+
+            return results;
+        }
+
         public virtual DateTime ParseAgeInYear(string inputAge)
         {
             int year = 0;

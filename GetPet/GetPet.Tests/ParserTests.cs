@@ -30,7 +30,8 @@ namespace GetPet.Tests
         private static ICityRepository cityRepository;
         private static IAnimalTypeRepository animalTypeRepository;
         private static IUserRepository userRepository;
-
+        private static ITraitOptionRepository traitOptionRepository;
+        
 
         [SetUp]
         public void Setup()
@@ -53,7 +54,7 @@ namespace GetPet.Tests
         public async Task MockTest()
         {
             // ctrl r+t
-            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
+            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
             await crawler.Load(file);
@@ -82,7 +83,7 @@ namespace GetPet.Tests
         public async Task SpcaTest()
         {
             // ctrl r+t
-            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
+            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
             await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
 
             var pets = spca.Parse();
@@ -94,7 +95,7 @@ namespace GetPet.Tests
         public void RehovotSpa()
         {
             // ctrl r+t
-            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository);
+            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
             spca.Load(@"http://rehovotspa.org.il/our-dogs/");
 
             var pets = spca.Parse();

@@ -8,19 +8,21 @@
             <span>
                 מאת
                 {{ article.user.name }}
+
+
+
             </span>
             <span>
+                <button mat-button>
+                    <mat-icon>comment</mat-icon>
+                    {{ article.commentCount }}
+                </button>
                 {{ article.creationTimestamp | date: 'dd/MM/yyyy' }}
             </span>
 
         </p>
     </mat-card-content>
-    <mat-card-actions>
-        <button mat-button>
+    <!-- <mat-card-actions>
 
-            <mat-icon>comment</mat-icon>
-            {{ article.commentCount }}
-        </button>
-
-    </mat-card-actions>
+    </mat-card-actions> -->
 </mat-card>

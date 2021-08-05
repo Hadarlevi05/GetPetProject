@@ -47,9 +47,8 @@ import { DonationsComponent } from './modules/home/components/donations/donation
 import { ArticleViewComponent } from './modules/articles/components/article-view/article-view.component';
 import { ArticlesComponent } from './modules/articles/components/articles/articles.component';
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
-import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-
-
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -77,10 +76,6 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatChipsModule,
     MatTabsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -100,12 +95,11 @@ import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/m
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
-    MatDividerModule,
-    MatCheckboxModule,
     FlexLayoutModule,
     MatProgressBarModule,
     MatSidenavModule,
-    MatMomentDateModule
+    MatDialogModule,
+    MatSnackBarModule
   ],
   providers: [
     DatePipe,

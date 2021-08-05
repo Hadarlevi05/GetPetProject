@@ -21,9 +21,10 @@ namespace GetPet.Crawler.Crawlers
             ITraitRepository traitRepository,
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            ITraitOptionRepository traitOptionRepository
             ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository)
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository)
         { }
 
         public override async Task<User> CreateUser()

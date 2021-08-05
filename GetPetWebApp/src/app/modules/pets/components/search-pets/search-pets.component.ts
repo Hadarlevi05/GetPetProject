@@ -9,12 +9,14 @@ import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
 import { AuthenticationService } from 'src/app/shared/services/authentication.service';
-import { NotificationService } from 'src/app/shared/services/notification.service';
 import { TraitsService } from 'src/app/shared/services/traits.service';
 import { IPet } from '../../models/ipet';
 import { PetFilter } from '../../models/pet-filter';
 import { PetsService } from '../../services/pets.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { PetViewComponent } from '../pet-view/pet-view.component';
+import { MatDialog } from '@angular/material/dialog';
+import { NotificationService } from 'src/app/shared/services/notification.service';
 @Component({
   selector: 'app-search-pets',
   templateUrl: './search-pets.component.html',
@@ -53,8 +55,15 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     private petsService: PetsService,
     private notificationService: NotificationService,
     private authenticationService: AuthenticationService,
-    //private snackBar: MatSnackBar
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
+
+  openPetDialog(pet: IPet) {
+    this.dialog.open(PetViewComponent, {
+      data: { pet }
+    });
+  }
 
   ngOnDestroy(): void {
 
@@ -125,7 +134,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 10, date, [this.animalTypeId]);
+    let filter = new PetFilter(1, 100, date, [this.animalTypeId]);
 
     this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
@@ -163,13 +172,10 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
   }
 
   openSnackBar(message: string, action: string) {
-    // this.snackBar.open(message, action);
-    alert(message);
+    this.snackBar.open(message, action, { duration: 3_000 });
   }
 
   addSearchNotification() {
-
-
     const user = this.authenticationService.currentUserValue;
 
     if (!user.id) {
@@ -182,7 +188,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
       const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
 
       this.notificationService.upsert(filter).subscribe(result => {
-
+        this.openSnackBar('התראה נוספה בהצלחה!', 'סגור');
       });
     }
 

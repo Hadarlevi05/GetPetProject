@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<Trait>> SearchAsync(TraitFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
 
             if (filter.AnimalTypeId.HasValue)
             {
@@ -46,6 +45,8 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(t => t.Name.Contains(filter.TraitName));
             }
+            query = base.SearchAsync(entities.AsQueryable(), filter);
+
             return await query.ToListAsync();
         }
 

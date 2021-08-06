@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

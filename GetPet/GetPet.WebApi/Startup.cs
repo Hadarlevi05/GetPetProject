@@ -74,6 +74,7 @@ namespace GetPet.WebApi
                 .AddScoped<IPetTraitRepository, PetTraitRepository>()
                 .AddScoped<ITraitOptionRepository, TraitOptionRepository>()
                 .AddScoped<IArticleRepository, ArticleRepository>()
+                .AddScoped<ICommentRepository, CommentRepository>()
                 .AddScoped<IMetaFileLinkRepository, MetaFileLinkRepository>()
                 .AddScoped<IGetPetDbContextSeed, GetPetDbContextSeed>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
@@ -96,7 +97,7 @@ namespace GetPet.WebApi
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GetPet.WebApi v1"));
             }
             app.UseCors("CorsPolicy");
-          app.UseStaticFiles();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +45,7 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<Pet>> SearchAsync(PetFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
 
             if (filter.CreatedSince.HasValue)
             {
@@ -81,6 +81,7 @@ namespace GetPet.BusinessLogic.Repositories
                         p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
                 }
             }
+            query = base.SearchAsync(entities.AsQueryable(), filter);
 
             // AsSplitQuery => To avoid performance penalty due to EF joining behaviour https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
             return await query.AsSplitQuery().ToListAsync();

@@ -2,16 +2,15 @@
 using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
+using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
-using GetPet.WebApi.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
-using GetPet.BusinessLogic.Repositories;
+using System.Threading.Tasks;
 
 namespace GetPet.WebApi.Controllers
 {

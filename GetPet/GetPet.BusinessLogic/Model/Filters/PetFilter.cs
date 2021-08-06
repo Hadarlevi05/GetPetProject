@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GetPet.BusinessLogic.Model
+namespace GetPet.BusinessLogic.Model.Filters
 {
     public class PetFilter : BaseFilter
     {

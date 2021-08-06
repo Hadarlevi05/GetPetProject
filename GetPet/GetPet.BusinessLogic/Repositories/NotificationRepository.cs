@@ -7,6 +7,7 @@ using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {
@@ -34,11 +35,13 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<Notification>> SearchAsync(NotificationFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
+
 
             if (filter.UserId > 0)            
                 query = query.Where(i => i.UserId == filter.UserId);
-            
+
+            query = base.SearchAsync(entities.AsQueryable(), filter);
             return await query.ToListAsync();
         }
 

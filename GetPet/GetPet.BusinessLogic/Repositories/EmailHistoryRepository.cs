@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {

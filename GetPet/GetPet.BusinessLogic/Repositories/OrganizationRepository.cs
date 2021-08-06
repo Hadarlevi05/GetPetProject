@@ -7,6 +7,7 @@ using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {
@@ -35,7 +36,7 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<Organization>> SearchAsync(OrganizationFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
@@ -46,6 +47,8 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(o => o.Email.StartsWith(filter.Email));
             }
+
+            query = base.SearchAsync(entities.AsQueryable(), filter);
 
             return await query.ToListAsync();
         }

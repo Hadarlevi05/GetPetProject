@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {
@@ -53,7 +54,7 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<User>> SearchAsync(UserFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filter.Name))
             {
@@ -81,6 +82,9 @@ namespace GetPet.BusinessLogic.Repositories
                     query = query.Where(u => !u.EmailSubscription);
                 }
             }
+
+            query = base.SearchAsync(entities.AsQueryable(), filter);
+
             return await query.ToListAsync();
         }
 

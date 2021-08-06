@@ -39,6 +39,7 @@ namespace GetPet.Crawler.Parsers
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalType = animalType,
+                AnimalTypeId = animalType.Id,
             };
 
             pet.MetaFileLinks = new List<MetaFileLink>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -61,7 +62,7 @@ namespace GetPet.WebApi.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
+        [HttpPost]  
         public async Task<IActionResult> Post(UserDto user)
         {
             if (!ModelState.IsValid)

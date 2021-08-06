@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Handlers.Abstractions

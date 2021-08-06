@@ -24,12 +24,12 @@ namespace GetPet.WebApi.Middlewares
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last().Trim("\"".ToCharArray());
 
             if (token != null)
-                AttachUserToContext(context, userRepository, token);
+                await AttachUserToContext(context, userRepository, token);
 
             await _next(context);
         }
 
-        private void AttachUserToContext(HttpContext context, IUserRepository userRepository, string token)
+        private async Task AttachUserToContext(HttpContext context, IUserRepository userRepository, string token)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace GetPet.WebApi.Middlewares
                 var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userRepository.GetByIdAsync(userId).Result;
+                context.Items["User"] = await userRepository.GetByIdAsync(userId);
             }
             catch
             {

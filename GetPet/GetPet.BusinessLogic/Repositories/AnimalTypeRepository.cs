@@ -7,6 +7,7 @@ using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {

@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace GetPet.BusinessLogic.Model
+namespace GetPet.BusinessLogic.Model.Filters
 {
     public class BaseFilter
     {

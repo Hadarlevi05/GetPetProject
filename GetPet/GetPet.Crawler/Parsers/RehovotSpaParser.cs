@@ -31,6 +31,7 @@ namespace GetPet.Crawler.Parsers
         public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
         {
             AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            int animalTypeId = animalType.Id;
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
@@ -53,6 +54,7 @@ namespace GetPet.Crawler.Parsers
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalType = animalType,
+                AnimalTypeId = animalTypeId,
             };
 
             pet.MetaFileLinks = new List<MetaFileLink>

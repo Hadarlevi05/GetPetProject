@@ -1,4 +1,4 @@
-﻿namespace GetPet.BusinessLogic.Model
+﻿namespace GetPet.BusinessLogic.Model.Filters
 {
     public class NotificationFilter: BaseFilter
     {

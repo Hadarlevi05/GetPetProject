@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,7 +29,6 @@ namespace GetPet.BusinessLogic.Repositories
                 .Include(a => a.MetaFileLink)
                 .Include(a => a.Comments)
                     .ThenInclude(c => c.User);
-
         }
 
         public new async Task DeleteAsync(int id)
@@ -40,9 +38,10 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<Article>> SearchAsync(BaseFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
+            var query = entities.AsQueryable();
 
             query = query.OrderBy(c => c.CreationTimestamp);
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }

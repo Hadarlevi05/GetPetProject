@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using GetPet.BusinessLogic;
 using System;
 using GetPet.Data.Entities;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.WebApi.Controllers
 {

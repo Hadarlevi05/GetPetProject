@@ -18,7 +18,7 @@ namespace GetPet.Scheduler.Jobs
         {
             Console.WriteLine($"{nameof(NotificationSenderJob)} Job starting run");
 
-              await _notificationHandler.SendNotificationAsync();
+            await _notificationHandler.SendNotificationAsync();
 
             Console.WriteLine($"{nameof(NotificationSenderJob)} Job ending run");
         }

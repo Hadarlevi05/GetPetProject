@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { BaseFilter } from 'src/app/shared/models/base-filter';
 import { IArticle } from '../../models/iarticle';
 import { ArticleService } from '../../services/article.service';
+import { ArticleViewComponent } from '../article-view/article-view.component';
 
 @Component({
   selector: 'app-articles',
@@ -17,7 +19,8 @@ export class ArticlesComponent implements OnInit {
 
   constructor(
     private articleService: ArticleService,
-    private router: Router) { }
+    private router: Router,
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.loadArticles();
@@ -36,6 +39,12 @@ export class ArticlesComponent implements OnInit {
       this.articles = articles;
 
       this.articleLoading = false;
+    });
+  }
+
+  openArticleDialog(article: IArticle) {
+    this.dialog.open(ArticleViewComponent, {
+      data: { article }
     });
   }
 }

@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ namespace GetPet.BusinessLogic.Repositories
                 .SingleOrDefaultAsync(e => e.Id == id);
 
             if (existing == null)
-                throw new System.Exception($"entity not exist with id: {id}");
+                throw new Exception($"entity not exist with id: {id}");
 
             existing.IsDeleted = true;
         }
@@ -37,8 +38,12 @@ namespace GetPet.BusinessLogic.Repositories
         {
             query = LoadNavigationProperties(query);
 
+            if (filter.Page > 1)
+            {
+                query = query
+                    .Skip(filter.PerPage * (filter.Page - 1));
+            }
             query = query
-                .Skip(filter.PerPage * (filter.Page - 1))
                 .Take(filter.PerPage);
 
             return query;
@@ -58,7 +63,7 @@ namespace GetPet.BusinessLogic.Repositories
         {
             entity.CreationTimestamp =
                 entity.UpdatedTimestamp =
-                    DateTime.UtcNow;
+                    DateTime.Now;
 
             await entities.AddAsync(entity);
 
@@ -68,7 +73,7 @@ namespace GetPet.BusinessLogic.Repositories
         public async Task UpdateAsync(T entity)
         {
             entity.UpdatedTimestamp =
-                DateTime.UtcNow;
+                DateTime.Now;
 
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -76,13 +81,9 @@ namespace GetPet.BusinessLogic.Repositories
 
         public abstract IQueryable<T> LoadNavigationProperties(IQueryable<T> query);
 
-
         public async Task<IEnumerable<Trait>> SearchByQueryString(string stringquery)
         {
            return _context.Traits.FromSqlRaw(stringquery).ToList();
         }
     }
-
-
-
 }

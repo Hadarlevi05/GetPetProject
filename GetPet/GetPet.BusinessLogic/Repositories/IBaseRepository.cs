@@ -1,4 +1,4 @@
-﻿using GetPet.BusinessLogic.Model;
+﻿using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data.Entities;
 using System.Linq;
 using System.Threading.Tasks;

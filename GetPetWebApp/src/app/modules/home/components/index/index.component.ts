@@ -36,11 +36,9 @@ export class IndexComponent implements OnInit {
     animalType: new FormControl('')
   });
 
-
   toggleGridColumns() {
     this.gridColumns = this.gridColumns === 3 ? 4 : 3;
   }
-
 
   constructor(
     private petsService: PetsService,

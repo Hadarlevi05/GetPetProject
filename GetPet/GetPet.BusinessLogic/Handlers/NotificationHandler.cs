@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -84,7 +84,7 @@ namespace GetPet.BusinessLogic.Handlers
             foreach (var notification in notifications)
             {
                 var filter = JsonConvert.DeserializeObject<PetFilter>(notification.PetFilterSerialized);
-                filter.CreatedSince = DateTime.UtcNow.Date;
+                filter.CreatedSince = DateTime.Now.Date;
 
                 var user = users[notification.UserId];
 
@@ -139,10 +139,10 @@ namespace GetPet.BusinessLogic.Handlers
 
                 var emailHistory = new EmailHistory()
                 {
-                    UpdatedTimestamp = DateTime.UtcNow,
+                    UpdatedTimestamp = DateTime.Now,
                     UserId = user.Id,
                     NotificationId = notification.Id,
-                    CreationTimestamp = DateTime.UtcNow
+                    CreationTimestamp = DateTime.Now
                 };
                 await _emailHistoryRepository.AddAsync(emailHistory);
                 await _unitOfWork.SaveChangesAsync();

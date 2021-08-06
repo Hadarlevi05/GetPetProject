@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,8 +37,8 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<IEnumerable<TraitOption>> SearchAsync(TraitOptionFilter filter)
         {
-            var query = base.SearchAsync(entities.AsQueryable(), filter);
-
+            var query = entities.AsQueryable();
+                                    
             if(filter.TraitId.HasValue)
             {
                 query = query.Where(o => o.TraitId == filter.TraitId);
@@ -49,6 +48,8 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(o => o.Trait.Name.StartsWith(filter.Name));
             }
+
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }

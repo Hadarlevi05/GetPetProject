@@ -17,8 +17,29 @@
     opacity: 0.65
     padding: 10px
 
+section
+    display: flex
+
+    aside
+        display: flex
+        justify-content: space-between
+        flex-direction: column
+
 .example-header-image
     // background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg')
     width: 40px
     height: 40px
     background-size: cover
+
+.comment-container
+    max-height: 400px
+    overflow: auto
+    clear: both
+
+.comment-form
+    display: flex
+    align-content: space-around
+    flex-wrap: nowrap
+    flex-direction: row
+    justify-content: flex-start
+    align-items: baseline

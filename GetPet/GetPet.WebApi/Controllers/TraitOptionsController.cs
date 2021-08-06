@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GetPet.Data.Entities;
+using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.WebApi.Controllers
 {
@@ -40,7 +41,6 @@ namespace GetPet.WebApi.Controllers
             {
                 return BadRequest();
             }
-
             return Ok(await _traitOptionRepository.SearchAsync(filter));
         }
     }

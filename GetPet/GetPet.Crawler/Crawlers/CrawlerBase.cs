@@ -1,6 +1,7 @@
 ﻿using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
@@ -65,7 +66,7 @@ namespace GetPet.Crawler.Crawlers
 
         protected virtual async Task<List<City>> GetAllCities()
         {
-            var filter = new CityFilter()
+            var filter = new CityFilter
             {
                 Page = 1,
                 PerPage = 1000,
@@ -189,10 +190,11 @@ namespace GetPet.Crawler.Crawlers
             });
 
             var id = traitGenderID.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
-            var options = await _traitOptionRepository.SearchAsync(new TraitOptionFilter()
+            var filter = new TraitOptionFilter
             {
                 TraitId = id
-            });
+            };
+            var options = await _traitOptionRepository.SearchAsync(filter);
             string gender = (int)animal.Gender == 1 ? "זכר" : "נקבה";
             var optionId = options.Where(o => o.Option == gender).FirstOrDefault().Id;
             animal.PetTraits.Add(new PetTrait()

@@ -61,7 +61,7 @@ namespace GetPet.WebApi.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
+        [HttpPost]  
         public async Task<IActionResult> Post(UserDto user)
         {
             if (!ModelState.IsValid)

@@ -49,6 +49,7 @@ import { ArticlesComponent } from './modules/articles/components/articles/articl
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [

@@ -100,7 +100,7 @@ namespace GetPet.Data
             // Cats
             var colorCat = context.Traits.Add(new Trait { Name = "צבע", FemaleName = "צבע", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
             var ageCat = context.Traits.Add(new Trait { Name = "גיל", FemaleName = "גיל", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
-            var genderCat = context.Traits.Add(new Trait { Name = "מין", FemaleName = "נקבה", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
+            var genderCat = context.Traits.Add(new Trait { Name = "מין", FemaleName = "מין", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Values });
 
             var catCurious = context.Traits.Add(new Trait { Name = "סקרן", FemaleName = "סקרנית", IsBoolean = true, AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });
             var catBrave = context.Traits.Add(new Trait { Name = "אמיץ", FemaleName = "אמיצה", IsBoolean = true, AnimalTypeId = cat.Id, CreationTimestamp = DateTime.UtcNow, UpdatedTimestamp = DateTime.UtcNow, TraitType = Enums.TraitType.Boolean });

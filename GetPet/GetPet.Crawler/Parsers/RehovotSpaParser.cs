@@ -53,6 +53,7 @@ namespace GetPet.Crawler.Parsers
                 Description = description,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
+                AnimalType = animalType,
                 AnimalTypeId = animalTypeId,
             };
 

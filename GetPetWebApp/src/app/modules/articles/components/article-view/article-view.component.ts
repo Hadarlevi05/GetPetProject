@@ -1,5 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from 'src/app/shared/services/authentication.service';
 import { IArticle } from '../../models/iarticle';
 import { IComment } from '../../models/icomment';
 import { ArticleService } from '../../services/article.service';
@@ -19,7 +21,9 @@ export class ArticleViewComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private articleService: ArticleService) {
+    private articleService: ArticleService,
+    private snackBar: MatSnackBar,
+    private authenticationService: AuthenticationService) {
     this.article = data.article;
   }
 
@@ -32,6 +36,12 @@ export class ArticleViewComponent implements OnInit {
 
   addComment() {
 
+    const user = this.authenticationService.currentUserValue;
+    if (!user.id) {
+      this.openSnackBar('אתה חייב להרשם לבצע פעולה זו', 'סגור');
+      return;
+    }
+
     const comment = {
       text: this.text
     } as IComment;
@@ -43,4 +53,9 @@ export class ArticleViewComponent implements OnInit {
       this.article.comments = comments as IComment[];
     })
   }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, { duration: 3_000 });
+  }
+
 }

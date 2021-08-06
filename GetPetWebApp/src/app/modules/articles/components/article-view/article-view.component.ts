@@ -36,6 +36,8 @@ export class ArticleViewComponent implements OnInit {
       text: this.text
     } as IComment;
 
+    this.text = '';
+
     this.articleService.addComment(this.article.id, comment).subscribe(comments => {
 
       this.article.comments = comments as IComment[];

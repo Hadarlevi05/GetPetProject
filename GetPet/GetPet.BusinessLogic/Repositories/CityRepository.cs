@@ -42,9 +42,9 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(c => c.Name.StartsWith(filter.Name));
             }
-            query = base.SearchAsync(entities.AsQueryable(), filter);
-
             query = query.OrderBy(c => c.Name);
+            query = base.SearchAsync(query, filter);
+
 
             return await query.ToListAsync();
         }

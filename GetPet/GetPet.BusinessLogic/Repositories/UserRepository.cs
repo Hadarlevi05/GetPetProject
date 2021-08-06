@@ -83,7 +83,7 @@ namespace GetPet.BusinessLogic.Repositories
                 }
             }
 
-            query = base.SearchAsync(entities.AsQueryable(), filter);
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }
@@ -134,8 +134,8 @@ namespace GetPet.BusinessLogic.Repositories
                 Name = registeredUser.Name,
                 PhoneNumber = registeredUser.PhoneNumber,
                 EmailSubscription = registeredUser.EmailSubscription,
-                CreationTimestamp = DateTime.UtcNow,
-                UpdatedTimestamp = DateTime.UtcNow,
+                CreationTimestamp = DateTime.Now,
+                UpdatedTimestamp = DateTime.Now,
             };
 
             if (registeredUser.Organization != null)
@@ -145,8 +145,8 @@ namespace GetPet.BusinessLogic.Repositories
                     Name = registeredUser.Organization.Name,
                     Email = registeredUser.Email,
                     PhoneNumber = registeredUser.PhoneNumber,
-                    CreationTimestamp = DateTime.UtcNow,
-                    UpdatedTimestamp = DateTime.UtcNow
+                    CreationTimestamp = DateTime.Now,
+                    UpdatedTimestamp = DateTime.Now
                 };
             }
             entities.Add(user);
@@ -166,7 +166,7 @@ namespace GetPet.BusinessLogic.Repositories
             if (!SecurePasswordHasher.Verify(loginUser.Password, user.PasswordHash))
                 throw new Exception("Password incorrect");
 
-            user.LastLoginDate = DateTime.UtcNow;
+            user.LastLoginDate = DateTime.Now;
 
             await _unitOfWork.SaveChangesAsync();
             var token = GenerateJwtToken(user);
@@ -192,7 +192,7 @@ namespace GetPet.BusinessLogic.Repositories
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.Now.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

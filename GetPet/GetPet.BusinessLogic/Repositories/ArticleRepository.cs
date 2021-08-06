@@ -41,8 +41,7 @@ namespace GetPet.BusinessLogic.Repositories
             var query = entities.AsQueryable();
 
             query = query.OrderBy(c => c.CreationTimestamp);
-
-            query = base.SearchAsync(entities.AsQueryable(), filter);
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }

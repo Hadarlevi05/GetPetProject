@@ -63,7 +63,7 @@ namespace GetPet.BusinessLogic.Repositories
         {
             entity.CreationTimestamp =
                 entity.UpdatedTimestamp =
-                    DateTime.UtcNow;
+                    DateTime.Now;
 
             await entities.AddAsync(entity);
 
@@ -73,7 +73,7 @@ namespace GetPet.BusinessLogic.Repositories
         public async Task UpdateAsync(T entity)
         {
             entity.UpdatedTimestamp =
-                DateTime.UtcNow;
+                DateTime.Now;
 
             _context.Entry(entity).State = EntityState.Modified;
             await _context.SaveChangesAsync();

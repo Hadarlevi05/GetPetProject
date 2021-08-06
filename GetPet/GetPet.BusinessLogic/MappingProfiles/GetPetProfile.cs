@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model;
+using GetPet.Common;
 using GetPet.Data.Entities;
 using System.Linq;
 
@@ -56,7 +57,9 @@ namespace GetPet.BusinessLogic.MappingProfiles
         {
             CreateMap<Article, ArticleDto>()
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.MetaFileLink == null ? null : src.MetaFileLink.Path))
-                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count));
+                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count))
+                .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content.ToHtmlText()));
+
 
             CreateMap<ArticleDto, Article>();
         }

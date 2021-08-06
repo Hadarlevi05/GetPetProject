@@ -40,6 +40,15 @@
 
     </aside>
     <main>
+
+        <div class="no-pets-found" *ngIf="pets.length === 0 && !loading">
+            <h2>
+                לא נמצאו בעליי חיים.<br />
+                ביכולתך להרשם להתראות לקבל מייל כשנוסף בעל חיים עם בחירות הסינון שלך
+
+            </h2>
+        </div>
+
         <div class="content" *ngIf="!loading">
             <div fxLayout="row wrap" fxLayoutGap="16px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"

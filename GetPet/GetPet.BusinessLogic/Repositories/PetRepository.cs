@@ -81,7 +81,7 @@ namespace GetPet.BusinessLogic.Repositories
                         p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
                 }
             }
-            query = base.SearchAsync(entities.AsQueryable(), filter);
+            query = base.SearchAsync(query, filter);
 
             // AsSplitQuery => To avoid performance penalty due to EF joining behaviour https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
             return await query.AsSplitQuery().ToListAsync();

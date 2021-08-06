@@ -45,7 +45,7 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(t => t.Name.Contains(filter.TraitName));
             }
-            query = base.SearchAsync(entities.AsQueryable(), filter);
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }

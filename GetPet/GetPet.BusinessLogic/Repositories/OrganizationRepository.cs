@@ -48,7 +48,7 @@ namespace GetPet.BusinessLogic.Repositories
                 query = query.Where(o => o.Email.StartsWith(filter.Email));
             }
 
-            query = base.SearchAsync(entities.AsQueryable(), filter);
+            query = base.SearchAsync(query, filter);
 
             return await query.ToListAsync();
         }

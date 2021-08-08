@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Utils
 {
@@ -43,10 +44,14 @@ namespace GetPet.Crawler.Utils
         private static List<string> _thirteenYear = new List<string>() { "13 שנים", "שלוש עשרה", "13" };
         private static List<string> _fourteenYear = new List<string>() { "14 שנים",  "ארבע עשרה", "14" };
 
-        
+        //check exact match
         public static int ConvertYear(string input)
-        {           
-            if (_fourteenYear.Any(x => input.Contains(x)))
+        {
+            int bYear;
+
+            if (Int32.TryParse(input, out bYear) && input.Length == 4)  //date given in year (e.g. 2017)
+                return (DateTime.Now.Year - bYear);
+            else if (_fourteenYear.Any(x => input.Contains(x)))
                 return 14;
             else if (_thirteenYear.Any(x => input.Contains(x)))
                 return 13;
@@ -66,9 +71,9 @@ namespace GetPet.Crawler.Utils
                 return 6;
             else if (_fiveYear.Any(x => input.Contains(x)))
                 return 5;
-            else if(_fourYear.Any(x => input.Contains(x)))
+            else if (_fourYear.Any(x => input.Contains(x)))
                 return 4;
-            else if(_threeYear.Any(x => input.Contains(x)))
+            else if (_threeYear.Any(x => input.Contains(x)))
                 return 3;
             else if (_twoYear.Any(x => input.Contains(x)))
                 return 2;
@@ -78,17 +83,17 @@ namespace GetPet.Crawler.Utils
             return 0;
         }
 
-        private static List<string> _oneMonth = new List<string>() { "חודש", "1 חודש" };
-        private static List<string> _twoMonth = new List<string>() { "חודשיים", "2 חודשים" };
-        private static List<string> _threeMonth = new List<string>() { "3 חודשים", "שלושה חודשים" };
-        private static List<string> _fourMonth = new List<string>() { "4 חודשים", "ארבעה חודשים" };
-        private static List<string> _fiveMonth = new List<string>() { "5 חודשים", "חמישה חודשים" };
-        private static List<string> _sixMonth = new List<string>() { "6 חודשים", "שישה חודשים", "חצי" };
-        private static List<string> _sevenMonth = new List<string>() { "7 חודשים", "שבעה חודשים" };
-        private static List<string> _eightMonth = new List<string>() { "8 חודשים", "שמונה חודשים" };
-        private static List<string> _nineMonth = new List<string>() { "9 חודשים", "תשעה חודשים" };
-        private static List<string> _tenMonth = new List<string>() { "10 חודשים", "עשרה חודשים" };
-        private static List<string> _elevenMonth = new List<string>() { "11 חודשים", "אחד עשר חודשים", "אחד עשרה חודשים" };
+        private static List<string> _oneMonth = new List<string>() { "חודש", "1 חודש", "כחודש", "1" };
+        private static List<string> _twoMonth = new List<string>() { "חודשיים", "2 חודשים", "כ2 חודשים", "כחודשיים", "2" };
+        private static List<string> _threeMonth = new List<string>() { "3 חודשים", "שלושה חודשים", "כ3 חודשים", "כשלושה חודשים", "3"};
+        private static List<string> _fourMonth = new List<string>() { "4 חודשים", "ארבעה חודשים", "כ4 חודשים", "כארבעה חודשים", "4" };
+        private static List<string> _fiveMonth = new List<string>() { "5 חודשים", "חמישה חודשים", "כ5 חודשים", "כחמישה חודשים", "5"};
+        private static List<string> _sixMonth = new List<string>() { "6 חודשים", "שישה חודשים", "חצי","כ6 חודשים","כשישה חודשים", "כחצי שנה", "חצי שנה", "6" };
+        private static List<string> _sevenMonth = new List<string>() { "7 חודשים", "שבעה חודשים", "כ7 חודשים","כשבעה חודשים", "7"};
+        private static List<string> _eightMonth = new List<string>() { "8 חודשים", "שמונה חודשים", "כ8 חודשים","כשמונה חודשים", "8"};
+        private static List<string> _nineMonth = new List<string>() { "9 חודשים", "תשעה חודשים","כ9 חודשים", "כתשעה חודשים", "9" };
+        private static List<string> _tenMonth = new List<string>() { "10 חודשים", "עשרה חודשים", "כ10 חודשים","כעשרה חודשים", "10" };
+        private static List<string> _elevenMonth = new List<string>() { "11 חודשים", "אחד עשר חודשים", "אחד עשרה חודשים", "כ11 חודשים", "כאחד עשר חודשים", "11" };
 
         public static int ConvertMonth(string input)
         {

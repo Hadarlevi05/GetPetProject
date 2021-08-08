@@ -120,6 +120,22 @@ namespace GetPet.Tests
             Assert.AreEqual(p.ParseAgeInYear("בן שנה."), now.AddYears(-1).Date);
             Assert.AreEqual(p.ParseAgeInYear("בת שנתיים."), now.AddYears(-2).Date);
             Assert.AreEqual(p.ParseAgeInYear("בת שלוש."), now.AddYears(-3).Date);
+
+            Assert.AreEqual(p.ParseAgeInYear("בת כ10 חודשים."), now.AddYears(0).AddMonths(-10).Date);
+            Assert.AreEqual(p.ParseAgeInYear("חודש"), now.AddYears(0).AddMonths(-1).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן חודש"), now.AddYears(0).AddMonths(-1).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בת 7 חודשים"), now.AddYears(0).AddMonths(-7).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן כשישה חודשים"), now.AddYears(0).AddMonths(-6).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן כ6 חודשים"), now.AddYears(0).AddMonths(-6).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן כחצי שנה"), now.AddYears(0).AddMonths(-6).Date);
+            Assert.AreEqual(p.ParseAgeInYear("בן חצי שנה"), now.AddYears(0).AddMonths(-6).Date);
+
+
+            Assert.AreEqual(p.ParseAgeInYear("2016"), now.AddYears(-5).AddMonths(0).Date);
+            Assert.AreEqual(p.ParseAgeInYear("2017"), now.AddYears(-4).AddMonths(0).Date);
+            Assert.AreEqual(p.ParseAgeInYear("2018"), now.AddYears(-3).AddMonths(0).Date);
+            Assert.AreEqual(p.ParseAgeInYear("2014"), now.AddYears(-7).AddMonths(0).Date);
+
             Debugger.Break();
         }
 

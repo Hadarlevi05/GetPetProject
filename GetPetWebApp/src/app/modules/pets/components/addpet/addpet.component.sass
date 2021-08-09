@@ -24,11 +24,56 @@
     display: flex
     flex-wrap: wrap
 
-.gender-radio-group
+::ng-deep .gender-radio-group
   display: flex
-  flex-direction: column
+  flex-direction: row
+  justify-content: space-between
+
+#name
+  width: 200px
+
+#bd
+  width: 200px
 
 .textarea
   width:550px
   padding: 3px
   border: 0
+
+:host
+  display: flex
+  height: 100vh
+  justify-content: center
+  // align-items: center
+  padding: 10px
+  background: #dfdfdf
+
+.container
+  max-width: 60%
+  width: 100%
+  //background: #fff
+  padding: 10px
+  border-radius: 5px
+
+::ng-deep .next-button
+  background-color: #e2ecfa
+  border-color: black
+
+mat-step
+  width: 100px
+
+.pet-details
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  width: 80%
+
+.pet-details .input-box
+  margin: 20px 0 12px 0
+  width: calc(100% / 2 - 20px)
+
+.pet-details .traits_chips
+  width: 100%
+
+.pet-details .input-box input
+  width: 150%

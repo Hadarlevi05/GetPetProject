@@ -210,7 +210,7 @@ namespace GetPet.Crawler.Parsers
                 year = ParserUtils.ConvertYear(age);
 
             }
-            //problem- maybe add a general else that will assian Date.now birthday(alissa)
+            //problem- maybe add a general else that will assign Date.now birthday(alissa)
             return DateTime.Now.AddYears(-year).AddMonths(-month).Date;
         }
     }

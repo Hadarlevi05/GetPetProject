@@ -16,11 +16,15 @@ import { PetSource } from 'src/app/shared/enums/pet-source';
 import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { ITraitOption } from 'src/app/shared/models/itrait-option';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-addpet',
   templateUrl: './addpet.component.html',
-  styleUrls: ['./addpet.component.sass']
+  styleUrls: ['./addpet.component.sass'],
+  providers: [{
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: {displayDefaultIndicatorType: false}
+  }]
 })
 
 export class AddpetComponent

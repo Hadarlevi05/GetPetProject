@@ -49,7 +49,6 @@ import { ArticlesComponent } from './modules/articles/components/articles/articl
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -77,6 +76,10 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapte
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
     MatTabsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -96,6 +99,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapte
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
+    MatDividerModule,
+    MatCheckboxModule,
     FlexLayoutModule,
     MatProgressBarModule,
     MatSidenavModule,
@@ -106,9 +111,8 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapte
     DatePipe,
     AuthGuard,
     AuthenticationService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } }
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+    bootstrap: [AppComponent]
+  })
+  
+  export class AppModule { }

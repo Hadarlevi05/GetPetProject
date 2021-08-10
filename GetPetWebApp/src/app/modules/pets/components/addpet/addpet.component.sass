@@ -16,18 +16,11 @@
 .small-font 
   font-size: 12px
 
-.container 
-  width:100%
-  margin: 0 auto
-
-  .row
-    display: flex
-    flex-wrap: wrap
-
 ::ng-deep .gender-radio-group
   display: flex
   flex-direction: row
   justify-content: space-between
+  width: 100%
 
 #name
   width: 200px
@@ -48,7 +41,7 @@
   padding: 10px
   background: #dfdfdf
 
-.container
+.all
   max-width: 60%
   width: 100%
   //background: #fff
@@ -58,6 +51,12 @@
 ::ng-deep .next-button
   background-color: #e2ecfa
   border-color: black
+
+mat-label
+  color: #a1a1a1
+
+.label-margin-bottom
+    margin-bottom: 15px
 
 mat-step
   width: 100px
@@ -69,11 +68,20 @@ mat-step
   width: 80%
 
 .pet-details .input-box
-  margin: 20px 0 12px 0
-  width: calc(100% / 2 - 20px)
+  // margin: 20px 0 12px 0
+  // width: calc(100% / 2 - 20px)
 
 .pet-details .traits_chips
   width: 100%
 
 .pet-details .input-box input
   width: 150%
+
+.uploader
+  margin-bottom: 15px
+
+.submit-button
+  margin-top: 20px
+  color: white
+  background-color: #fa4383
+  width: 70%

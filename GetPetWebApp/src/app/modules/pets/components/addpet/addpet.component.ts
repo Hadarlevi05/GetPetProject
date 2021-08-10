@@ -89,18 +89,20 @@ export class AddpetComponent
     this.addPetFormGroup = this._formBuilder.group({
       formArray: this._formBuilder.array([
         this._formBuilder.group({
-          animalType: ['', [Validators.required]]
+          animalType: ['', Validators.required]
         }),
         this._formBuilder.group({
           petName: new FormControl('', [Validators.required,
           Validators.minLength(2),
           Validators.maxLength(10)]),
-          gender: ['', [Validators.required]],
-          dob: ['', [Validators.required]],
+          gender: ['', Validators.required],
+          dob: ['', Validators.required],
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
+        }),
+        this._formBuilder.group({
           description: ['', [Validators.required,
-          Validators.maxLength(1000)]],
+          Validators.maxLength(1000)]]
         }),
         this._formBuilder.group({
           //upload pictures
@@ -211,7 +213,7 @@ export class AddpetComponent
   AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
-    this.pet.description = this.formArray?.get([1])?.get('description')?.value;
+    this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
     console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;

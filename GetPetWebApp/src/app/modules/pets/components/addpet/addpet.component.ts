@@ -46,7 +46,6 @@ export class AddpetComponent
   ngAfterViewInit() {
   }
 
-
   pet: Pet = {
     name: '',
     description: '',
@@ -92,17 +91,14 @@ export class AddpetComponent
           animalType: ['', Validators.required]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(10)]),
+          petName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
           gender: ['', Validators.required],
           dob: ['', Validators.required],
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
         }),
         this._formBuilder.group({
-          description: ['', [Validators.required,
-          Validators.maxLength(1000)]]
+          description: ['', [Validators.required, Validators.maxLength(1000)]]
         }),
         this._formBuilder.group({
           //upload pictures
@@ -237,8 +233,7 @@ export class AddpetComponent
     this.loading = false;
   }
 
-
-  async onSubmit(postData) {
+  onSubmit(postData) {
 
     //collect all files to upload (of FormDate type)
     this.components.forEach(uploader => {

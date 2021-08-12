@@ -1,6 +1,7 @@
-<div class="title">
+<h1>
   הוסף בעל חיים
-</div>
+</h1>
+<br>
 
 <div class="all">
   <!--Add pet form starts-->
@@ -30,12 +31,18 @@
         <!--Insert pet name-->
         <div class="pet-details">
           <div class="container mb-4">
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between mt-4">
               <div class="input-box">
-                <mat-form-field hintLabel="מקסימום 10 תווים" appearance="outline" id="name">
+
+
+                <mat-form-field hintLabel="10 תווים לכל היותר" appearance="outline" id="name">
+                  <mat-error class="text-danger"
+                    *ngIf="formArray?.get([1])?.get('petName')?.touched && formArray?.get([1])?.get('petName')?.hasError('required')">
+                    חובה להזין שם
+                  </mat-error>
                   <mat-label>שם</mat-label>
-                  <input #petName maxlength="10" formControlName="petName" matInput name="name" placeholder="שם"
-                    required />
+                  <input #petName maxlength="10" id="name" formControlName="petName" matInput name="name"
+                    placeholder="שם" required />
                   <mat-hint align="end">{{petName.value?.length || 0}}/10</mat-hint>
                 </mat-form-field>
               </div>
@@ -44,6 +51,12 @@
               <!--Select date of birth-->
               <div class="input-box">
                 <mat-form-field appearance="outline" id="bd">
+
+                  <mat-error class="text-danger"
+                    *ngIf="formArray?.get([1])?.get('dob')?.touched && formArray?.get([1])?.get('dob')?.hasError('required')">
+                    חובה להזין תאריך לידה
+                  </mat-error>
+
                   <mat-label>תאריך לידה</mat-label>
                   <mat-hint>*ניתן למלא תאריך לידה משוער</mat-hint>
                   <input formControlName="dob" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" />
@@ -55,19 +68,19 @@
           </div>
 
           <!--Select gender-->
-          <div class="container mb-4">
+          <div class="container mb-5">
             <div class="label-margin-bottom">
               <mat-label>בחרו מין:</mat-label>
             </div>
             <mat-radio-group formControlName="gender" class="margin-left gender-radio-group">
-              <mat-radio-button class="gender-button" *ngFor="let gender of gender_arr; index as id" [value]=id>
+              <mat-radio-button class="gender-button" *ngFor="let gender of gender_arr; index as id" [value]=id [checked]="id === 0">
                 {{gender}}
               </mat-radio-button>
             </mat-radio-group>
           </div>
 
           <!--Unique traits for chosen animal type-->
-          <div class="traits-chips">
+          <div class="traits-chips mb-5">
             <div class="label-margin-bottom">
               <mat-label>בחרו תכונות:</mat-label>
             </div>
@@ -136,8 +149,8 @@
         <div class="container mb-4">
           <div class="d-flex justify-content-center">
             <button mat-button class="submit-button" type="submit" (click)="onSubmit(addPetForm.value)">שלח</button>
+          </div>
         </div>
-      </div>
       </mat-step>
 
       <!-- Icon overrides. -->

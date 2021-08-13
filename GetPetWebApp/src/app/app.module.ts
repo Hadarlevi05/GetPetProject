@@ -76,6 +76,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatChipsModule,
     MatTabsModule,
     ReactiveFormsModule,
     FormsModule,
@@ -95,6 +99,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatCheckboxModule,
     MatChipsModule,
     MatIconModule,
+    MatDividerModule,
+    MatCheckboxModule,
     FlexLayoutModule,
     MatProgressBarModule,
     MatSidenavModule,
@@ -106,6 +112,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AuthGuard,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+    bootstrap: [AppComponent]
+  })
+  
+  export class AppModule { }

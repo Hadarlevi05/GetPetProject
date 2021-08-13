@@ -1,130 +1,199 @@
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>הוסף בעל חיים</mat-card-title>
-  </mat-card-header>
+<h1>
+  הוסף בעל חיים
+</h1>
+<br>
 
-  <mat-card-content>
-    <div class="container">
-      <!--Add pet form starts-->
-      <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="formUploaded">
-        <mat-vertical-stepper dir="rtl" #stepper [linear]="true" formArrayName="formArray">
-          <mat-step formGroupName="0" [stepControl]="formArray?.get([0])!" label="בחר סוג חיה">
-            <!--Select animal type-->
-            <div class="row">
-              <mat-form-field appearance="outline">
-                <mat-label>סוג</mat-label>
-                <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
-                  (selectionChange)="loadUniqueTraits($event)">
-                  <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
-                    {{ type.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </mat-step>
+<div class="all">
+  <!--Add pet form starts-->
+  <form [formGroup]="addPetFormGroup" #addPetForm="ngForm" [hidden]="formUploaded">
+    <mat-vertical-stepper dir="rtl" #stepper [linear]="true" formArrayName="formArray">
+      <!--Select animal type-->
+      <mat-step formGroupName="0" [stepControl]="formArray?.get([0])!" label="בחר סוג חיה" state="type">
+        <div class="container mb-4">
+          <div class="d-flex justify-content-start">
+            <mat-form-field appearance="outline">
+              <mat-label>סוג</mat-label>
+              <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType"
+                (selectionChange)="loadUniqueTraits($event)">
+                <mat-option *ngFor="let type of animaltypes_arr" [value]="type.id">
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button class="next-button" mat-button matStepperNext>הבא</button>
+          </div>
+        </div>
+      </mat-step>
 
-          <mat-step formGroupName="1" [stepControl]="formArray?.get([1])!" label="פרטי החיה">
-            <!--Insert pet name-->
-            <div class="row">
-              <mat-form-field hintLabel="מקסימום 10 תווים" appearance="outline">
-                <mat-label>שם</mat-label>
-                <input #petName maxlength="10" formControlName="petName" matInput name="name" placeholder="שם"
-                  required />
-                <mat-hint align="end">{{petName.value?.length || 0}}/10</mat-hint>
-              </mat-form-field>
-            </div>
+      <mat-step formGroupName="1" [stepControl]="formArray?.get([1])!" label="פרטי החיה" state="details">
+        <!--Insert pet name-->
+        <div class="pet-details">
+          <div class="container mb-4">
+            <div class="d-flex justify-content-between mt-4">
+              <div class="input-box">
 
-            <!--Select gender-->
-            <div class="col-6">
-              <mat-label>מין</mat-label>
-              <mat-radio-group formControlName="gender" class="margin-left gender-radio-group">
-                <mat-radio-button *ngFor="let gender of gender_arr; index as id" [value]=id> {{gender}}
-                </mat-radio-button>
-              </mat-radio-group>
-            </div>
 
-            <!--Select date of birth-->
-            <div class="row">
-              <mat-form-field appearance="outline">
-                <mat-label>תאריך לידה</mat-label>
-                <mat-hint>*ניתן למלא תאריך לידה משוער</mat-hint>
-                <input formControlName="dob" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" />
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </div>
+                <mat-form-field hintLabel="10 תווים לכל היותר" appearance="outline" id="name">
+                  <mat-error class="text-danger"
+                    *ngIf="formArray?.get([1])?.get('petName')?.touched && formArray?.get([1])?.get('petName')?.hasError('required')">
+                    חובה להזין שם
+                  </mat-error>
+                  <mat-label>שם</mat-label>
+                  <input #petName maxlength="10" id="name" formControlName="petName" matInput name="name"
+                    placeholder="שם" required />
+                  <mat-hint align="end">{{petName.value?.length || 0}}/10</mat-hint>
+                </mat-form-field>
+              </div>
 
-            <!--Unique traits for chosen animal type-->
-            <div class="row">
-              <mat-label>בחר תכונות מיוחדות:</mat-label>
-              <app-chips-multi-select #chips [options]="traitsWithBooleanValue"
-                [isMatChipsTraitsLoaded]="isMatChipsLoaded" (data)="eventHandler($event)"
-                formControlName="chipsControl">
-              </app-chips-multi-select>
-            </div>
 
-            <div class="row" *ngFor="let trait of traitsWithSetOfValues">
+              <!--Select date of birth-->
+              <div class="input-box">
+                <mat-form-field appearance="outline" id="bd">
 
-              <app-select [trait]="trait" (selectionEvent)="onTraitSelection($event)"></app-select>
+                  <mat-error class="text-danger"
+                    *ngIf="formArray?.get([1])?.get('dob')?.touched && formArray?.get([1])?.get('dob')?.hasError('required')">
+                    חובה להזין תאריך לידה
+                  </mat-error>
 
-            </div>
-
-            <!--Some more details about the pet-->
-            <div class="row">
-              <mat-form-field appearance="outline">
-                <textarea matInput style="width: 300px;" placeholder="תיאור נוסף" formControlName="description"
-                  cdkTextareaAutosize cdkAutosizeMinRows="5" cdkAutosizeMaxRows="10">
-                    </textarea>
-              </mat-form-field>
-            </div>
-          </mat-step>
-
-          <mat-step formGroupName="2" label="הוספת תמונות" [optional]="true">
-            <!--Image upload-->
-            <div class="row">
-              <app-file-uploader #fileuploader></app-file-uploader>
-              <app-file-uploader #fileuploader></app-file-uploader>
-              <app-file-uploader #fileuploader></app-file-uploader>
-            </div>
-          </mat-step>
-
-          <mat-step formGroupName="3" [stepControl]="formArray?.get([3])!" label="סיום ושליחה">
-            <div class="row">
-              <!--TODO: a preview of the form before sending-->
-
-              <!--submit button-->
-              <div class="row">
-                <button mat-button color="primary" type="submit" (click)="onSubmit(addPetForm.value)">שלח</button>
+                  <mat-label>תאריך לידה</mat-label>
+                  <mat-hint>*ניתן למלא תאריך לידה משוער</mat-hint>
+                  <input formControlName="dob" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
               </div>
             </div>
-          </mat-step>
-        </mat-vertical-stepper>
-      </form>
-    </div>
-    <!--Add pet form ends-->
+          </div>
 
-    <div *ngIf="formUploaded" class="notification is-success">
-      <div *ngIf="success; else failed">
-        <div>
-          בעל החיים הוסף בהצלחה!
+          <!--Select gender-->
+          <div class="container mb-5">
+            <div class="label-margin-bottom">
+              <mat-label>בחרו מין:</mat-label>
+            </div>
+            <mat-radio-group formControlName="gender" class="margin-left gender-radio-group">
+              <mat-radio-button class="gender-button" *ngFor="let gender of gender_arr; index as id" [value]=id [checked]="id === 0">
+                {{gender}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!--Unique traits for chosen animal type-->
+          <div class="traits-chips mb-5">
+            <div class="label-margin-bottom">
+              <mat-label>בחרו תכונות:</mat-label>
+            </div>
+            <app-chips-multi-select #chips [options]="traitsWithBooleanValue"
+              [isMatChipsTraitsLoaded]="isMatChipsLoaded" (data)="eventHandler($event)" formControlName="chipsControl">
+            </app-chips-multi-select>
+          </div>
+
+          <div class="input-box" *ngFor="let trait of traitsWithSetOfValues">
+            <app-select [trait]="trait" (selectionEvent)="onTraitSelection($event)"></app-select>
+          </div>
+
         </div>
-        <div>
-          <a routerLink="/">חזרו לעמוד הראשי</a>
+        <div class="container mb-4">
+          <div class="d-flex justify-content-end">
+            <button class="next-button" mat-button matStepperNext>הבא</button>
+          </div>
         </div>
-      </div>
-      <ng-template #failed>
-        <div>
-          אנחנו מצטערים:( חלה שגיאה בהעלאת בעל החיים.
-          אנא
-          <a routerLink="/pets/add">נסו שוב</a>
-          או
-          <a routerLink="/">חזרו לעמוד הראשי</a>
+      </mat-step>
+
+      <!-- Some more details about the pet -->
+      <mat-step formGroupName="2" label="הוספת תיאור" state="description">
+
+        <div class="container mb-4">
+          <div class="d-flex justify-content-end">
+            <mat-form-field appearance="outline" class="p-2 flex-grow-1">
+              <textarea matInput rows="8" placeholder="פרטו עוד על חיית המחמד" formControlName="description">
+                  </textarea>
+            </mat-form-field>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button class="next-button" mat-button matStepperNext>הבא</button>
+          </div>
+
         </div>
+
+      </mat-step>
+
+      <!--Image upload-->
+      <mat-step formGroupName="3" label="הוספת תמונות" [optional]="true" state="pictures">
+        <div class="label-margin-bottom">
+          <mat-label>הוסיפו עד 3 תמונות</mat-label>
+        </div>
+        <div class="container mb-4">
+          <div class="d-flex flex-column">
+            <div class="uploader">
+              <app-file-uploader #fileuploader></app-file-uploader>
+            </div>
+            <div class="uploader">
+              <app-file-uploader #fileuploader></app-file-uploader>
+            </div>
+            <div class="uploader">
+              <app-file-uploader #fileuploader></app-file-uploader>
+            </div>
+
+            <div class="d-flex justify-content-end">
+              <button class="next-button" mat-button matStepperNext>הבא</button>
+            </div>
+          </div>
+        </div>
+      </mat-step>
+
+      <!--submit button-->
+      <mat-step formGroupName="4" [stepControl]="formArray?.get([4])!" label="סיום ושליחה" state="send">
+        <div class="container mb-4">
+          <div class="d-flex justify-content-center">
+            <button mat-button class="submit-button" type="submit" (click)="onSubmit(addPetForm.value)">שלח</button>
+          </div>
+        </div>
+      </mat-step>
+
+      <!-- Icon overrides. -->
+      <ng-template matStepperIcon="type">
+        <mat-icon>pets</mat-icon>
       </ng-template>
+      <ng-template matStepperIcon="details">
+        <mat-icon>list_alt</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="pictures">
+        <mat-icon>camera_alt</mat-icon>
+      </ng-template>
+      <ng-template matStepperIcon="send">
+        <mat-icon>send</mat-icon>
+      </ng-template>
+
+    </mat-vertical-stepper>
+  </form>
+</div>
+<!--Add pet form ends-->
+
+<div *ngIf="formUploaded" class="notification is-success">
+  <div *ngIf="success; else failed">
+    <div>
+      בעל החיים הוסף בהצלחה!
     </div>
+    <div>
+      <a routerLink="/">חזרו לעמוד הראשי</a>
+    </div>
+  </div>
+  <ng-template #failed>
+    <div>
+      אנחנו מצטערים:( חלה שגיאה בהעלאת בעל החיים.
+      אנא
+      <a routerLink="/pets/add">נסו שוב</a>
+      או
+      <a routerLink="/">חזרו לעמוד הראשי</a>
+    </div>
+  </ng-template>
+</div>
 
 
-    <!-- <div *ngIf="success; else failed" class="notification is-success">
+<!-- <div *ngIf="success; else failed" class="notification is-success">
       <div>
         בעל החיים הוסף בהצלחה!
       </div>

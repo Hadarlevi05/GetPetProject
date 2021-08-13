@@ -1,3 +1,6 @@
+.title
+  font-size: 15px
+  
 .full-width 
   width: 100%
 
@@ -16,19 +19,69 @@
 .small-font 
   font-size: 12px
 
-.container 
-  width:100%
-  margin: 0 auto
-
-  .row
-    display: flex
-    flex-wrap: wrap
-
-.gender-radio-group
+::ng-deep .gender-radio-group
   display: flex
-  flex-direction: column
+  flex-direction: row
+  justify-content: space-between
+  width: 100%
+
+#name
+  width: 200px
+
+#bd
+  width: 200px
 
 .textarea
   width:550px
   padding: 3px
   border: 0
+
+:host
+  display: flex
+  height: 100vh
+  justify-content: right
+  // align-items: center
+  padding: 10px
+
+.all
+  max-width: 60%
+  width: 100%
+  padding: 10px
+
+::ng-deep .next-button
+  background-color: #e2ecfa
+  border-color: black
+
+mat-label
+  color: #a1a1a1
+
+.label-margin-bottom
+    margin-bottom: 15px
+
+mat-step
+  width: 100px
+
+.pet-details
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
+  width: 80%
+
+.pet-details .input-box
+  // margin: 20px 0 12px 0
+  // width: calc(100% / 2 - 20px)
+
+.pet-details .traits_chips
+  width: 100%
+
+.pet-details .input-box input
+  width: 150%
+
+.uploader
+  margin-bottom: 15px
+
+.submit-button
+  margin-top: 20px
+  color: white
+  background-color: #fa4383
+  width: 70%

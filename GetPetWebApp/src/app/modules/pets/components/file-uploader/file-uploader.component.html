@@ -1,13 +1,11 @@
 <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept="image/*">
 
 <div class="file-upload">
-
-   {{fileName || "No file uploaded yet."}}
-
     <button mat-mini-fab color="primary" class="upload-btn"
       (click)="onClick()">
         <mat-icon>attach_file</mat-icon>
-
     </button>
+
+    {{fileName || "בחר קובץ"}}
 
 </div>

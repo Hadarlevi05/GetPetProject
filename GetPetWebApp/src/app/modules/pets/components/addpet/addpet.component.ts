@@ -9,7 +9,6 @@ import { ITrait } from 'src/app/shared/models/itrait';
 import { TraitFilter } from 'src/app/shared/models/trait-filter';
 import { ITraitSelection } from 'src/app/shared/models/itrait-selection';
 import { FileUploaderComponent } from '../file-uploader/file-uploader.component';
-import { DatePipe } from '@angular/common';
 import { MultiSelectChipsComponent } from '../multi-select-chips/multi-select-chips.component';
 import { UploadService } from '../../services/upload.service';
 import { Pet } from '../../models/pet';
@@ -17,11 +16,15 @@ import { PetSource } from 'src/app/shared/enums/pet-source';
 import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { ITraitOption } from 'src/app/shared/models/itrait-option';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-addpet',
   templateUrl: './addpet.component.html',
-  styleUrls: ['./addpet.component.sass']
+  styleUrls: ['./addpet.component.sass'],
+  providers: [{
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: {displayDefaultIndicatorType: false}
+  }]
 })
 
 export class AddpetComponent
@@ -42,7 +45,6 @@ export class AddpetComponent
 
   ngAfterViewInit() {
   }
-
 
   pet: Pet = {
     name: '',
@@ -86,18 +88,17 @@ export class AddpetComponent
     this.addPetFormGroup = this._formBuilder.group({
       formArray: this._formBuilder.array([
         this._formBuilder.group({
-          animalType: ['', [Validators.required]]
+          animalType: ['', Validators.required]
         }),
         this._formBuilder.group({
-          petName: new FormControl('', [Validators.required,
-          Validators.minLength(2),
-          Validators.maxLength(10)]),
-          gender: ['', [Validators.required]],
-          dob: ['', [Validators.required]],
+          petName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(10)]),
+          gender: ['', Validators.required],
+          dob: ['', Validators.required],
           chipsControl: new FormControl(['']),
           traits: this._formBuilder.array([]),
-          description: ['', [Validators.required,
-          Validators.maxLength(1000)]],
+        }),
+        this._formBuilder.group({
+          description: ['', [Validators.required, Validators.maxLength(1000)]]
         }),
         this._formBuilder.group({
           //upload pictures
@@ -198,11 +199,19 @@ export class AddpetComponent
     return user.id;
   }
 
+  convertGMTtoUTC(date: Date): Date {
+    var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+
+    return new Date(now_utc);
+  }
+
   AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
-    this.pet.description = this.formArray?.get([1])?.get('description')?.value;
+    this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
+    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
@@ -224,8 +233,7 @@ export class AddpetComponent
     this.loading = false;
   }
 
-
-  async onSubmit(postData) {
+  onSubmit(postData) {
 
     //collect all files to upload (of FormDate type)
     this.components.forEach(uploader => {

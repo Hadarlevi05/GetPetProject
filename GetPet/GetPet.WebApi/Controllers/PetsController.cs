@@ -85,18 +85,26 @@ namespace GetPet.WebApi.Controllers
                     });
             }
 
-            //get list of all traits
-            var filter = new TraitFilter();
-            var allTraits = _traitRepository.SearchAsync(filter).Result.ToList();
+            var traitsFilter = new TraitFilter
+            {
+                AnimalTypeId = pet.AnimalTypeId
+            };
 
-            //convert dictionary of <traitId, traitOptionid> to list of <PetTrait>
-            List<Trait> allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == pet.AnimalTypeId).ToList();
+            ////get list of all traits
+            //var filter = new TraitFilter();
+            //var allTraits = _traitRepository.SearchAsync(filter).Result.ToList();
+
+            ////convert dictionary of <traitId, traitOptionid> to list of <PetTrait>
+            //List<Trait> allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == pet.AnimalTypeId).ToList();
+
+            //get list of all traits by AnimalTypeId
+            List<Trait> traitsByAnimal = _traitRepository.SearchAsync(traitsFilter).Result.ToList();
             
             petToInsert.PetTraits = new List<PetTrait>();
             foreach (KeyValuePair<string, string> entry in pet.Traits)
             {
                 //Use entry.Value & entry.Key
-                var foundTrait = allTraitsByAnimalType.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
+                var foundTrait = traitsByAnimal.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
                 var foundTraitOption = foundTrait.TraitOptions.FirstOrDefault(op => op.Id == int.Parse(entry.Value));
 
                 petToInsert.PetTraits.Add(

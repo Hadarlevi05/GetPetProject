@@ -12,8 +12,8 @@ namespace GetPet.BusinessLogic.Model.Filters
         public int Page { get; set; } = 1;
 
         [Range(1, 1000)]
-        [DefaultValue(20)]
-        public int PerPage { get; set; } = 20;
+        [DefaultValue(100)]
+        public int PerPage { get; set; } = 100;
 
 
     }

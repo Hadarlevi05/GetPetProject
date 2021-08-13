@@ -1,4 +1,5 @@
-﻿using GetPet.Crawler.Parsers.Abstractions;
+﻿using GetPet.Common;
+using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
@@ -22,7 +23,7 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits, animalTypes);
+                var pet = ParseSingleNode(node, allTraits, animalTypes);                
                 pet.User = user;
 
                 results.Add(pet);
@@ -32,9 +33,11 @@ namespace GetPet.Crawler.Parsers
         }
 
         public abstract HtmlNodeCollection GetNodes();
+
         public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes);
 
         public abstract string ParseName(HtmlNode node);
+
         public abstract DateTime ParseAgeInYear(HtmlNode node);
 
         public Gender ParseGender(HtmlNode node, string name)

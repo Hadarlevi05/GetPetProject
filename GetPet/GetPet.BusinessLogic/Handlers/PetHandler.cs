@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
+using GetPet.BusinessLogic.Repositories;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
-using GetPet.BusinessLogic.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Handlers
 {
@@ -17,24 +16,34 @@ namespace GetPet.BusinessLogic.Handlers
         protected readonly IPetRepository _petRepository;
         protected readonly IMapper _mapper;
         protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IPetHistoryStatusRepository _petHistoryStatusRepository;
 
-        public PetHandler(IPetRepository petRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public PetHandler(
+            IMapper mapper,
+            IUnitOfWork unitOfWork,
+            IPetRepository petRepository,
+            IPetHistoryStatusRepository petHistoryStatusRepository)
         {
             _petRepository = petRepository;
+            _petHistoryStatusRepository = petHistoryStatusRepository;
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
 
         public async Task SetPetStatus(int petId, PetStatus petStatus)
         {
-
+            await _petHistoryStatusRepository.AddAsync(new PetHistoryStatus
+            {
+                PetId = petId,
+                Status = petStatus                                
+            });
         }
 
         public async Task AddPet(Pet pet)
         {
             try
             {
-                await _petRepository.AddAsync(pet);
+                await _petRepository.AddAsync(pet);                
             }
             catch (Exception ex)
             {

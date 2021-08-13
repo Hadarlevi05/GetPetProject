@@ -23,9 +23,8 @@ namespace GetPet.Crawler.Parsers
             catch (Exception ex)
             {
                 Console.WriteLine("Cannot parse nodes", ex);
+                throw;
             }
-
-            return null;
         }
 
         public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
@@ -132,9 +131,8 @@ namespace GetPet.Crawler.Parsers
             catch (Exception ex)
             {
                 Console.WriteLine("Cannot load details page", ex);
+                throw;
             }
-
-            return null;
         }
 
         public string ParseDetailsURL(HtmlNode node)

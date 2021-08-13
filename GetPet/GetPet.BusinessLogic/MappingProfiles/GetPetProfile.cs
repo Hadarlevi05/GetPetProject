@@ -2,6 +2,7 @@
 using GetPet.BusinessLogic.Model;
 using GetPet.Common;
 using GetPet.Data.Entities;
+using System;
 using System.Linq;
 
 namespace GetPet.BusinessLogic.MappingProfiles
@@ -33,6 +34,13 @@ namespace GetPet.BusinessLogic.MappingProfiles
             MetaFileLinkMapping();
 
             TraitOptionMapping();
+
+            PetHistoryStatusMapping();
+        }
+
+        private void PetHistoryStatusMapping()
+        {
+            CreateMap<PetHistoryStatus, PetHistoryStatusDto>();
         }
 
         private void TraitOptionMapping()

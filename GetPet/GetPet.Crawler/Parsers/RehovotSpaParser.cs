@@ -68,8 +68,7 @@ namespace GetPet.Crawler.Parsers
             };
 
             pet.PetTraits = new List<PetTrait>();
-            // ask Shlomi
-            // pet.PetTraits.Add(new PetTrait { Trait= "גיל", TraitOptionId = 2 });
+
             foreach (var trait in traits)
             {
                 pet.PetTraits.Add(

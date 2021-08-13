@@ -297,6 +297,22 @@ namespace GetPet.Data
 
             await context.SaveChangesAsync();
 
+            foreach (var pet in context.Pets.ToList())
+            {
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.Created
+                });
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.WaitingForAdoption
+                });
+            }
+
+            await context.SaveChangesAsync();
+
             var booleanTraits = await context.TraitOptions.Where(to => to.TraitId == goodWithDogs.Entity.Id || to.TraitId == vaccinated.Entity.Id).ToListAsync();
 
             foreach (var pet in context.Pets)

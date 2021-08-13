@@ -6,6 +6,7 @@ namespace GetPet.Data.Enums
 {
     public enum PetStatus
     {
+        Created,
         WaitingForAdoption,
         Adopted
     }

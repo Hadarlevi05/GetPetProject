@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model.Filters;
+using GetPet.Common;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,9 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IPetRepository : IBaseRepository<Pet>
     {
         Task<IEnumerable<Pet>> SearchAsync(PetFilter filter);
+        string GetPetHashed(Pet pet);
+        Task<bool> IsPetExist(Pet pet);
+        Task<IEnumerable<Pet>> IsPetExist(IEnumerable<Pet> pets);
     }
     public class PetRepository : BaseRepository<Pet>, IPetRepository
     {
@@ -24,6 +28,7 @@ namespace GetPet.BusinessLogic.Repositories
         public override IQueryable<Pet> LoadNavigationProperties(IQueryable<Pet> query)
         {
             query = query
+                .Include(q => q.PetHistoryStatuses)
                 .Include(q => q.MetaFileLinks)
                 .Include(q => q.AnimalType)
                 .Include(q => q.PetTraits)
@@ -78,7 +83,7 @@ namespace GetPet.BusinessLogic.Repositories
                 foreach (var boolTrait in filter.BooleanTraits)
                 {
                     query = query.Where(p =>
-                        p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
+                        p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));
                 }
             }
             query = base.SearchAsync(query, filter);
@@ -92,10 +97,38 @@ namespace GetPet.BusinessLogic.Repositories
             return await base.GetByIdAsync(id);
         }
 
-
         public new async Task UpdateAsync(Pet entity)
         {
             await base.UpdateAsync(entity);
+        }
+
+        public string GetPetHashed(Pet pet)
+        {
+            var hashedExternalId = HashHelper.Sha256($"{pet.Name}_{pet.Description}_{pet.Source}");
+
+            return hashedExternalId;
+        }
+
+        public async Task<bool> IsPetExist(Pet pet)
+        {
+            var hashedExternalId = GetPetHashed(pet);
+
+            var exist = await entities
+                .AnyAsync(p => p.ExternalId == hashedExternalId);
+
+            return exist;
+        }
+
+        public async Task<IEnumerable<Pet>> IsPetExist(IEnumerable<Pet> pets)
+        {
+            var hashedExternalId = pets
+                .Select(p => GetPetHashed(p));
+
+            var petExists = await entities
+                .Where(p => hashedExternalId.Contains(p.ExternalId))
+                .ToListAsync();
+
+            return petExists;
         }
     }
 }

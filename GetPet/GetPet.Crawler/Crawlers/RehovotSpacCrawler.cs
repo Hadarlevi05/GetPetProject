@@ -50,9 +50,9 @@ namespace GetPet.Crawler.Crawlers
                 },
             };
 
-            var existingUser = IsUserExists(user.Name, user.PhoneNumber);
+            var existingUser = (await IsUserExists(user)) ?? user;
 
-            return (existingUser != null) ? existingUser : user;
+            return existingUser;
         }
     }
 }

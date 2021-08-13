@@ -22,7 +22,7 @@ namespace GetPet.Scheduler.Jobs
 
             var result = await _rlaCrawler.Parse();
 
-            await _rlaCrawler.InsertToDB(result);
+            await _rlaCrawler.InsertPets(result);
 
             Console.WriteLine($"{nameof(RehovotSpaJob)} Job Ending run");
         }

@@ -1,12 +1,13 @@
 ﻿using GetPet.BusinessLogic;
 using GetPet.BusinessLogic.Handlers.Abstractions;
-using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Common;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
+using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,8 @@ namespace GetPet.Crawler.Crawlers
         protected readonly IUserRepository _userRepository;
         protected readonly ITraitOptionRepository _traitOptionRepository;
 
-        private List<Pet> _AllPets;
-        private List<User> _AllUsers;
+        //private List<Pet> _AllPets;
+        //private List<User> _AllUsers;
 
         protected abstract string url { get; }
 
@@ -43,8 +44,7 @@ namespace GetPet.Crawler.Crawlers
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository
-            )
+            ITraitOptionRepository traitOptionRepository)
         {
             _petHandler = petHandler;
             _petRepository = petRepository;
@@ -92,9 +92,6 @@ namespace GetPet.Crawler.Crawlers
             doc.LoadHtml(html);
 
             parser.Document = doc;
-
-            _AllPets = _petRepository.SearchAsync(new PetFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
-            _AllUsers = _userRepository.SearchAsync(new UserFilter() { Page = 1, PerPage = 1000 }).Result.ToList();
         }
 
         public virtual async Task Load()
@@ -109,35 +106,49 @@ namespace GetPet.Crawler.Crawlers
 
             var user = await CreateUser();
 
-            return parser.Parse(traits, user, animalTypes);
+            var pets = parser.Parse(traits, user, animalTypes);
+
+            foreach (var pet in pets)
+            {
+                pet.ExternalId = _petRepository.GetPetHashed(pet);
+            }
+            return pets;
         }
 
-        public virtual async Task InsertToDB(IList<Pet> animals)
+        public virtual async Task InsertPets(IList<Pet> pets)
         {
-            foreach (var animal in animals)
+            var petsExist = await IsPetExists(pets);
+
+            var petsToInsert = pets
+                .Where(p => !petsExist.Any(pe => p.ExternalId == pe.ExternalId));
+
+            foreach (var pet in petsToInsert)
             {
-                if (animal.PetTraits == null)
+                if (pet.PetTraits == null)
                 {
-                    animal.PetTraits = new List<PetTrait>();
+                    pet.PetTraits = new List<PetTrait>();
                 }
-                await AddAgeTrait(animal);
-                await AddGenderTrait(animal);
-
+                await AddAgeTrait(pet);
+                await AddGenderTrait(pet);
             }
-            var tasks = animals
-                .Where(p => !IsPetExists(p))
-                .Select(pet => _petHandler.AddPet(pet));
 
-            await Task.WhenAll(tasks);
+            foreach (var petToInsert in petsToInsert)
+            {
+                await _petHandler.AddPet(petToInsert);
+            }
+            await _unitOfWork.SaveChangesAsync();
 
-            // There is an async/await bug here. Need to investigate. Foir know, lets use the sync version
-            // await _unitOfWork.SaveChangesAsync();
+            foreach (var petToInsert in petsToInsert)
+            {
+                await _petHandler.SetPetStatus(petToInsert.Id, PetStatus.Created);
+                await _petHandler.SetPetStatus(petToInsert.Id, PetStatus.WaitingForAdoption);
+            }
             await _unitOfWork.SaveChangesAsync();
         }
 
         private async Task AddAgeTrait(Pet animal)
         {
-            var traitAge = await _traitRepository.SearchAsync(new TraitFilter()
+            var traitAge = await _traitRepository.SearchAsync(new TraitFilter
             {
                 PerPage = 1000,
                 TraitName = "גיל"
@@ -167,13 +178,20 @@ namespace GetPet.Crawler.Crawlers
             {
                 option = "מבוגר";
             }
-            var traitAgeId = traitAge.Where(t=> t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
-            var options = await _traitOptionRepository.SearchAsync(new TraitOptionFilter()
+            var traitAgeId = traitAge.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
+
+            var options = await _traitOptionRepository.SearchAsync(new TraitOptionFilter
             {
                 TraitId = traitAgeId
             });
 
-            var optionId = options.Where(o => o.Option == option).FirstOrDefault().Id;
+            var optionId = options
+                .Where(o => o.Option == option)
+                .FirstOrDefault().Id;
+
+            if (animal.PetTraits.Any(pt => pt.TraitId == traitAgeId || pt.Trait?.Id == traitAgeId))
+                return;
+
             animal.PetTraits.Add(new PetTrait()
             {
                 TraitId = traitAgeId,
@@ -183,35 +201,63 @@ namespace GetPet.Crawler.Crawlers
 
         private async Task AddGenderTrait(Pet animal)
         {
-            var traitGenderID = await _traitRepository.SearchAsync(new TraitFilter()
+            var traitGenderId = await _traitRepository.SearchAsync(new TraitFilter()
             {
                 PerPage = 1000,
                 TraitName = "מין"
             });
 
-            var id = traitGenderID.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
+            var id = traitGenderId
+                .Where(t => t.AnimalTypeId == animal.AnimalTypeId)
+                .FirstOrDefault().Id;
+
             var filter = new TraitOptionFilter
             {
                 TraitId = id
             };
             var options = await _traitOptionRepository.SearchAsync(filter);
+
             string gender = (int)animal.Gender == 1 ? "זכר" : "נקבה";
-            var optionId = options.Where(o => o.Option == gender).FirstOrDefault().Id;
-            animal.PetTraits.Add(new PetTrait()
+
+            var optionId = options
+                .Where(o => o.Option == gender)
+                .FirstOrDefault().Id;
+
+            //var genderTraitAlreadyExist = animal.PetTraits.Any(pt => pt.TraitId == id);
+            //var pet = await _petRepository.GetByIdAsync(animal.Id);
+            //if (pet != null)
+            //{
+            //    genderTraitAlreadyExist = genderTraitAlreadyExist || pet.PetTraits.Any(pt => pt.TraitId == id);
+            //    if (genderTraitAlreadyExist)
+            //    {
+            //        return;
+            //    }
+
+            //}
+
+            if (animal.PetTraits.Any(pt => pt.TraitId == id || pt.Trait?.Id == id))
+                return;
+
+            animal.PetTraits.Add(new PetTrait
             {
                 TraitId = id,
                 TraitOptionId = optionId
             });
         }
 
-        protected bool IsPetExists(Pet pet)
+        protected async Task<bool> IsPetExists(Pet pet)
         {
-            return _AllPets.Any(p => p.Name.Equals(pet.Name) && p.SourceLink == pet.SourceLink);
+            return await _petRepository.IsPetExist(pet);
         }
 
-        protected User IsUserExists(string name, string phoneNember)
+        protected async Task<IEnumerable<Pet>> IsPetExists(IEnumerable<Pet> pets)
         {
-            return _AllUsers.FirstOrDefault(u => u.Name.Equals(name) && u.PhoneNumber.Equals(phoneNember));
+            return await _petRepository.IsPetExist(pets);
+        }
+
+        protected async Task<User> IsUserExists(User user)
+        {
+            return await _userRepository.IsUserExist(user);
         }
 
         public abstract Task<User> CreateUser();

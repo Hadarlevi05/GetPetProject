@@ -12,7 +12,7 @@ namespace GetPet.Crawler.Crawlers.Abstractions
 
         Task<IList<Pet>> Parse();
 
-        Task InsertToDB(IList<Pet> input);
+        Task InsertPets(IList<Pet> input);
 
         Task<User> CreateUser();
     }

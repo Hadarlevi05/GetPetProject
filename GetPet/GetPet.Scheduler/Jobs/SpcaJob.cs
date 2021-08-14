@@ -22,7 +22,7 @@ namespace GetPet.Scheduler.Jobs
 
             var result = await _spcaCrawler.Parse();
 
-            await _spcaCrawler.InsertToDB(result);
+            await _spcaCrawler.InsertPets(result);
 
             Console.WriteLine($"{nameof(SpcaJob)} Job Ending run");
         }

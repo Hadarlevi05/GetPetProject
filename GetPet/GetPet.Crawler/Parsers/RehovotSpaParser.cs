@@ -1,5 +1,4 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
+﻿using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
@@ -12,6 +11,8 @@ namespace GetPet.Crawler.Parsers
 {
     public class RehovotSpaParser : ParserBase
     {
+        public override PetSource Source => PetSource.RehovotSpa;
+
         public override HtmlNodeCollection GetNodes()
         {
             try
@@ -68,8 +69,7 @@ namespace GetPet.Crawler.Parsers
             };
 
             pet.PetTraits = new List<PetTrait>();
-            // ask Shlomi
-            // pet.PetTraits.Add(new PetTrait { Trait= "גיל", TraitOptionId = 2 });
+
             foreach (var trait in traits)
             {
                 pet.PetTraits.Add(

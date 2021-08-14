@@ -55,6 +55,20 @@ namespace GetPet.WebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
 
+        [HttpPost("search/count")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> SearchCount([FromBody] PetFilter filter)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var petCount = await _petRepository.SearchCountAsync(filter);
+
+            return Ok(new CountResponseDto { Count = petCount });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(PetDto pet)
         {

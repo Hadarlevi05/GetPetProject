@@ -29,6 +29,8 @@ namespace GetPet.BusinessLogic.Model
 
         public IDictionary<string, string> BooleanTraits { get; set; }
 
+        public IList<PetHistoryStatusDto> PetHistoryStatuses { get; set; }
+
         public PetSource Source { get; set; }
         /// <summary>
         /// if the source is external we should save the link to the original link

@@ -1,20 +1,17 @@
 ﻿using AutoMapper;
-using GetPet.BusinessLogic.Model;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
-using GetPet.BusinessLogic.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GetPet.BusinessLogic.Model.Filters;
 
 namespace GetPet.BusinessLogic.Repositories
 {
     public interface IPetTraitRepository : IBaseRepository<PetTrait>
     {
         Task<IEnumerable<PetTrait>> SearchAsync(BaseFilter filter);
-
     }
     public class PetTraitRepository : BaseRepository<PetTrait>, IPetTraitRepository
     {

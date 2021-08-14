@@ -25,12 +25,13 @@ namespace GetPet.Data.Entities
 
         public IList<MetaFileLink> MetaFileLinks { get; set; }
         public IList<PetTrait> PetTraits { get; set; }
+        public IList<PetHistoryStatus> PetHistoryStatuses { get; set; }        
 
-        
         public PetSource Source { get; set; }
         /// <summary>
         /// if the source is external we should save the link to the original link
         /// </summary>
         public string SourceLink { get; set; }
+        public string ExternalId { get; set; }
     }
 }

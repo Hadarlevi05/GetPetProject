@@ -49,10 +49,9 @@ namespace GetPet.Crawler.Crawlers
                     PhoneNumber = "052-3264943",
                 },
             };
+            var existingUser = await IsUserExists(user) ?? user;
 
-            var existingUser = IsUserExists(user.Name, user.PhoneNumber);
-
-            return (existingUser != null) ? existingUser : user;
+            return existingUser; 
         }
     }
 }

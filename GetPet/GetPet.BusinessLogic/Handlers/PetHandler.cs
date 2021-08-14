@@ -32,6 +32,9 @@ namespace GetPet.BusinessLogic.Handlers
 
         public async Task SetPetStatus(int petId, PetStatus petStatus)
         {
+            var pet = await _petRepository.GetByIdAsync(petId);
+            pet.Status = petStatus;
+
             await _petHistoryStatusRepository.AddAsync(new PetHistoryStatus
             {
                 PetId = petId,

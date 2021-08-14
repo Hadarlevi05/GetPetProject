@@ -13,6 +13,8 @@ namespace GetPet.Crawler.Parsers
 {
     public abstract class ParserBase : IParser
     {
+        public abstract PetSource Source { get; }
+
         public HtmlDocument Document { get; set; }
 
         public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes)

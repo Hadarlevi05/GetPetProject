@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { PetViewComponent } from '../pet-view/pet-view.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
+import { PetStatus } from 'src/app/shared/enums/pet-status';
 @Component({
   selector: 'app-search-pets',
   templateUrl: './search-pets.component.html',
@@ -180,17 +181,15 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
     if (!user.id) {
       this.openSnackBar('אתה חייב להרשם לבצע פעולה זו', 'סגור');
-    } else {
-
-      const date = new Date();
-      date.setDate(date.getDate() - 14);
-
-      const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
-
-      this.notificationService.upsert(filter).subscribe(result => {
-        this.openSnackBar('התראה נוספה בהצלחה!', 'סגור');
-      });
+      return;
     }
 
+    const date = new Date();
+    date.setDate(date.getDate() - 14);
+
+    const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits, PetStatus.WaitingForAdoption);
+    this.notificationService.upsert(filter).subscribe(result => {
+      this.openSnackBar('התראה נוספה בהצלחה!', 'סגור');
+    });
   }
 }

@@ -10,6 +10,9 @@ namespace GetPet.Data.Enums
     public enum PetSource
     {
         External,
-        Internal
+        Internal,
+        Spca, 
+        Rla,
+        RehovotSpa
     }
 }

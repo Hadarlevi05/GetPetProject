@@ -10,6 +10,7 @@ import { PetViewComponent } from 'src/app/modules/pets/components/pet-view/pet-v
 import { IPet } from 'src/app/modules/pets/models/ipet';
 import { PetFilter } from 'src/app/modules/pets/models/pet-filter';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
+import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { AnimalTypeFilter } from 'src/app/shared/models/animal-type-filter';
 import { BaseFilter } from 'src/app/shared/models/base-filter';
 import { IAnimalType } from 'src/app/shared/models/ianimal-type';
@@ -32,6 +33,9 @@ export class IndexComponent implements OnInit {
   animalTypeId = 1;
   animaltypes: IAnimalType[] = [];
 
+  waitingForAdoptionCount = -1;
+  adoptedCount = -1;
+
   form: FormGroup = new FormGroup({
     animalType: new FormControl('')
   });
@@ -52,8 +56,26 @@ export class IndexComponent implements OnInit {
     this.loadArticles();
     this.loadAnimalTypes();
     this.setFormSubscribers();
+    this.setCounters();
   }
 
+  setCounters() {
+    this.petLoading = false;
+
+    const date = new Date();
+    date.setDate(date.getDate() - 1000);
+
+
+    const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
+    this.petsService.searchCount(filter).subscribe(counter => {
+      this.waitingForAdoptionCount = counter.count;
+    });
+
+    filter.petStatus = PetStatus.Adopted;
+    this.petsService.searchCount(filter).subscribe(counter => {
+      this.adoptedCount = counter.count;
+    });
+  }
 
   setFormSubscribers() {
     this.form.controls['animalType'].valueChanges.subscribe(value => {
@@ -103,10 +125,10 @@ export class IndexComponent implements OnInit {
 
     this.petLoading = false;
 
-    let date = new Date();
+    const date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new PetFilter(1, 100, date, [this.animalTypeId]);
+    const filter = new PetFilter(1, 100, date, [this.animalTypeId], undefined, undefined, PetStatus.WaitingForAdoption);
 
     this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;

@@ -265,13 +265,13 @@ namespace GetPet.Data
             };
             var names = new[] {
                 "לואי",
-                "לואון",
-                "לואיש"
+                //"לואון",
+                //"לואיש"
             };
             var descriptions = new[] {
                 "לואי שלנו הוא כלב חברותי ואהוב על כל הבריות, אוהב לשחק מאוד ונהדר עם ילדים נשים וטף",
-                "כלב חתיך ויפיוף",
-                "לואי לואי לואי לורם יפסום"
+                //"כלב חתיך ויפיוף",
+                //"לואי לואי לואי לורם יפסום"
             };
 
             for (int i = 0; i < names.Length; i++)
@@ -282,13 +282,10 @@ namespace GetPet.Data
                     AnimalTypeId = dog.Id,
                     Birthday = DateTime.Now.AddYears(-2),
                     Gender = Enums.Gender.Male,
-                    Status = Enums.PetStatus.WaitingForAdoption,
+                    Status = Enums.PetStatus.Adopted,
                     UserId = system.Entity.Id,
                     Description = descriptions[i],
-                    MetaFileLinks = new List<MetaFileLink>()
-                    {
-                        images[i]
-                    },
+                    MetaFileLinks = images.ToList(),
                     CreationTimestamp = DateTime.Now,
                     UpdatedTimestamp = DateTime.Now,
                     Source = Enums.PetSource.Internal,
@@ -304,10 +301,17 @@ namespace GetPet.Data
                     PetId = pet.Id,
                     Status = Enums.PetStatus.Created
                 });
+                await context.SaveChangesAsync();
                 context.PetHistoryStatuses.Add(new PetHistoryStatus
                 {
                     PetId = pet.Id,
                     Status = Enums.PetStatus.WaitingForAdoption
+                });
+                await context.SaveChangesAsync();
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.Adopted
                 });
             }
 

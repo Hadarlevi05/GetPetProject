@@ -16,6 +16,7 @@ namespace GetPet.BusinessLogic.Repositories
         string GetPetHashed(Pet pet);
         Task<bool> IsPetExist(Pet pet);
         Task<IEnumerable<Pet>> IsPetExist(IEnumerable<Pet> pets);
+        Task<int> SearchCountAsync(PetFilter filter);
     }
     public class PetRepository : BaseRepository<Pet>, IPetRepository
     {
@@ -52,6 +53,24 @@ namespace GetPet.BusinessLogic.Repositories
         {
             var query = entities.AsQueryable();
 
+            query = GetSearchParameters(filter, query);
+
+            query = base.SearchAsync(query, filter);
+
+            return await query.AsSplitQuery().ToListAsync();
+        }
+
+        public async Task<int> SearchCountAsync(PetFilter filter)
+        {
+            var query = entities.AsQueryable();
+
+            query = GetSearchParameters(filter, query);
+            
+            return await query.CountAsync();
+        }
+
+        private IQueryable<Pet> GetSearchParameters(PetFilter filter, IQueryable<Pet> query)
+        {
             if (filter.CreatedSince.HasValue)
             {
                 query = query.Where(p => p.CreationTimestamp > filter.CreatedSince.Value);
@@ -86,10 +105,17 @@ namespace GetPet.BusinessLogic.Repositories
                         p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));
                 }
             }
-            query = base.SearchAsync(query, filter);
 
-            // AsSplitQuery => To avoid performance penalty due to EF joining behaviour https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
-            return await query.AsSplitQuery().ToListAsync();
+            if (filter.PetStatus.HasValue)
+            {
+                query = query.Where(p => p.Status == filter.PetStatus.Value);
+            }
+
+            if (filter.PetSource.HasValue)
+            {
+                query = query.Where(p => p.Source == filter.PetSource.Value);
+            }
+            return query;
         }
 
         public new async Task<Pet> GetByIdAsync(int id)

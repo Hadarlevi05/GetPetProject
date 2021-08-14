@@ -1,17 +1,17 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
+﻿using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
 {
     public class RlaParser : ParserBase
     {
+        public override PetSource Source => PetSource.Rla;
+
         public override HtmlNodeCollection GetNodes()
         {
             try

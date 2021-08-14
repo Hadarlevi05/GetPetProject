@@ -117,31 +117,38 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual async Task InsertPets(IList<Pet> pets)
         {
-            var petsExist = await IsPetExists(pets);
+            var petsFromSource = await _petRepository.SearchAsync(new PetFilter { PetSource = parser.Source, PerPage = int.MaxValue });
 
             var petsToInsert = pets
-                .Where(p => !petsExist.Any(pe => p.ExternalId == pe.ExternalId));
+                .Where(p => !petsFromSource.Any(pe => p.ExternalId == pe.ExternalId));
+
+            var petsRemovedFromSource = petsFromSource
+                .Where(p => !pets.Any(pe => p.ExternalId == pe.ExternalId));
+
+            foreach (var pet in petsRemovedFromSource)
+            {
+                await _petHandler.SetPetStatus(pet.Id, PetStatus.Adopted);
+            }        
 
             foreach (var pet in petsToInsert)
             {
-                if (pet.PetTraits == null)
-                {
-                    pet.PetTraits = new List<PetTrait>();
-                }
+                pet.PetTraits ??= new List<PetTrait>();
+                pet.Source = parser.Source;
+
                 await AddAgeTrait(pet);
                 await AddGenderTrait(pet);
             }
 
-            foreach (var petToInsert in petsToInsert)
+            foreach (var pet in petsToInsert)
             {
-                await _petHandler.AddPet(petToInsert);
+                await _petHandler.AddPet(pet);
             }
             await _unitOfWork.SaveChangesAsync();
 
-            foreach (var petToInsert in petsToInsert)
+            foreach (var pet in petsToInsert)
             {
-                await _petHandler.SetPetStatus(petToInsert.Id, PetStatus.Created);
-                await _petHandler.SetPetStatus(petToInsert.Id, PetStatus.WaitingForAdoption);
+                await _petHandler.SetPetStatus(pet.Id, PetStatus.Created);
+                await _petHandler.SetPetStatus(pet.Id, PetStatus.WaitingForAdoption);
             }
             await _unitOfWork.SaveChangesAsync();
         }
@@ -192,7 +199,7 @@ namespace GetPet.Crawler.Crawlers
             if (animal.PetTraits.Any(pt => pt.TraitId == traitAgeId || pt.Trait?.Id == traitAgeId))
                 return;
 
-            animal.PetTraits.Add(new PetTrait()
+            animal.PetTraits.Add(new PetTrait
             {
                 TraitId = traitAgeId,
                 TraitOptionId = optionId

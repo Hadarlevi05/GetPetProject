@@ -1,5 +1,4 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
+﻿using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
@@ -12,6 +11,8 @@ namespace GetPet.Crawler.Parsers
 {
     public class RehovotSpaParser : ParserBase
     {
+        public override PetSource Source => PetSource.RehovotSpa;
+
         public override HtmlNodeCollection GetNodes()
         {
             try

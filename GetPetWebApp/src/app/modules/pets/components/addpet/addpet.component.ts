@@ -56,7 +56,7 @@ export class AddpetComponent
     userId: 0,
     traits: {},
     source: PetSource.Internal,
-    images: [],
+    formFiles: [],
     creationTimestamp: new Date(),
   }
 
@@ -211,11 +211,10 @@ export class AddpetComponent
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
-    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
-    this.pet.images = this.imagesURLs;
+    this.pet.formFiles = this.filesToUpload;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
     this.pet.traits = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
@@ -251,21 +250,23 @@ export class AddpetComponent
     })
 
     console.log(this.filesToUpload.length);
+    
+    this.AddPet();
+    // // upload pictures to db
+    // this._uploadService.uploadData(this.filesToUpload)
+    //   .subscribe(res => {
+    //     console.log(res);
+    //     for (const element of res) {
+    //       this.imagesURLs.push(element['path']);
+    //     }
+    //     console.log("THE IMAGES URLS:", this.imagesURLs);
 
-    // upload pictures to db
-    this._uploadService.uploadData(this.filesToUpload)
-      .subscribe(res => {
-        console.log(res);
-        for (const element of res) {
-          this.imagesURLs.push(element['path']);
-        }
-        console.log("THE IMAGES URLS:", this.imagesURLs);
+    //     this.AddPet();
+    //   }, err => {
+    //     console.log("pet upload failed!", err);
+    //     this.formUploaded = true;
+    //     this.success = false;
+    //   });
 
-        this.AddPet();
-      }, err => {
-        console.log("pet upload failed!", err);
-        this.formUploaded = true;
-        this.success = false;
-      });
   }
 }

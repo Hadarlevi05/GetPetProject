@@ -23,11 +23,11 @@ export interface Pet {
 
   user?: IUser;
 
-  images: string[];
+  // images: string[];
+
+  formFiles: FormData[];
 
   traits: { [key: string]: string; };
-
-  //traitsDTOs?: Map<ITrait, ITraitOption>;
 
   source: number;
 

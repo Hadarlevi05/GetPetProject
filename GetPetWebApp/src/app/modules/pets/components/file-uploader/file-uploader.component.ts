@@ -18,7 +18,7 @@ export class FileUploaderComponent implements OnInit {
   fileName: string = '';
   imgPath: string = '';
 
-  uploadFile(file) {    //delete this method
+  uploadFile(file) {
     console.log("in uploadFile:", file);
     this.file = file;
     this.fileName = file.data.name;

@@ -1,4 +1,5 @@
 ﻿using GetPet.Data.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 
@@ -24,6 +25,9 @@ namespace GetPet.BusinessLogic.Model
         public UserDto User { get; set; } 
 
         public IList<string> Images { get; set; }
+
+        //read more about Collection of Iformfile
+        public ICollection<IFormFile> formFiles { get; set; }
 
         public IDictionary<string, string> Traits { get; set; }
 

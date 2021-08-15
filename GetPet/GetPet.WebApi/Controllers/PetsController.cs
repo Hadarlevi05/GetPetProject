@@ -4,11 +4,14 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Common;
 using GetPet.Data.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -55,6 +58,22 @@ namespace GetPet.WebApi.Controllers
             return Ok(_mapper.Map<IEnumerable<PetDto>>(pets));
         }
 
+        private async Task<string> UploadFile(IFormFile formFile)
+        {
+            if (formFile != null && formFile.Length > 0)
+            {
+                var extension = formFile.FileName.Split(".").Last();
+                var fileName = $"{Guid.NewGuid()}.{extension}";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(fileStream);
+                }
+                return $"{Constants.WEBAPI_URL}/upload-content/{fileName}";
+            }
+            return null;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post(PetDto pet)
         {
@@ -74,14 +93,16 @@ namespace GetPet.WebApi.Controllers
             };
 
             petToInsert.MetaFileLinks = new List<MetaFileLink>();
-            foreach (var imageSource in pet.Images)
+            foreach (var formFile in pet.formFiles)
             {
+                var uploadFilePath = await UploadFile(formFile);
+
                 petToInsert.MetaFileLinks.Add(
                     new MetaFileLink
                     {
-                        Path = imageSource,
-                        MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
-                        Size = 1000
+                        Path = uploadFilePath,
+                        MimeType = formFile.ContentType,
+                        Size = formFile.Length
                     });
             }
 

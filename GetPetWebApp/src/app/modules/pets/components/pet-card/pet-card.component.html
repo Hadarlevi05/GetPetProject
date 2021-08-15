@@ -2,7 +2,7 @@
     <!-- <a [href]="pet.sourceLink" target="_blank"> -->
     <span class="image-container">
         <img mat-card-image [src]="pet.images[0]" [alt]="pet.name">
-        <mat-card-title class="text-block">{{ pet.name }}, {{getAge(pet.birthday)}}</mat-card-title>
+        <mat-card-title class="text-block">{{ pet.name }} {{getAge(pet.birthday,pet.gender)}}</mat-card-title>
     </span>
     <!-- </a> -->
     <mat-card-content>

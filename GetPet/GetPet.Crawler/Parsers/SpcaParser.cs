@@ -1,5 +1,4 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Data.Entities;
+﻿using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
@@ -7,9 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace GetPet.Crawler.Parsers
-{  
-     public class SpcaParser : ParserBase
+{
+    public class SpcaParser : ParserBase
      {
+        public override PetSource Source => PetSource.Spca;
+
         public override HtmlNodeCollection GetNodes()
         {
             var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");

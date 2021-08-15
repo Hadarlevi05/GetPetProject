@@ -7,5 +7,6 @@ export interface IUser {
     name: string;
     cityId: number;
     token?: string;
+    phoneNumber: string;
     organization: IOrganization;
 }

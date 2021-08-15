@@ -1,4 +1,5 @@
 import { IUser } from "src/app/shared/models/iuser";
+import { IPetHistoryStatus } from "./pet-status-history";
 
 export interface IPet {
   id?: number;
@@ -24,6 +25,8 @@ export interface IPet {
   sourceLink?: string;
 
   images: string[];
+
+  petHistoryStatuses: IPetHistoryStatus[];
 
   traits: Map<string, string>;
 

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using GetPet.Data.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,10 @@ namespace GetPet.BusinessLogic.Model.Filters
         public DateTime? CreatedSince { get; set; } = null;
 
         public override bool Equals(object obj) => Equals(obj as PetFilter);
+
+        public PetStatus? PetStatus { get; set; } = null;
+
+        public PetSource? PetSource { get; set; } = null;
 
         public override string ToString() => JsonConvert.SerializeObject(new
         {

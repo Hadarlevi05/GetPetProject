@@ -51,12 +51,16 @@ namespace GetPet.BusinessLogic.Repositories
 
         public async Task<T> GetByIdAsync(int id)
         {
-            var query = entities
-                .Where(e => e.Id == id);
+            var query = entities.AsQueryable();
 
             query = LoadNavigationProperties(query);
 
-            return await query.SingleOrDefaultAsync();
+            query = query
+                .Where(e => e.Id == id);
+
+            
+
+            return await query.AsSplitQuery().SingleOrDefaultAsync();
         }
 
         public async Task<T> AddAsync(T entity)

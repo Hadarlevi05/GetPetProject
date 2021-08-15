@@ -24,6 +24,8 @@ namespace GetPet.BusinessLogic.Repositories
         Task<User> GetByEmailAsync(string email);
         Task<User> Register(UserDto user);
         Task<LoginResponseDto> Login(LoginDto loginUser);
+
+        Task<User> IsUserExist(User user);
     }
 
     public class UserRepository : BaseRepository<User>, IUserRepository
@@ -197,6 +199,14 @@ namespace GetPet.BusinessLogic.Repositories
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<User> IsUserExist(User user)
+        {            
+            var dbUser = await entities
+                .SingleOrDefaultAsync(p => p.Email == user.Email);
+
+            return dbUser;
         }
     }
 }

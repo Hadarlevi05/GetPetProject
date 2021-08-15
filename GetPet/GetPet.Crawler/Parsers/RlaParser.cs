@@ -1,17 +1,17 @@
-﻿using GetPet.BusinessLogic.Model;
-using GetPet.Crawler.Utils;
+﻿using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace GetPet.Crawler.Parsers
 {
     public class RlaParser : ParserBase
     {
+        public override PetSource Source => PetSource.Rla;
+
         public override HtmlNodeCollection GetNodes()
         {
             try
@@ -23,9 +23,8 @@ namespace GetPet.Crawler.Parsers
             catch (Exception ex)
             {
                 Console.WriteLine("Cannot parse nodes", ex);
+                throw;
             }
-
-            return null;
         }
 
         public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
@@ -132,9 +131,8 @@ namespace GetPet.Crawler.Parsers
             catch (Exception ex)
             {
                 Console.WriteLine("Cannot load details page", ex);
+                throw;
             }
-
-            return null;
         }
 
         public string ParseDetailsURL(HtmlNode node)

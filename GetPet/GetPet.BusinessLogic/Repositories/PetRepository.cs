@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic.Model.Filters;
+using GetPet.Common;
 using GetPet.Data;
 using GetPet.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,10 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IPetRepository : IBaseRepository<Pet>
     {
         Task<IEnumerable<Pet>> SearchAsync(PetFilter filter);
+        string GetPetHashed(Pet pet);
+        Task<bool> IsPetExist(Pet pet);
+        Task<IEnumerable<Pet>> IsPetExist(IEnumerable<Pet> pets);
+        Task<int> SearchCountAsync(PetFilter filter);
     }
     public class PetRepository : BaseRepository<Pet>, IPetRepository
     {
@@ -24,6 +29,7 @@ namespace GetPet.BusinessLogic.Repositories
         public override IQueryable<Pet> LoadNavigationProperties(IQueryable<Pet> query)
         {
             query = query
+                .Include(q => q.PetHistoryStatuses)
                 .Include(q => q.MetaFileLinks)
                 .Include(q => q.AnimalType)
                 .Include(q => q.PetTraits)
@@ -47,6 +53,24 @@ namespace GetPet.BusinessLogic.Repositories
         {
             var query = entities.AsQueryable();
 
+            query = GetSearchParameters(filter, query);
+
+            query = base.SearchAsync(query, filter);
+
+            return await query.AsSplitQuery().ToListAsync();
+        }
+
+        public async Task<int> SearchCountAsync(PetFilter filter)
+        {
+            var query = entities.AsQueryable();
+
+            query = GetSearchParameters(filter, query);
+            
+            return await query.CountAsync();
+        }
+
+        private IQueryable<Pet> GetSearchParameters(PetFilter filter, IQueryable<Pet> query)
+        {
             if (filter.CreatedSince.HasValue)
             {
                 query = query.Where(p => p.CreationTimestamp > filter.CreatedSince.Value);
@@ -78,13 +102,20 @@ namespace GetPet.BusinessLogic.Repositories
                 foreach (var boolTrait in filter.BooleanTraits)
                 {
                     query = query.Where(p =>
-                        p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));                    
+                        p.PetTraits.Any(pt => pt.TraitId == boolTrait && pt.TraitOption.Option == "כן"));
                 }
             }
-            query = base.SearchAsync(query, filter);
 
-            // AsSplitQuery => To avoid performance penalty due to EF joining behaviour https://docs.microsoft.com/en-us/ef/core/querying/single-split-queries
-            return await query.AsSplitQuery().ToListAsync();
+            if (filter.PetStatus.HasValue)
+            {
+                query = query.Where(p => p.Status == filter.PetStatus.Value);
+            }
+
+            if (filter.PetSource.HasValue)
+            {
+                query = query.Where(p => p.Source == filter.PetSource.Value);
+            }
+            return query;
         }
 
         public new async Task<Pet> GetByIdAsync(int id)
@@ -92,10 +123,38 @@ namespace GetPet.BusinessLogic.Repositories
             return await base.GetByIdAsync(id);
         }
 
-
         public new async Task UpdateAsync(Pet entity)
         {
             await base.UpdateAsync(entity);
+        }
+
+        public string GetPetHashed(Pet pet)
+        {
+            var hashedExternalId = HashHelper.Sha256($"{pet.Name}_{pet.Description}_{pet.Source}");
+
+            return hashedExternalId;
+        }
+
+        public async Task<bool> IsPetExist(Pet pet)
+        {
+            var hashedExternalId = GetPetHashed(pet);
+
+            var exist = await entities
+                .AnyAsync(p => p.ExternalId == hashedExternalId);
+
+            return exist;
+        }
+
+        public async Task<IEnumerable<Pet>> IsPetExist(IEnumerable<Pet> pets)
+        {
+            var hashedExternalId = pets
+                .Select(p => GetPetHashed(p));
+
+            var petExists = await entities
+                .Where(p => hashedExternalId.Contains(p.ExternalId))
+                .ToListAsync();
+
+            return petExists;
         }
     }
 }

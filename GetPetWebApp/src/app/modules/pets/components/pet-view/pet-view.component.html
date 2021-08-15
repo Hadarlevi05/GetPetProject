@@ -9,13 +9,23 @@
     </p>
     <p>
         איש קשר: {{ pet?.user?.name }}
-        {{ pet.creationTimestamp | date: 'dd/MM/yyyy' }}
+        <br />
+        <span *ngIf="pet?.user?.phoneNumber">
+            יצירת קשר: {{ pet?.user?.phoneNumber }}
+        </span>
+        <span *ngIf="!pet?.user?.phoneNumber && pet?.user?.email">
+            אימייל: {{ pet?.user?.email }}
+        </span>
+
+
     </p>
 
     <h2>
-        <a [href]="pet.sourceLink" target="_blank">
+        <a *ngIf="pet.sourceLink" [href]="pet.sourceLink" target="_blank">
             אמץ אותי
         </a>
+
+
     </h2>
     <p>
         <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">

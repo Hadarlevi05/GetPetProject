@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { CountResponse } from 'src/app/shared/models/count-response';
 import { BaseService } from 'src/app/shared/services/base-service';
 import { IPet } from '../models/ipet';
 import { Pet } from '../models/pet';
@@ -20,6 +21,10 @@ export class PetsService extends BaseService {
 
   search(filter: PetFilter): Observable<IPet[]> {
     return this.http.post<IPet[]>(`${this.entPointUrl}/search`, filter);
+  }
+
+  searchCount(filter: PetFilter): Observable<CountResponse> {
+    return this.http.post<CountResponse>(`${this.entPointUrl}/search/count`, filter);
   }
 
   addPet(pet: Pet) {

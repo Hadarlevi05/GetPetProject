@@ -96,6 +96,7 @@ namespace GetPet.Data
             var happy = context.Traits.Add(new Trait { Name = "שמח", FemaleName = "שמחה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
             var funny = context.Traits.Add(new Trait { Name = "מצחיק", FemaleName = "מצחיקה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
             var gamin = context.Traits.Add(new Trait { Name = "שובב", FemaleName = "שובבה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
+            var disciplined = context.Traits.Add(new Trait { Name = "ממושמע", FemaleName = "ממושמעת", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
 
             // Cats
             var colorCat = context.Traits.Add(new Trait { Name = "צבע", FemaleName = "צבע", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Values });
@@ -265,13 +266,13 @@ namespace GetPet.Data
             };
             var names = new[] {
                 "לואי",
-                "לואון",
-                "לואיש"
+                //"לואון",
+                //"לואיש"
             };
             var descriptions = new[] {
                 "לואי שלנו הוא כלב חברותי ואהוב על כל הבריות, אוהב לשחק מאוד ונהדר עם ילדים נשים וטף",
-                "כלב חתיך ויפיוף",
-                "לואי לואי לואי לורם יפסום"
+                //"כלב חתיך ויפיוף",
+                //"לואי לואי לואי לורם יפסום"
             };
 
             for (int i = 0; i < names.Length; i++)
@@ -282,16 +283,36 @@ namespace GetPet.Data
                     AnimalTypeId = dog.Id,
                     Birthday = DateTime.Now.AddYears(-2),
                     Gender = Enums.Gender.Male,
-                    Status = Enums.PetStatus.WaitingForAdoption,
+                    Status = Enums.PetStatus.Adopted,
                     UserId = system.Entity.Id,
                     Description = descriptions[i],
-                    MetaFileLinks = new List<MetaFileLink>()
-                    {
-                        images[i]
-                    },
+                    MetaFileLinks = images.ToList(),
                     CreationTimestamp = DateTime.Now,
                     UpdatedTimestamp = DateTime.Now,
                     Source = Enums.PetSource.Internal,
+                });
+            }
+
+            await context.SaveChangesAsync();
+
+            foreach (var pet in context.Pets.ToList())
+            {
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.Created
+                });
+                await context.SaveChangesAsync();
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.WaitingForAdoption
+                });
+                await context.SaveChangesAsync();
+                context.PetHistoryStatuses.Add(new PetHistoryStatus
+                {
+                    PetId = pet.Id,
+                    Status = Enums.PetStatus.Adopted
                 });
             }
 

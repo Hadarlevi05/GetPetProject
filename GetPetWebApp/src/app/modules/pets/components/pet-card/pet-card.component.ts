@@ -16,26 +16,29 @@ export class PetCardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getAge(birthday) {
+  getAge(birthday, gender) {
 
     birthday = new Date(birthday);
 
     var age = this.calculateAge(new Date(birthday));
+    const genderString = gender == 1 ? 'בן' : 'בת'
     if (age === 0) {
       const oneDay = 24 * 60 * 60 * 1000;
       const diffMonth = Math.round(Math.abs((Date.now() - birthday) / oneDay) / 30);
 
 
-      if (diffMonth === 1) return 'חודש';
-      if (diffMonth === 2) return 'חודשיים';
-
-      return `${diffMonth} חודשים`;
+      if (diffMonth === 1) return `, ${genderString} חודש`;
+      if (diffMonth === 2) return `, ${genderString} חודשיים`;
+      if (diffMonth == 0)
+        return;
+      return `, ${genderString} ${diffMonth} חודשים`;
     }
 
-    if (age === 1) return 'שנה';
-    if (age === 2) return 'שנתיים';
-
-    return `${age} שנים`;;
+    if (age === 1) return `, ${genderString} שנה`;
+    if (age === 2) return `, ${genderString} שנתיים`;
+    if (age == 0 || age > 18)
+      return;
+    return `, ${genderString} ${age} שנים`;
   }
 
   calculateAge(birthday) {

@@ -96,6 +96,7 @@ namespace GetPet.Data
             var happy = context.Traits.Add(new Trait { Name = "שמח", FemaleName = "שמחה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
             var funny = context.Traits.Add(new Trait { Name = "מצחיק", FemaleName = "מצחיקה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
             var gamin = context.Traits.Add(new Trait { Name = "שובב", FemaleName = "שובבה", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
+            var disciplined = context.Traits.Add(new Trait { Name = "ממושמע", FemaleName = "ממושמעת", IsBoolean = true, AnimalTypeId = dog.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Boolean });
 
             // Cats
             var colorCat = context.Traits.Add(new Trait { Name = "צבע", FemaleName = "צבע", AnimalTypeId = cat.Id, CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now, TraitType = Enums.TraitType.Values });

@@ -56,7 +56,7 @@ export class AddpetComponent
     userId: 0,
     traits: {},
     source: PetSource.Internal,
-    formFiles: [],
+    images: [],
     creationTimestamp: new Date(),
   }
 
@@ -211,10 +211,11 @@ export class AddpetComponent
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
+    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
-    this.pet.formFiles = this.filesToUpload;
+    this.pet.images = this.imagesURLs;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
     this.pet.traits = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
@@ -236,10 +237,10 @@ export class AddpetComponent
 
     //collect all files to upload (of FormDate type)
     this.components.forEach(uploader => {
-      console.log("uploader.file.data is: ", uploader.file.data);
-      if (uploader.file.data) {  //check if there is a file in currentuploader
+      console.log("uploader.file.data is: ", uploader.file);
+      if (uploader.file) {  //check if there is a file in currentuploader
         this.formDataFile = new FormData();
-        this.formDataFile.set('formFile', uploader.file.data); //prepare FormData object from file
+        this.formDataFile.set('formFile', uploader.file); //prepare FormData object from file
         this.filesToUpload.push(this.formDataFile);
       }
     })
@@ -248,25 +249,21 @@ export class AddpetComponent
     this.filesToUpload.forEach(f => {
       console.log(f.get('formFile'));
     })
-
-    console.log(this.filesToUpload.length);
     
-    this.AddPet();
-    // // upload pictures to db
-    // this._uploadService.uploadData(this.filesToUpload)
-    //   .subscribe(res => {
-    //     console.log(res);
-    //     for (const element of res) {
-    //       this.imagesURLs.push(element['path']);
-    //     }
-    //     console.log("THE IMAGES URLS:", this.imagesURLs);
+    // upload pictures to db
+    this._uploadService.uploadData(this.filesToUpload)
+      .subscribe(res => {
+        console.log(res);
+        for (const element of res) {
+          this.imagesURLs.push(element['path']);
+        }
+        console.log("THE IMAGES URLS:", this.imagesURLs);
 
-    //     this.AddPet();
-    //   }, err => {
-    //     console.log("pet upload failed!", err);
-    //     this.formUploaded = true;
-    //     this.success = false;
-    //   });
-
+        this.AddPet();
+      }, err => {
+        console.log("pet upload failed!", err);
+        this.formUploaded = true;
+        this.success = false;
+      });
   }
 }

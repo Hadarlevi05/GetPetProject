@@ -23,9 +23,9 @@ export interface Pet {
 
   user?: IUser;
 
-  // images: string[];
+  images: string[];
 
-  formFiles: FormData[];
+  //formFiles: FormData;
 
   traits: { [key: string]: string; };
 

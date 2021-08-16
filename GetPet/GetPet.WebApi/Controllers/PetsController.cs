@@ -107,16 +107,14 @@ namespace GetPet.WebApi.Controllers
             };
 
             petToInsert.MetaFileLinks = new List<MetaFileLink>();
-            foreach (var formFile in pet.formFiles)
+            foreach (var imageSource in pet.Images)
             {
-                var uploadFilePath = await UploadFile(formFile);
-
                 petToInsert.MetaFileLinks.Add(
                     new MetaFileLink
                     {
-                        Path = uploadFilePath,
-                        MimeType = formFile.ContentType,
-                        Size = formFile.Length
+                        Path = imageSource,
+                        MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
+                        Size = 1000
                     });
             }
 
@@ -124,7 +122,6 @@ namespace GetPet.WebApi.Controllers
             {
                 AnimalTypeId = pet.AnimalTypeId
             };
-
             ////get list of all traits
             //var filter = new TraitFilter();
             //var allTraits = _traitRepository.SearchAsync(filter).Result.ToList();

@@ -11,6 +11,7 @@ export class UploadService extends BaseService{
 
   entPointUrl = `${this.BASE_URL}metafilelinks`;
   imgPath:string = '';
+  responses: Observable<any>[] = new Array();
 
 	constructor(private httpClient: HttpClient) {
     super(httpClient);
@@ -24,10 +25,17 @@ export class UploadService extends BaseService{
     //     reportProgress: true,  
     //     observe: 'response'  
     //   });  
-    const response0 = this.httpClient.post(`${this.entPointUrl}`, formData[0], {  reportProgress: true});
-    const response1 = this.httpClient.post(`${this.entPointUrl}`, formData[1], {  reportProgress: true});
-    const response2 = this.httpClient.post(`${this.entPointUrl}`, formData[2], {  reportProgress: true});
+    var numOfFiles = formData.length;
+    console.log("in upload service - number Of Files:" + numOfFiles);
+
+    for (var i = 0; i < numOfFiles; i++) {
+      this.responses[i] = this.httpClient.post(`${this.entPointUrl}`, formData[i]);
+    }
+
+    // const response0 = this.httpClient.post(`${this.entPointUrl}`, formData[0], {  reportProgress: true});
+    // const response1 = this.httpClient.post(`${this.entPointUrl}`, formData[1], {  reportProgress: true});
+    // const response2 = this.httpClient.post(`${this.entPointUrl}`, formData[2], {  reportProgress: true});
     
-    return forkJoin([response0, response1, response2]);
+    return forkJoin(this.responses);
   }
 }

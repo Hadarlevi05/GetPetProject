@@ -94,6 +94,7 @@ export class MultiSelectChipsComponent
     this.traitChipSelections = [] as ITraitSelection[];
 
     this.options.forEach (op => {
+      console.log("current mat chip option: ", op);
       this.traitChipSelection = {} as ITraitSelection;      
       this.traitChipSelection.traitId = op.id;
       this.traitChipSelection.traitOptionId = 
@@ -140,9 +141,7 @@ export class MultiSelectChipsComponent
   //value is of type iTrait
   toggleSelection(chip: MatChip) {
     if (!this.disabled) chip.toggleSelected();
-    console.log("chip changed! : Property no. " + chip.value.id + " changed to : " + chip.selected);
-    console.log("CHIP DETAILS: name" + chip.value.name + " traitOptions: " + chip.value.traitOptions);
-
+    console.log("chip changed! : Property no. " + chip.value.id + "name: " + chip.value.name + " changed to : " + chip.selected);
     //strategy: all mats are "no" and then update to change
     var optionId;
     const item = this.traitChipSelections.find(i => i.traitId === chip.value.id);

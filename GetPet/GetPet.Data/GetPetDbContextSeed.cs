@@ -163,9 +163,9 @@ namespace GetPet.Data
             await context.SaveChangesAsync();
 
             AddBooleanTraitOption(context, goodWithKids);
-            AddBooleanTraitOption(context, trained);
             AddBooleanTraitOption(context, goodWithPpl);
             AddBooleanTraitOption(context, goodWithDogs);
+            AddBooleanTraitOption(context, trained);
             AddBooleanTraitOption(context, worried);
             AddBooleanTraitOption(context, vaccinated);
             AddBooleanTraitOption(context, mixed);
@@ -187,6 +187,7 @@ namespace GetPet.Data
             AddBooleanTraitOption(context, happy);
             AddBooleanTraitOption(context, funny);
             AddBooleanTraitOption(context, gamin);
+            AddBooleanTraitOption(context, disciplined);
             //cat
             AddBooleanTraitOption(context, catCurious);
             AddBooleanTraitOption(context, catBrave);
@@ -199,6 +200,7 @@ namespace GetPet.Data
             AddBooleanTraitOption(context, catTolerant);
             AddBooleanTraitOption(context, catHomey);
             AddBooleanTraitOption(context, catAccustomedToSandbox);
+            AddBooleanTraitOption(context, catRacial);
             AddBooleanTraitOption(context, catLikeToPlay);
             AddBooleanTraitOption(context, catSmart);
             AddBooleanTraitOption(context, catLoyal);

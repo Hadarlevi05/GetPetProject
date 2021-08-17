@@ -102,7 +102,7 @@ export class AddpetComponent
           traits: this._formBuilder.array([]),
         }),
         this._formBuilder.group({
-          description: ['', [Validators.required, Validators.maxLength(1000)]]
+          description: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(1000)]]
         }),
         this._formBuilder.group({
           //upload pictures

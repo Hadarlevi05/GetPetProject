@@ -105,13 +105,14 @@
         </mat-step>
 
         <!-- Some more details about the pet -->
-        <mat-step formGroupName="2" label="הוספת תיאור" state="description">
+        <mat-step formGroupName="2" [stepControl]="formArray?.get([2])!" label="הוספת תיאור" state="description">
 
           <div class="container mb-4">
             <div class="d-flex justify-content-end">
               <mat-form-field appearance="outline" class="p-2 flex-grow-1">
-                <textarea matInput rows="8" placeholder="פרטו עוד על חיית המחמד" formControlName="description">
-                  </textarea>
+                <textarea #description matInput rows="8" placeholder="פרטו עוד על חיית המחמד"
+                  formControlName="description"></textarea>
+                <mat-hint align="end">{{description.value?.length || 0}}/1000</mat-hint>
               </mat-form-field>
             </div>
 

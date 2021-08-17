@@ -17,7 +17,7 @@ import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SuccessViewComponent } from './success-view/success-view.component';
 import { NoopScrollStrategy } from '@angular/cdk/overlay';
 import { ErrorViewComponent } from './error-view/error-view.component';
@@ -27,7 +27,7 @@ import { ErrorViewComponent } from './error-view/error-view.component';
   templateUrl: './addpet.component.html',
   styleUrls: ['./addpet.component.sass'],
   providers: [{
-    provide: STEPPER_GLOBAL_OPTIONS, useValue: {displayDefaultIndicatorType: false}
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
   }]
 })
 
@@ -154,7 +154,9 @@ export class AddpetComponent
       if (trait.isBoolean) {
         this.traitsWithBooleanValue.push(trait);
       } else {
-        this.traitsWithSetOfValues.push(trait)
+        if (trait.name != "מין" && trait.name != "גיל") {
+          this.traitsWithSetOfValues.push(trait);
+        }
       }
     }
     this.isMatChipsLoaded = true;
@@ -204,15 +206,15 @@ export class AddpetComponent
   }
 
   convertGMTtoUTC(date: Date): Date {
-    var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+      date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
     return new Date(now_utc);
   }
 
   openSuccessDialog() {
     this._dialog.open(SuccessViewComponent, {
-      data: { 
+      data: {
         name: this.pet.name
       },
       disableClose: true,
@@ -250,7 +252,7 @@ export class AddpetComponent
       this.success = false;
       console.log("Error, can't add pet!, success changed to false", err);
       this.openErrorDialog();
-        }
+    }
     this.loading = false;
   }
 

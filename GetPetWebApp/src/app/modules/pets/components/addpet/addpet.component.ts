@@ -39,7 +39,6 @@ export class AddpetComponent
 
   loading = false;
   success = false;
-  formSent = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;

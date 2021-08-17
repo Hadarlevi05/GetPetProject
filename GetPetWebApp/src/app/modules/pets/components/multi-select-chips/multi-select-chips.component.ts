@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-  OnChanges
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatChip, MatChipList, MatChipSelectionChange } from '@angular/material/chips';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -84,8 +75,6 @@ export class MultiSelectChipsComponent
 
     console.log("in child: isMatChipsTraitsLoaded: " + this.isMatChipsTraitsLoaded);
 
-    this.setAllMatchipsFalse();
-
     console.log('all matchips selections', this.traitChipSelections);
   }
 
@@ -142,7 +131,7 @@ export class MultiSelectChipsComponent
   toggleSelection(chip: MatChip) {
     if (!this.disabled) chip.toggleSelected();
     console.log("chip changed! : Property no. " + chip.value.id + "name: " + chip.value.name + " changed to : " + chip.selected);
-    //strategy: all mats are "no" and then update to change
+    //all mats are set to "no" at the beginning and changes as user click the chips
     var optionId;
     const item = this.traitChipSelections.find(i => i.traitId === chip.value.id);
     if (item) {

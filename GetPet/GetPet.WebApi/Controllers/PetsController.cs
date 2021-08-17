@@ -92,66 +92,72 @@ namespace GetPet.WebApi.Controllers
         public async Task<IActionResult> Post(PetDto pet)
         {
             //var petToInsert = _mapper.Map<Pet>(pet);
-
-            var petToInsert = new Pet
+            try
             {
-                Name = pet.Name,
-                Gender = pet.Gender,
-                Birthday = pet.Birthday,
-                Description = pet.Description,
-                Source = pet.Source,
-                SourceLink = pet.SourceLink,
-                AnimalTypeId = pet.AnimalTypeId,
-                UserId = pet.UserId
-                //animal type?
-            };
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            petToInsert.MetaFileLinks = new List<MetaFileLink>();
-            foreach (var imageSource in pet.Images)
-            {
-                petToInsert.MetaFileLinks.Add(
-                    new MetaFileLink
-                    {
-                        Path = imageSource,
-                        MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
-                        Size = 1000
-                    });
+                var petToInsert = new Pet
+                {
+                    Name = pet.Name,
+                    Gender = pet.Gender,
+                    Birthday = pet.Birthday,
+                    Description = pet.Description,
+                    Source = pet.Source,
+                    SourceLink = pet.SourceLink,
+                    AnimalTypeId = pet.AnimalTypeId,
+                    UserId = pet.UserId
+                    //animal type?
+                };
+
+                petToInsert.MetaFileLinks = new List<MetaFileLink>();
+                foreach (var imageSource in pet.Images)
+                {
+                    petToInsert.MetaFileLinks.Add(
+                        new MetaFileLink
+                        {
+                            Path = imageSource,
+                            MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
+                            Size = 1000
+                        });
+                }
+
+                var traitsFilter = new TraitFilter
+                {
+                    AnimalTypeId = pet.AnimalTypeId
+                };
+
+                //get list of all traits by AnimalTypeId
+                List<Trait> traitsByAnimal = _traitRepository.SearchAsync(traitsFilter).Result.ToList();
+
+                petToInsert.PetTraits = new List<PetTrait>();
+                foreach (KeyValuePair<string, string> entry in pet.Traits)
+                {
+                    //Use entry.Value & entry.Key
+                    var foundTrait = traitsByAnimal.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
+                    var foundTraitOption = foundTrait.TraitOptions.FirstOrDefault(op => op.Id == int.Parse(entry.Value));
+
+                    petToInsert.PetTraits.Add(
+                        new PetTrait
+                        {
+                            Trait = foundTrait,
+                            TraitOption = foundTraitOption
+                        });
+                }
+
+                await _petHandler.AddPet(petToInsert);
+
+                await _unitOfWork.SaveChangesAsync();
+
+                return Ok(_mapper.Map<PetDto>(petToInsert));
+
             }
-
-            var traitsFilter = new TraitFilter
+            catch (Exception ex)
             {
-                AnimalTypeId = pet.AnimalTypeId
-            };
-            ////get list of all traits
-            //var filter = new TraitFilter();
-            //var allTraits = _traitRepository.SearchAsync(filter).Result.ToList();
-
-            ////convert dictionary of <traitId, traitOptionid> to list of <PetTrait>
-            //List<Trait> allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == pet.AnimalTypeId).ToList();
-
-            //get list of all traits by AnimalTypeId
-            List<Trait> traitsByAnimal = _traitRepository.SearchAsync(traitsFilter).Result.ToList();
-            
-            petToInsert.PetTraits = new List<PetTrait>();
-            foreach (KeyValuePair<string, string> entry in pet.Traits)
-            {
-                //Use entry.Value & entry.Key
-                var foundTrait = traitsByAnimal.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
-                var foundTraitOption = foundTrait.TraitOptions.FirstOrDefault(op => op.Id == int.Parse(entry.Value));
-
-                petToInsert.PetTraits.Add(
-                    new PetTrait
-                    {
-                        Trait = foundTrait,
-                        TraitOption = foundTraitOption
-                    });
+                return BadRequest();
             }
-
-            await _petHandler.AddPet(petToInsert);
-
-            await _unitOfWork.SaveChangesAsync();
-
-            return Ok(_mapper.Map<PetDto>(petToInsert));
         }
     }
 }

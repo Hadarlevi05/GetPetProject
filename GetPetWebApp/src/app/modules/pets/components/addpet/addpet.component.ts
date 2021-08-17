@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList, Input } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
@@ -17,6 +17,10 @@ import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import {MatDialog} from '@angular/material/dialog';
+import { SuccessViewComponent } from './success-view/success-view.component';
+import { NoopScrollStrategy } from '@angular/cdk/overlay';
+import { ErrorViewComponent } from './error-view/error-view.component';
 
 @Component({
   selector: 'app-addpet',
@@ -35,7 +39,7 @@ export class AddpetComponent
 
   loading = false;
   success = false;
-  formUploaded = false;
+  formSent = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
@@ -78,7 +82,8 @@ export class AddpetComponent
     private _animalTypeService: AnimalTypeService,
     private _traitsService: TraitsService,
     private _petsService: PetsService,
-    private _uploadService: UploadService) { }
+    private _uploadService: UploadService,
+    private _dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -206,12 +211,28 @@ export class AddpetComponent
     return new Date(now_utc);
   }
 
+  openSuccessDialog() {
+    this._dialog.open(SuccessViewComponent, {
+      data: { 
+        name: this.pet.name
+      },
+      disableClose: true,
+      scrollStrategy: new NoopScrollStrategy()
+    });
+  }
+
+  openErrorDialog() {
+    this._dialog.open(ErrorViewComponent, {
+      disableClose: true,
+      scrollStrategy: new NoopScrollStrategy()
+    });
+  }
+
   AddPet() {
 
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
-    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
@@ -224,21 +245,22 @@ export class AddpetComponent
 
     try {
       this._petsService.addPet(this.pet);
-      this.formUploaded = true;
       this.success = true;
+      this.openSuccessDialog();
     } catch (err) {
       this.success = false;
       console.log("Error, can't add pet!, success changed to false", err);
-    }
+      this.openErrorDialog();
+        }
     this.loading = false;
   }
 
-  onSubmit(postData) {
+  onSubmit() {
 
-    //collect all files to upload (of FormDate type)
+    //upload files
     this.components.forEach(uploader => {
       console.log("uploader.file.data is: ", uploader.file);
-      if (uploader.file) {  //check if there is a file in currentuploader
+      if (uploader.file) {
         this.formDataFile = new FormData();
         this.formDataFile.set('formFile', uploader.file); //prepare FormData object from file
         this.filesToUpload.push(this.formDataFile);
@@ -249,8 +271,7 @@ export class AddpetComponent
     this.filesToUpload.forEach(f => {
       console.log(f.get('formFile'));
     })
-    
-    // upload pictures to db
+
     this._uploadService.uploadData(this.filesToUpload)
       .subscribe(res => {
         console.log(res);
@@ -261,9 +282,7 @@ export class AddpetComponent
 
         this.AddPet();
       }, err => {
-        console.log("pet upload failed!", err);
-        this.formUploaded = true;
-        this.success = false;
+        console.log("pictures upload failed", err);
       });
   }
 }

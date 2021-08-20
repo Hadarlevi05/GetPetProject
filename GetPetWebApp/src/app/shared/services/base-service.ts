@@ -1,11 +1,11 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BaseFilter } from '../models/base-filter';
+import { environment } from '../../../environments/environment';
 
 export class BaseService {
 
-    protected BASE_URL = 'https://localhost:44345/api/';
-
-    protected IMAGE_BASE_URL = 'https://localhost:44345/api/';
+    protected BASE_URL = environment.apiUrl;
+    protected IMAGE_BASE_URL = environment.baseImageUrl;
 
     constructor(
         protected http: HttpClient) { }

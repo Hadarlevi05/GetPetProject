@@ -58,6 +58,9 @@ namespace GetPet.Crawler.Parsers
                 AnimalTypeId = animalTypeId,
             };
 
+
+            var file = 
+
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink

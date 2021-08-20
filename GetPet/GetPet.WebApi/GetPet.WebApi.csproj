@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="Models\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="Models\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="Models\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="Models\**" />
+    <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\NewFolder\" />
-    <Folder Include="wwwroot\upload-content\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

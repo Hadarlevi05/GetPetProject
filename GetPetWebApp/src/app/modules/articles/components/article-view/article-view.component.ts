@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { IArticle } from '../../models/iarticle';
 import { IComment } from '../../models/icomment';
 import { ArticleService } from '../../services/article.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-article-view',
@@ -31,7 +32,7 @@ export class ArticleViewComponent implements OnInit {
   }
 
   getAvatarImage(num: number) {
-    return `url(https://localhost:44345/images/avatars/${num % 50}.png)`;
+    return `url(${environment.baseImageUrl}images/avatars/${num % 50}.png)`;
   }
 
   addComment() {

@@ -6,8 +6,11 @@ using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -52,6 +55,20 @@ namespace GetPet.Crawler.Parsers
         public Gender ParseGender(string description)
         {
             return ParserUtils.ConvertGender(description);
+        }
+
+        public async Task<string> DownloadFile(string url) 
+        {
+
+            using (var client = new WebClient())
+            {
+                var extension = url.Split(".").Last();
+                var fileName = $"{Guid.NewGuid()}.{extension}";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
+
+                await client.DownloadFileTaskAsync(new Uri(url), "a.mpeg");
+            }
+            return null;
         }
 
         public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)

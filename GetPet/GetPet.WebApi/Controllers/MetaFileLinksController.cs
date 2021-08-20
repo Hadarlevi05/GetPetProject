@@ -36,22 +36,6 @@ namespace GetPet.WebApi.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        private async Task<string> UploadFile(IFormFile formFile)
-        {
-            if (formFile != null && formFile.Length > 0)
-            {
-                var extension = formFile.FileName.Split(".").Last();
-                var fileName = $"{Guid.NewGuid()}.{extension}";                
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await formFile.CopyToAsync(fileStream);
-                }
-                return $"{Constants.WEBAPI_URL}/upload-content/{fileName}";
-            }
-            return null ;
-        }
-
         [HttpPost]
         public async Task<IActionResult> Post(IFormFile formFile)
         {
@@ -70,6 +54,22 @@ namespace GetPet.WebApi.Controllers
             await _unitOfWork.SaveChangesAsync();
 
             return Ok(_mapper.Map<MetaFileLinkDto>(mfl));
+        }
+
+        private async Task<string> UploadFile(IFormFile formFile)
+        {
+            if (formFile != null && formFile.Length > 0)
+            {
+                var extension = formFile.FileName.Split(".").Last();
+                var fileName = $"{Guid.NewGuid()}.{extension}";
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(fileStream);
+                }
+                return $"{Constants.WEBAPI_URL}/upload-content/{fileName}";
+            }
+            return null;
         }
     }
 }

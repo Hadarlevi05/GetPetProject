@@ -1,9 +1,11 @@
-﻿using GetPet.Data.Entities;
+﻿using GetPet.BusinessLogic.Azure;
+using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
@@ -17,7 +19,7 @@ namespace GetPet.Crawler.Parsers
             return items;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
+        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
         {
             AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
             int animalTypeId = animalType.Id; 
@@ -44,11 +46,13 @@ namespace GetPet.Crawler.Parsers
                 AnimalTypeId = animalType.Id,
             };
 
+            AzureBlobHelper blobHelper = new();
+            var filePath = await blobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink
                 {
-                    Path = image,
+                    Path = filePath,
                     MimeType = image.Substring(image.LastIndexOf(".")),
                     Size = 1000
                 }

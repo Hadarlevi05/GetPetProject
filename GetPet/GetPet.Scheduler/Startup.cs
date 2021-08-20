@@ -1,4 +1,5 @@
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Azure;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
@@ -33,6 +34,8 @@ namespace GetPet.Scheduler
         private void SetEnvironmentVariables()
         {
             Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
+            Constants.Secret = Configuration.GetValue<string>("Secret");
+            Constants.AzureStorageConnectionString = Configuration.GetValue<string>("AzureStorageConnectionString");
         }
 
         public IConfiguration Configuration { get; }
@@ -101,7 +104,8 @@ namespace GetPet.Scheduler
                 .AddScoped<ITraitOptionRepository, TraitOptionRepository>()
                 .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())
                 .AddTransient<IMailHandler, MailHandler>()
-                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>();
+                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>()
+                .AddScoped<AzureBlobHelper>();
 
             SetBackgroundJobs();
         }

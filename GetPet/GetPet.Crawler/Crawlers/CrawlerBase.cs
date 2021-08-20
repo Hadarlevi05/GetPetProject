@@ -106,7 +106,7 @@ namespace GetPet.Crawler.Crawlers
 
             var user = await CreateUser();
 
-            var pets = parser.Parse(traits, user, animalTypes);
+            var pets = await parser.Parse(traits, user, animalTypes);
 
             foreach (var pet in pets)
             {

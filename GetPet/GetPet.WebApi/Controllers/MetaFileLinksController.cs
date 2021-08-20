@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Azure;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
@@ -23,17 +24,20 @@ namespace GetPet.WebApi.Controllers
         private readonly ILogger<MetaFileLinksController> _logger;
         private readonly IMetaFileLinkRepository _metaFileLinkRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly AzureBlobHelper _blobHelper;
 
         public MetaFileLinksController(
-                ILogger<MetaFileLinksController> logger,
-                IMapper mapper,
-                IMetaFileLinkRepository metaFileLinkRepository,
-                IUnitOfWork unitOfWork)
+            ILogger<MetaFileLinksController> logger,
+            IMapper mapper,
+            IMetaFileLinkRepository metaFileLinkRepository,
+            IUnitOfWork unitOfWork,
+            AzureBlobHelper blobHelper)
         {
             _logger = logger;
             _mapper = mapper;
             _metaFileLinkRepository = metaFileLinkRepository;
             _unitOfWork = unitOfWork;
+            _blobHelper = blobHelper;
         }
 
         [HttpPost]
@@ -58,18 +62,14 @@ namespace GetPet.WebApi.Controllers
 
         private async Task<string> UploadFile(IFormFile formFile)
         {
-            if (formFile != null && formFile.Length > 0)
-            {
-                var extension = formFile.FileName.Split(".").Last();
-                var fileName = $"{Guid.NewGuid()}.{extension}";
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    await formFile.CopyToAsync(fileStream);
-                }
-                return $"{Constants.WEBAPI_URL}/upload-content/{fileName}";
-            }
-            return null;
+            if (formFile == null || formFile.Length == 0)
+                return null;
+
+            using var ms = new MemoryStream();
+            formFile.CopyTo(ms);
+
+            var filePath = await _blobHelper.Upload(formFile.FileName, ms);
+            return filePath;
         }
     }
 }

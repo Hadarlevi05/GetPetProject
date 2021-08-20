@@ -3,6 +3,7 @@ using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers.Abstractions
 {
@@ -10,7 +11,7 @@ namespace GetPet.Crawler.Parsers.Abstractions
     {
         PetSource Source { get; }
         HtmlDocument Document { get; set; }
-        IList<Pet> Parse(List<Trait> allTraits, User user, List<Data.Entities.AnimalType> animalTypes);
+        Task<IList<Pet>> Parse(List<Trait> allTraits, User user, List<Data.Entities.AnimalType> animalTypes);
         string ParseName(HtmlNode node);
         DateTime ParseAgeInYear(HtmlNode node);
         Gender ParseGender(HtmlNode node, string name);

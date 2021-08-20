@@ -1,5 +1,4 @@
-﻿using GetPet.Common;
-using GetPet.Crawler.Parsers.Abstractions;
+﻿using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
@@ -20,7 +19,7 @@ namespace GetPet.Crawler.Parsers
 
         public HtmlDocument Document { get; set; }
 
-        public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes)
+        public async virtual Task<IList<Pet>> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes)
         {
             var results = new List<Pet>();
 
@@ -28,7 +27,7 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits, animalTypes);                
+                var pet = await ParseSingleNode(node, allTraits, animalTypes);                
                 pet.User = user;
 
                 results.Add(pet);
@@ -39,7 +38,7 @@ namespace GetPet.Crawler.Parsers
 
         public abstract HtmlNodeCollection GetNodes();
 
-        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes);
+        public abstract Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes);
 
         public abstract string ParseName(HtmlNode node);
 
@@ -64,9 +63,11 @@ namespace GetPet.Crawler.Parsers
             {
                 var extension = url.Split(".").Last();
                 var fileName = $"{Guid.NewGuid()}.{extension}";
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\upload-content", fileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\temp", fileName);
+                await client.DownloadFileTaskAsync(new Uri(url), fileName);
 
-                await client.DownloadFileTaskAsync(new Uri(url), "a.mpeg");
+
+
             }
             return null;
         }

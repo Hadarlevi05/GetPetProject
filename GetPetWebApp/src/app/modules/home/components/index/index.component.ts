@@ -33,8 +33,9 @@ export class IndexComponent implements OnInit {
   animalTypeId = 1;
   animaltypes: IAnimalType[] = [];
 
-  waitingForAdoptionCount = -1;
-  adoptedCount = -1;
+  waitingForAdoptionCount: number = -1;
+  waitingForAdoptionAnimation: number = 0;
+  adoptedCount: number = -1;
 
   form: FormGroup = new FormGroup({
     animalType: new FormControl('')
@@ -76,6 +77,16 @@ export class IndexComponent implements OnInit {
       this.adoptedCount = counter.count;
     });
   }
+
+  waitingForAdoptionStop: any = setInterval(() => {
+    if (this.waitingForAdoptionCount == 0) {
+      clearInterval(this.waitingForAdoptionStop);
+    }
+    this.waitingForAdoptionAnimation++;
+    if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
+      clearInterval(this.waitingForAdoptionStop);
+    }
+  },10);
 
   setFormSubscribers() {
     this.form.controls['animalType'].valueChanges.subscribe(value => {

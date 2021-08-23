@@ -21,6 +21,7 @@ namespace GetPet.WebApi.Controllers
     [Route("api/[controller]")]
     public class PetsController : BaseController
     {
+        private readonly IMetaFileLinkRepository _mflRepository;
         private readonly ITraitRepository _traitRepository;
         private readonly IPetHandler _petHandler;
         private readonly IMapper _mapper;
@@ -29,6 +30,7 @@ namespace GetPet.WebApi.Controllers
         private readonly IUnitOfWork _unitOfWork;
 
         public PetsController(
+            IMetaFileLinkRepository mflRepository,
             ITraitRepository traitRepository,
             IPetHandler petHandler,
             ILogger<PetsController> logger,
@@ -36,6 +38,7 @@ namespace GetPet.WebApi.Controllers
             IPetRepository petRepository,
             IUnitOfWork unitOfWork)
         {
+            _mflRepository = mflRepository;
             _traitRepository = traitRepository;
             _petHandler = petHandler;
             _logger = logger;
@@ -91,7 +94,6 @@ namespace GetPet.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(PetDto pet)
         {
-            //var petToInsert = _mapper.Map<Pet>(pet);
             try
             {
                 if (!ModelState.IsValid)
@@ -109,19 +111,13 @@ namespace GetPet.WebApi.Controllers
                     SourceLink = pet.SourceLink,
                     AnimalTypeId = pet.AnimalTypeId,
                     UserId = pet.UserId
-                    //animal type?
                 };
 
                 petToInsert.MetaFileLinks = new List<MetaFileLink>();
-                foreach (var imageSource in pet.Images)
+                foreach (var mflId in pet.MetaFileLinkIds)
                 {
-                    petToInsert.MetaFileLinks.Add(
-                        new MetaFileLink
-                        {
-                            Path = imageSource,
-                            MimeType = imageSource.Substring(imageSource.LastIndexOf(".")),
-                            Size = 1000
-                        });
+                    MetaFileLink mfl = _mflRepository.GetByIdAsync(mflId).Result;
+                    petToInsert.MetaFileLinks.Add(mfl);
                 }
 
                 var traitsFilter = new TraitFilter

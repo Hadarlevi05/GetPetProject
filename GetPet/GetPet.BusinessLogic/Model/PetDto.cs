@@ -26,7 +26,7 @@ namespace GetPet.BusinessLogic.Model
 
         public IList<string> Images { get; set; }
 
-        //public IFormFile formFiles { get; set; }
+        public IList<int> MetaFileLinkIds { get; set; }
 
         public IDictionary<string, string> Traits { get; set; }
 

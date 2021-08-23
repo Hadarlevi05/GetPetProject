@@ -45,6 +45,7 @@ export class AddpetComponent
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
+  imagesIds: number[] = [];
 
   ngAfterViewInit() {
   }
@@ -59,7 +60,8 @@ export class AddpetComponent
     userId: 0,
     traits: {},
     source: PetSource.Internal,
-    images: [],
+    //images: [],
+    metaFileLinkIds: [],
     creationTimestamp: new Date(),
   }
 
@@ -159,15 +161,16 @@ export class AddpetComponent
         }
       }
     }
-    this.isMatChipsLoaded = true;
 
+    this.isMatChipsLoaded = true;
+    //this.multiSelectChipsChild.setAllMatchipsFalse();
     console.log("traits with boolean value:", this.traitsWithBooleanValue);
     console.log("trait with set of values:", this.traitsWithSetOfValues);
   }
 
   private deleteTraitsArrays() {
 
-    this.multiSelectChipsChild.setAllMatchipsFalse();
+    this.multiSelectChipsChild.traitChipSelections = [];
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
     this.traitsWithSetOfValues = [];
@@ -237,7 +240,8 @@ export class AddpetComponent
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
-    this.pet.images = this.imagesURLs;
+    //this.pet.images = this.imagesURLs;
+    this.pet.metaFileLinkIds = this.imagesIds;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
     this.pet.traits = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
@@ -245,7 +249,12 @@ export class AddpetComponent
     console.log("PET TO SEND INFO: ", this.pet);
 
     try {
-      this._petsService.addPet(this.pet);
+      this._petsService.addPet(this.pet).subscribe
+      (response => {
+        console.log(response);
+        var petDbId = response['id'];
+        //this._uploadService.AttachFilesToPet(this.imagesIds, petDbId);  ??
+      });
       this.success = true;
       this.openSuccessDialog();
     } catch (err) {
@@ -258,7 +267,7 @@ export class AddpetComponent
 
   onSubmit() {
 
-    //upload files
+    //upload files to db
     this.components.forEach(uploader => {
       console.log("uploader.file.data is: ", uploader.file);
       if (uploader.file) {
@@ -278,10 +287,12 @@ export class AddpetComponent
         console.log(res);
         for (const element of res) {
           this.imagesURLs.push(element['path']);
+          this.imagesIds.push(element['id']);
         }
         console.log("THE IMAGES URLS:", this.imagesURLs);
-
+        console.log("THE IMAGES IDS:", this.imagesIds);
         this.AddPet();
+
       }, err => {
         console.log("pictures upload failed", err);
       });

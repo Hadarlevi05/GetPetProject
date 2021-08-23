@@ -21,10 +21,7 @@ export class UploadService extends BaseService{
   public uploadData(formData: FormData[]): Observable<any> {
 
     console.log("upload URL: " + `${this.entPointUrl}`);
-    // return this.httpClient.post(`${this.entPointUrl}`, formData, {  
-    //     reportProgress: true,  
-    //     observe: 'response'  
-    //   });  
+
     var numOfFiles = formData.length;
     console.log("in upload service - number Of Files:" + numOfFiles);
 
@@ -32,10 +29,11 @@ export class UploadService extends BaseService{
       this.responses[i] = this.httpClient.post(`${this.entPointUrl}`, formData[i]);
     }
 
-    // const response0 = this.httpClient.post(`${this.entPointUrl}`, formData[0], {  reportProgress: true});
-    // const response1 = this.httpClient.post(`${this.entPointUrl}`, formData[1], {  reportProgress: true});
-    // const response2 = this.httpClient.post(`${this.entPointUrl}`, formData[2], {  reportProgress: true});
-    
     return forkJoin(this.responses);
+  }
+
+  public AttachFilesToPet(imagesIds: number[], petDbId: number) {
+
+      //??
   }
 }

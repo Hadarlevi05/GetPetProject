@@ -1,15 +1,41 @@
 <section dir="rtl" class="adopt-pet">
-    <h1>
-        ברוכים הבאים לגט-פט!
-    </h1>
+
+    <section class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-6 order-2 order-md-1">
+                <img src="https://localhost:44345/images/index/animals1.png" class="img-fluid">
+            </div>
+            <div class="col-md-6 order-1 order-md-2">
+                <div class="row align-items-center">
+                    <h1>
+                        ברוכים הבאים!
+                    </h1>
+                </div>
+                <div class="row align-items-center">
+                    <img src="https://localhost:44345/images/index/logo2.png" class="img-fluid">
+                </div>
+                <div class="row align-items-center content">
+                    <div *ngFor="let type of animaltypes" class="col-md-6 col-sm-6 align-items-center">
+                        <button (click)="onAdpotButtonClick(type.id)">אמצו {{type.name}}</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+
+
+
     <h2>עד כה אומצו
         {{ adoptedCount }}
         כלבים וחתולים!
         {{ waitingForAdoptionAnimation }}
         כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
     </h2>
-    <h2>איזה בעל חיים תרצו לאמץ?</h2>
-    <form [formGroup]="form">
+
+    <!-- <form [formGroup]="form">
 
         <section class="row">
             <mat-form-field appearance="outline">
@@ -21,7 +47,8 @@
                 </mat-select>
             </mat-form-field>
         </section>
-    </form>
+    </form> -->
+
 </section>
 
 

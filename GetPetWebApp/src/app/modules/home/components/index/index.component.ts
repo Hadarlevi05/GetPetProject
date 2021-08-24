@@ -56,7 +56,7 @@ export class IndexComponent implements OnInit {
     this.loadPets();
     this.loadArticles();
     this.loadAnimalTypes();
-    this.setFormSubscribers();
+    //this.setFormSubscribers();
     this.setCounters();
   }
 
@@ -88,14 +88,20 @@ export class IndexComponent implements OnInit {
     }
   },10);
 
-  setFormSubscribers() {
-    this.form.controls['animalType'].valueChanges.subscribe(value => {
-
+  onAdpotButtonClick(animalTypeId: number) {
       const urlTree = this.router.parseUrl('pets/search');
-      urlTree.queryParams['animalType'] = value;
+      urlTree.queryParams['animalType'] = animalTypeId;
       this.router.navigateByUrl(urlTree);
-    });
   }
+
+  // setFormSubscribers() {
+  //   this.form.controls['animalType'].valueChanges.subscribe(value => {
+
+  //     const urlTree = this.router.parseUrl('pets/search');
+  //     urlTree.queryParams['animalType'] = value;
+  //     this.router.navigateByUrl(urlTree);
+  //   });
+  // }
 
   loadAnimalTypes() {
 

@@ -33,7 +33,7 @@ export class IndexComponent implements OnInit {
   animalTypeId = 1;
   animaltypes: IAnimalType[] = [];
 
-  waitingForAdoptionCount: number = -1;
+  waitingForAdoptionCount: number = 0;
   waitingForAdoptionAnimation: number = 0;
   adoptedCount: number = -1;
 
@@ -70,6 +70,20 @@ export class IndexComponent implements OnInit {
     const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
     this.petsService.searchCount(filter).subscribe(counter => {
       this.waitingForAdoptionCount = counter.count;
+      
+      var waitingForAdoptionStop: any = setInterval(() => {
+        console.log("waitfor count",this.waitingForAdoptionCount);
+        if (this.waitingForAdoptionCount <= 0) {
+          clearInterval(waitingForAdoptionStop);
+        } else {
+          this.waitingForAdoptionAnimation++;
+          if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
+            clearInterval(waitingForAdoptionStop);
+          }
+        }
+      },10);
+
+
     });
 
     filter.petStatus = PetStatus.Adopted;
@@ -77,16 +91,6 @@ export class IndexComponent implements OnInit {
       this.adoptedCount = counter.count;
     });
   }
-
-  waitingForAdoptionStop: any = setInterval(() => {
-    if (this.waitingForAdoptionCount == 0) {
-      clearInterval(this.waitingForAdoptionStop);
-    }
-    this.waitingForAdoptionAnimation++;
-    if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
-      clearInterval(this.waitingForAdoptionStop);
-    }
-  },10);
 
   onAdpotButtonClick(animalTypeId: number) {
       const urlTree = this.router.parseUrl('pets/search');

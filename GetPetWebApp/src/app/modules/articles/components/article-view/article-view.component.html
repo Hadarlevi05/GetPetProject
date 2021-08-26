@@ -10,7 +10,7 @@
         </p>
         <p>
             <span class="image-container">
-                <img [src]="article.imageUrl" [alt]="article.title">
+                <img [src]="imageUrl + article.imageUrl" [alt]="article.title">
 
                 <div [innerHTML]="article.content"></div>
             </span>

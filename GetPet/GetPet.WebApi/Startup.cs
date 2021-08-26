@@ -88,7 +88,8 @@ namespace GetPet.WebApi
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
                 .AddScoped<IPetHandler, PetHandler>()
                 .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>()
-                .AddScoped<AzureBlobHelper>();
+                .AddScoped<AzureBlobHelper>()
+                .AddScoped<ImageHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

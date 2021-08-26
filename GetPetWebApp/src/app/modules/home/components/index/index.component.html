@@ -1,17 +1,29 @@
-<section dir="rtl" class="adopt-pet">
-    <h1>
-        ברוכים הבאים לגט-פט!
-    </h1>
-    <h2>עד כה אומצו
-        {{ adoptedCount }}
-        כלבים וחתולים!
-        {{ waitingForAdoptionCount }}
-        כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
-    </h2>
-    <h2>איזה בעל חיים תרצו לאמץ?</h2>
-    <form [formGroup]="form">
+<section class="row adopt-pet" dir="rtl">
 
-        <section class="row">
+
+
+    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
+        fxFlex.xl="20%" fx class="row">
+
+
+        <h1>
+            ברוכים הבאים לגט-פט!
+        </h1>
+        <h2>עד כה אומצו
+            {{ adoptedCount }}
+            כלבים וחתולים!
+            {{ waitingForAdoptionCount }}
+            כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
+        </h2>
+        <h2>איזה בעל חיים תרצו לאמץ?</h2>
+    </div>
+
+    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
+        fxFlex.xl="20%" fx class="row">
+
+        <form [formGroup]="form">
+
+
             <mat-form-field appearance="outline">
                 <mat-label>סוג</mat-label>
                 <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
@@ -20,9 +32,11 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field>
-        </section>
-    </form>
+
+        </form>
+    </div>
 </section>
+
 
 
 <section>
@@ -32,10 +46,12 @@
         <app-loader [Show]="articleLoading"></app-loader>
 
         <div class="content" *ngIf="!articleLoading">
-            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div fxLayout="row wrap" fxLayoutGap="24px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
                     fxFlex.xl="20%" fx *ngFor="let article of articles">
+
                     <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
+
                 </div>
             </div>
         </div>

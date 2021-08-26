@@ -20,6 +20,8 @@ export class ArticleViewComponent implements OnInit {
   @Input()
   article: IArticle = {} as IArticle;
 
+  imageUrl = '';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private articleService: ArticleService,
@@ -29,10 +31,11 @@ export class ArticleViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageUrl = environment.baseImageUrl;
   }
 
   getAvatarImage(num: number) {
-    return `url(${environment.baseImageUrl}images/avatars/${num % 50}.png)`;
+    return `url(${environment.baseImageUrl}avatars/${num % 50}.png)`;
   }
 
   addComment() {

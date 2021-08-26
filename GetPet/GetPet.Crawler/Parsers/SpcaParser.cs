@@ -11,6 +11,10 @@ namespace GetPet.Crawler.Parsers
 {
     public class SpcaParser : ParserBase
      {
+        public SpcaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.Spca;
 
         public override HtmlNodeCollection GetNodes()
@@ -45,9 +49,8 @@ namespace GetPet.Crawler.Parsers
                 AnimalType = animalType,
                 AnimalTypeId = animalType.Id,
             };
-
-            AzureBlobHelper blobHelper = new();
-            var filePath = await blobHelper.Upload(image);
+            
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink

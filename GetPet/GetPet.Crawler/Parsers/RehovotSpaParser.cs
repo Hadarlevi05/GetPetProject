@@ -13,6 +13,10 @@ namespace GetPet.Crawler.Parsers
 {
     public class RehovotSpaParser : ParserBase
     {
+        public RehovotSpaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.RehovotSpa;
 
         public override HtmlNodeCollection GetNodes()
@@ -59,8 +63,7 @@ namespace GetPet.Crawler.Parsers
                 AnimalTypeId = animalTypeId,
             };
 
-            AzureBlobHelper blobHelper = new();
-            var filePath = await blobHelper.Upload(image);
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink

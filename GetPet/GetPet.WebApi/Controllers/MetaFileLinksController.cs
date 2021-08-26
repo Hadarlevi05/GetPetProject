@@ -67,6 +67,7 @@ namespace GetPet.WebApi.Controllers
 
             using var ms = new MemoryStream();
             formFile.CopyTo(ms);
+            ms.Seek(0, SeekOrigin.Begin);
 
             var filePath = await _blobHelper.Upload(formFile.FileName, ms);
             return filePath;

@@ -1,4 +1,5 @@
-﻿using GetPet.Crawler.Parsers.Abstractions;
+﻿using GetPet.BusinessLogic.Azure;
+using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
@@ -15,6 +16,13 @@ namespace GetPet.Crawler.Parsers
 {
     public abstract class ParserBase : IParser
     {
+        protected readonly AzureBlobHelper _azureBlobHelper;
+
+        public ParserBase(AzureBlobHelper azureBlobHelper)
+        {
+            _azureBlobHelper = azureBlobHelper;
+        }
+
         public abstract PetSource Source { get; }
 
         public HtmlDocument Document { get; set; }
@@ -54,22 +62,6 @@ namespace GetPet.Crawler.Parsers
         public Gender ParseGender(string description)
         {
             return ParserUtils.ConvertGender(description);
-        }
-
-        public async Task<string> DownloadFile(string url) 
-        {
-
-            using (var client = new WebClient())
-            {
-                var extension = url.Split(".").Last();
-                var fileName = $"{Guid.NewGuid()}.{extension}";
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\temp", fileName);
-                await client.DownloadFileTaskAsync(new Uri(url), fileName);
-
-
-
-            }
-            return null;
         }
 
         public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)

@@ -12,6 +12,10 @@ namespace GetPet.Crawler.Parsers
 {
     public class RlaParser : ParserBase
     {
+        public RlaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.Rla;
 
         public override HtmlNodeCollection GetNodes()
@@ -63,8 +67,7 @@ namespace GetPet.Crawler.Parsers
                 AnimalTypeId = animalTypeId,
             };
 
-            AzureBlobHelper blobHelper = new();
-            var filePath = await blobHelper.Upload(image);
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink

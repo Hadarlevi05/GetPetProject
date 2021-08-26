@@ -260,9 +260,9 @@ namespace GetPet.Data
             await context.SaveChangesAsync();
 
             var images = new[] {
-                new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/img_1.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
-                new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/img_2.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
-                new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/img_3.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
+                new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"upload-content/8c996882-d950-4828-bee6-cc8b20f0132a.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
+                //new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/img_2.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
+                //new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/img_3.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now },
             };
             var names = new[] {
                 "לואי",
@@ -342,10 +342,18 @@ namespace GetPet.Data
                 "30 בחודש – תורמים לבעלי החיים",
                 "קר שם בחוץ"
             };
+            
+            var articleImages = new[] {
+                "upload-content/dc5b62d8-1fd0-46d0-baf8-7cdf06768024.jpg",
+                "upload-content/354efbae-e65e-48b2-86da-9a2383074f65.jpg",
+                "upload-content/a03ff394-840d-4076-80ec-5a2ebecfe79d.jpg",
+                "upload-content/f38a3eac-5b4a-4b6c-9705-cddbebd90b38.jpg",
+                "upload-content/8f053c3c-29b2-4701-ab6d-d1292923eff3.jpg"
+            };
 
             for (int i = 1; i <= 5; i++)
             {
-                var mtf = context.MetaFileLinks.Add(new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = $"{Constants.WEBAPI_URL}images/mocks/article{i}.jpg", CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now });
+                var mtf = context.MetaFileLinks.Add(new MetaFileLink { MimeType = "image/jpeg", Size = 1000, Path = articleImages[i - 1], CreationTimestamp = DateTime.Now, UpdatedTimestamp = DateTime.Now });
 
                 await context.SaveChangesAsync();
 

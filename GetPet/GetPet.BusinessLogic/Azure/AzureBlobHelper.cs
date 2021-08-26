@@ -12,6 +12,13 @@ namespace GetPet.BusinessLogic.Azure
     {
         private const string containerName = "upload-content";
 
+        private readonly ImageHelper _imageHelper;
+
+        public AzureBlobHelper(ImageHelper imageHelper)
+        {
+            _imageHelper = imageHelper;
+        }
+
         private async Task<BlobContainerClient> GetBlobContainerClient()
         {
             BlobServiceClient blobServiceClient = new(Constants.AzureStorageConnectionString);
@@ -25,7 +32,10 @@ namespace GetPet.BusinessLogic.Azure
             var extension = fileName.Split(".").Last();
             var newFileName = $"{Guid.NewGuid()}.{extension}";
 
-            var fileRelativePath = await Upload(newFileName, stream);
+            var imageStream = _imageHelper.PrepareImage(stream);
+            imageStream.Seek(0, SeekOrigin.Begin);
+
+            var fileRelativePath = await UploadToContainer(newFileName, imageStream);
 
             return fileRelativePath;
         }
@@ -34,10 +44,13 @@ namespace GetPet.BusinessLogic.Azure
         {
             var stream = GetStream(url);
 
+            var imageStream = _imageHelper.PrepareImage(stream);
+            imageStream.Seek(0, SeekOrigin.Begin);
+
             var extension = url.Split(".").Last();
             var fileName = $"{Guid.NewGuid()}.{extension}";
 
-            var fileRelativePath = await UploadToContainer(fileName, stream);
+            var fileRelativePath = await UploadToContainer(fileName, imageStream);
 
             return fileRelativePath;
         }

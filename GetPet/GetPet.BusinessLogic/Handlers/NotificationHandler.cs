@@ -89,8 +89,12 @@ namespace GetPet.BusinessLogic.Handlers
                 var user = users[notification.UserId];
 
                 var pets = await _petRepository.SearchAsync(filter);
+
+                if (pets.Count() == 0)
+                    continue;
+
                 var attachment = new List<Attachment>();
-                if (mailAlreadySent())
+                if (await EmailExists(user.Id, notification.Id, DateTime.Now.Date))
                 {
                     continue;
                 }
@@ -142,7 +146,8 @@ namespace GetPet.BusinessLogic.Handlers
                     UpdatedTimestamp = DateTime.Now,
                     UserId = user.Id,
                     NotificationId = notification.Id,
-                    CreationTimestamp = DateTime.Now
+                    CreationTimestamp = DateTime.Now,
+                    SentDate = DateTime.Now.Date
                 };
                 await _emailHistoryRepository.AddAsync(emailHistory);
                 await _unitOfWork.SaveChangesAsync();
@@ -150,9 +155,9 @@ namespace GetPet.BusinessLogic.Handlers
             }
         }
 
-        private bool mailAlreadySent()
+        private async Task<bool> EmailExists(int userId, int notificationId, DateTime sentDate)
         {
-            return false;
+            return await _emailHistoryRepository.EmailExists(userId, notificationId, sentDate);            
         }
 
         private string GetResource(string filename)

@@ -51,7 +51,14 @@ namespace GetPet.Crawler.Parsers
 
         public Gender ParseGender(string description)
         {
-            return ParserUtils.ConvertGender(description);
+            Gender gender = ParserUtils.ConvertGender(description);
+
+            if (gender == Gender.Unknown)
+            {
+                gender = ParserUtils.ParseGenderByKeyWords(description);
+            }
+
+            return gender;
         }
 
         public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)

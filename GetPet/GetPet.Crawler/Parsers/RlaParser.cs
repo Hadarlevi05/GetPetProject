@@ -43,7 +43,7 @@ namespace GetPet.Crawler.Parsers
             string name = ParseName(detailsNode);
             var birthday = ParseAgeInYear(detailsNode); //check
             var gender = ParseGender(description);
-            var decoded_description = ParseDescription(node, "title");
+            var decodedDescription = ParseDescription(description);
             var traits = ParseTraits(description, allTraitsByAnimalType);
             var image = node.SelectSingleNode(".//img[starts-with(@class, 'ui--content-box-image')]").Attributes["src"].Value;
             var sourceLink = petPage;
@@ -54,7 +54,7 @@ namespace GetPet.Crawler.Parsers
                 Name = name,
                 Gender = gender,
                 Birthday = birthday,
-                Description = description,
+                Description = decodedDescription,
                 Source = PetSource.External,
                 SourceLink = sourceLink,
                 AnimalType = animalType,

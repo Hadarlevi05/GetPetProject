@@ -139,9 +139,9 @@ namespace GetPet.Scheduler
 
             RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
 
-            RecurringJob.Trigger("RehovotSpaJob");
+            //RecurringJob.Trigger("RehovotSpaJob");
             //RecurringJob.Trigger("SpcaJob");
-            //RecurringJob.Trigger("RlaJob");
+            RecurringJob.Trigger("RlaJob");
         }
     }
 }

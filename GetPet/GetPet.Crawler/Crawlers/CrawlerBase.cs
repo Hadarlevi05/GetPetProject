@@ -2,7 +2,6 @@
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
-using GetPet.Common;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
@@ -17,10 +16,10 @@ using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Crawlers
 {
-    public abstract class CrawlerBase<T> : ICrawler where T : IParser, new()
+    public abstract class CrawlerBase<T> : ICrawler where T : IParser
     {
-        protected readonly HtmlDocument doc = new HtmlDocument();
-        protected readonly T parser = new T();
+        protected readonly HtmlDocument _doc = new HtmlDocument();
+        protected readonly T _parser;
 
         protected readonly IPetHandler _petHandler;
         protected readonly IPetRepository _petRepository;
@@ -30,9 +29,6 @@ namespace GetPet.Crawler.Crawlers
         protected readonly IAnimalTypeRepository _animalTypeRepository;
         protected readonly IUserRepository _userRepository;
         protected readonly ITraitOptionRepository _traitOptionRepository;
-
-        //private List<Pet> _AllPets;
-        //private List<User> _AllUsers;
 
         protected abstract string url { get; }
 
@@ -44,7 +40,8 @@ namespace GetPet.Crawler.Crawlers
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository)
+            ITraitOptionRepository traitOptionRepository, 
+            T parser)
         {
             _petHandler = petHandler;
             _petRepository = petRepository;
@@ -54,6 +51,7 @@ namespace GetPet.Crawler.Crawlers
             _animalTypeRepository = animalTypeRepository;
             _userRepository = userRepository;
             _traitOptionRepository = traitOptionRepository;
+            _parser = parser;
         }
 
         protected virtual async Task<List<Trait>> GetAllTraits()
@@ -89,9 +87,9 @@ namespace GetPet.Crawler.Crawlers
         {
             string html = await new WebClient().DownloadStringTaskAsync(new Uri(url));
 
-            doc.LoadHtml(html);
+            _doc.LoadHtml(html);
 
-            parser.Document = doc;
+            _parser.Document = _doc;
         }
 
         public virtual async Task Load()
@@ -106,7 +104,7 @@ namespace GetPet.Crawler.Crawlers
 
             var user = await CreateUser();
 
-            var pets = parser.Parse(traits, user, animalTypes);
+            var pets = await _parser.Parse(traits, user, animalTypes);
 
             foreach (var pet in pets)
             {
@@ -117,7 +115,7 @@ namespace GetPet.Crawler.Crawlers
 
         public virtual async Task InsertPets(IList<Pet> pets)
         {
-            var petsFromSource = await _petRepository.SearchAsync(new PetFilter { PetSource = parser.Source, PerPage = int.MaxValue });
+            var petsFromSource = await _petRepository.SearchAsync(new PetFilter { PetSource = _parser.Source, PerPage = int.MaxValue });
 
             var petsToInsert = pets
                 .Where(p => !petsFromSource.Any(pe => p.ExternalId == pe.ExternalId));
@@ -133,7 +131,7 @@ namespace GetPet.Crawler.Crawlers
             foreach (var pet in petsToInsert)
             {
                 pet.PetTraits ??= new List<PetTrait>();
-                pet.Source = parser.Source;
+                pet.Source = _parser.Source;
 
                 await AddAgeTrait(pet);
                 await AddGenderTrait(pet);

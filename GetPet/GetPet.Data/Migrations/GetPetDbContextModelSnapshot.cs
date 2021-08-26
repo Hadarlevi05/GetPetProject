@@ -16,7 +16,7 @@ namespace GetPet.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("GetPet.Data.Entities.AnimalType", b =>
@@ -692,7 +692,7 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.PetHistoryStatus", b =>
                 {
                     b.HasOne("GetPet.Data.Entities.Pet", "Pet")
-                        .WithMany()
+                        .WithMany("PetHistoryStatuses")
                         .HasForeignKey("PetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -761,6 +761,8 @@ namespace GetPet.Data.Migrations
             modelBuilder.Entity("GetPet.Data.Entities.Pet", b =>
                 {
                     b.Navigation("MetaFileLinks");
+
+                    b.Navigation("PetHistoryStatuses");
 
                     b.Navigation("PetTraits");
                 });

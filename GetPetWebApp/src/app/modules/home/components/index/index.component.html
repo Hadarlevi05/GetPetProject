@@ -24,32 +24,32 @@
         </div>
     </section>
 
-
-
-
-
     <h2>עד כה אומצו
         {{ adoptedCount }}
         כלבים וחתולים!
         {{ waitingForAdoptionAnimation }}
         כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
     </h2>
-
-    <!-- <form [formGroup]="form">
-
-        <section class="row">
-            <mat-form-field appearance="outline">
-                <mat-label>סוג</mat-label>
-                <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
-                    <mat-option *ngFor="let type of animaltypes" [value]="type.id">
-                        {{ type.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </section>
-    </form> -->
-
 </section>
+
+<!-- <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
+    fxFlex.xl="20%" fx class="row">
+
+    <form [formGroup]="form">
+
+
+        <mat-form-field appearance="outline">
+            <mat-label>סוג</mat-label>
+            <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
+                <mat-option *ngFor="let type of animaltypes" [value]="type.id">
+                    {{ type.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+    </form>
+</div> -->
+
 
 
 <section>
@@ -59,10 +59,12 @@
         <app-loader [Show]="articleLoading"></app-loader>
 
         <div class="content" *ngIf="!articleLoading">
-            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div fxLayout="row wrap" fxLayoutGap="24px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
                     fxFlex.xl="20%" fx *ngFor="let article of articles">
+
                     <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
+
                 </div>
             </div>
         </div>

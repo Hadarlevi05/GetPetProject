@@ -37,6 +37,8 @@ namespace GetPet.WebApi.Middlewares
                 var key = Encoding.ASCII.GetBytes(Constants.Secret);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
+
+
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,

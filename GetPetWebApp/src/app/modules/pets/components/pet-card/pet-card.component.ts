@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IPet } from '../../models/ipet';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pet-card',
@@ -11,9 +12,12 @@ export class PetCardComponent implements OnInit {
   @Input()
   pet: IPet = {} as IPet;
 
+  imageUrl = '';
+
   constructor() { }
 
   ngOnInit(): void {
+    this.imageUrl = environment.baseImageUrl;
   }
 
   getAge(birthday, gender) {

@@ -49,6 +49,8 @@ import { ArticlesComponent } from './modules/articles/components/articles/articl
 import { TokenInterceptor } from './shared/Interceptor/tokenInterceptor';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SuccessViewComponent } from './modules/pets/components/addpet/success-view/success-view.component';
+import { ErrorViewComponent } from './modules/pets/components/addpet/error-view/error-view.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     AboutUsComponent,
     DonationsComponent,
     ArticlesComponent,
+    SuccessViewComponent,
+    ErrorViewComponent,
   ],
   imports: [
     BrowserModule,

@@ -10,16 +10,22 @@ namespace GetPet.Crawler.Utils
 {
     public static class ParserUtils
     {
-        private static List<string> _male = new List<string>() { "זכר", "male", "Male", "בן" };
-        private static List<string> _female = new List<string>() { "נקבה", "female", "Female", "בת" };
+        //private static List<string> _male = new List<string>() { "זכר", "male", "Male", "בן" };
+        //private static List<string> _female = new List<string>() { "נקבה", "female", "Female", "בת" };
+
+        private static string _male = "(זכר|בן|male)";
+        private static string _female = "(נקבה|בת|female)";
+
+        private static string _femaleWordPool = "(היא|לה|שלה|היתה|הייתה|אחת|גורה|חתולה|כלבה|הגיעה|נולדה|אותה|ניצלה|קיבלה|כולה|מחפשת|אוהבת)";
+        private static string _maleWordPool = "(הוא|לו|שלו|היה|אחד|גור|חתול|כלב|הגיע|נולד|אותו|ניצל|קיבל|כולו|מחפש|אוהב)";
 
         public static Gender ConvertGender(string input)
         {
-            if (_female.Any(x => input.Contains(x)))
+            if (Regex.IsMatch(input, @"\b" + _female + @"\b", RegexOptions.Singleline | RegexOptions.IgnoreCase))
             {
                 return Gender.Female;
             }
-            else if (_male.Any(x => input.Contains(x)))
+            else if (Regex.IsMatch(input, @"\b" + _male + @"\b", RegexOptions.Singleline | RegexOptions.IgnoreCase))
             {
                 return Gender.Male;
             }
@@ -29,7 +35,24 @@ namespace GetPet.Crawler.Utils
             }
         }
 
-        private static List<string> _oneYear = new List<string>() { "שנה", "1 שנים" };
+        //Prase gender by some commom male\female key words
+        public static Gender ParseGenderByKeyWords(string description)
+        {
+            if (Regex.IsMatch(description, @"\b" + _femaleWordPool + @"\b", RegexOptions.Singleline | RegexOptions.IgnoreCase))
+            {
+                return Gender.Female;
+            }
+            else if (Regex.IsMatch(description, @"\b" + _maleWordPool + @"\b", RegexOptions.Singleline | RegexOptions.IgnoreCase))
+            {
+                return Gender.Male;
+            }
+            else
+            {
+                return Gender.Unknown;
+            }
+        }
+
+    private static List<string> _oneYear = new List<string>() { "שנה", "1 שנים" };
         private static List<string> _twoYear = new List<string>() { "שנתיים", "2 שנים", "2" };
         private static List<string> _threeYear = new List<string>() { "3 שנים", "שלוש", "3" };
         private static List<string> _fourYear = new List<string>() { "4 שנים", "ארבע", "4" };

@@ -33,8 +33,9 @@ export class IndexComponent implements OnInit {
   animalTypeId = 1;
   animaltypes: IAnimalType[] = [];
 
-  waitingForAdoptionCount = -1;
-  adoptedCount = -1;
+  waitingForAdoptionCount: number = 0;
+  waitingForAdoptionAnimation: number = 0;
+  adoptedCount: number = -1;
 
   form: FormGroup = new FormGroup({
     animalType: new FormControl('')
@@ -55,7 +56,7 @@ export class IndexComponent implements OnInit {
     this.loadPets();
     this.loadArticles();
     this.loadAnimalTypes();
-    this.setFormSubscribers();
+    //this.setFormSubscribers();
     this.setCounters();
   }
 
@@ -69,6 +70,20 @@ export class IndexComponent implements OnInit {
     const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
     this.petsService.searchCount(filter).subscribe(counter => {
       this.waitingForAdoptionCount = counter.count;
+      
+      var waitingForAdoptionStop: any = setInterval(() => {
+        console.log("waitfor count",this.waitingForAdoptionCount);
+        if (this.waitingForAdoptionCount <= 0) {
+          clearInterval(waitingForAdoptionStop);
+        } else {
+          this.waitingForAdoptionAnimation++;
+          if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
+            clearInterval(waitingForAdoptionStop);
+          }
+        }
+      },10);
+
+
     });
 
     filter.petStatus = PetStatus.Adopted;
@@ -77,14 +92,20 @@ export class IndexComponent implements OnInit {
     });
   }
 
-  setFormSubscribers() {
-    this.form.controls['animalType'].valueChanges.subscribe(value => {
-
+  onAdpotButtonClick(animalTypeId: number) {
       const urlTree = this.router.parseUrl('pets/search');
-      urlTree.queryParams['animalType'] = value;
+      urlTree.queryParams['animalType'] = animalTypeId;
       this.router.navigateByUrl(urlTree);
-    });
   }
+
+  // setFormSubscribers() {
+  //   this.form.controls['animalType'].valueChanges.subscribe(value => {
+
+  //     const urlTree = this.router.parseUrl('pets/search');
+  //     urlTree.queryParams['animalType'] = value;
+  //     this.router.navigateByUrl(urlTree);
+  //   });
+  // }
 
   loadAnimalTypes() {
 

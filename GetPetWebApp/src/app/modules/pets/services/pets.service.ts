@@ -29,9 +29,6 @@ export class PetsService extends BaseService {
 
   addPet(pet: Pet) {
     console.log("in add pet");
-    return this.http.post(`${this.entPointUrl}`, pet).subscribe(
-      (response) => console.log(response),
-      (error) => console.log(error)
-    );
+    return this.http.post(`${this.entPointUrl}`, pet);
   }
 }

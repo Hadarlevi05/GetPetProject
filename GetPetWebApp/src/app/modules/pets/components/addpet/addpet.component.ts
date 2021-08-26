@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList, Input } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators, ControlContainer, ControlValueAccessor } from '@angular/forms';
 import { PetsService } from 'src/app/modules/pets/services/pets.service';
 import { AnimalTypeService } from 'src/app/shared/services/animal-type.service';
@@ -17,13 +17,17 @@ import { Gender } from 'src/app/shared/enums/gender';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
 import { ITraitOption } from 'src/app/shared/models/itrait-option';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { MatDialog } from '@angular/material/dialog';
+import { SuccessViewComponent } from './success-view/success-view.component';
+import { NoopScrollStrategy } from '@angular/cdk/overlay';
+import { ErrorViewComponent } from './error-view/error-view.component';
 
 @Component({
   selector: 'app-addpet',
   templateUrl: './addpet.component.html',
   styleUrls: ['./addpet.component.sass'],
   providers: [{
-    provide: STEPPER_GLOBAL_OPTIONS, useValue: {displayDefaultIndicatorType: false}
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { displayDefaultIndicatorType: false }
   }]
 })
 
@@ -35,13 +39,13 @@ export class AddpetComponent
 
   loading = false;
   success = false;
-  formUploaded = false;
   optionBooleanVal = false;
   isMatChipsLoaded = false;
   addPetFormGroup!: FormGroup;
   formDataFile: FormData = {} as FormData;
   filesToUpload: FormData[] = [];
   imagesURLs: string[] = [];
+  imagesIds: number[] = [];
 
   ngAfterViewInit() {
   }
@@ -56,7 +60,8 @@ export class AddpetComponent
     userId: 0,
     traits: {},
     source: PetSource.Internal,
-    images: [],
+    //images: [],
+    metaFileLinkIds: [],
     creationTimestamp: new Date(),
   }
 
@@ -78,7 +83,8 @@ export class AddpetComponent
     private _animalTypeService: AnimalTypeService,
     private _traitsService: TraitsService,
     private _petsService: PetsService,
-    private _uploadService: UploadService) { }
+    private _uploadService: UploadService,
+    private _dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -98,7 +104,7 @@ export class AddpetComponent
           traits: this._formBuilder.array([]),
         }),
         this._formBuilder.group({
-          description: ['', [Validators.required, Validators.maxLength(1000)]]
+          description: ['', [Validators.required, Validators.minLength(20), Validators.maxLength(1000)]]
         }),
         this._formBuilder.group({
           //upload pictures
@@ -150,18 +156,21 @@ export class AddpetComponent
       if (trait.isBoolean) {
         this.traitsWithBooleanValue.push(trait);
       } else {
-        this.traitsWithSetOfValues.push(trait)
+        if (trait.name != "מין" && trait.name != "גיל") {
+          this.traitsWithSetOfValues.push(trait);
+        }
       }
     }
-    this.isMatChipsLoaded = true;
 
+    this.isMatChipsLoaded = true;
+    //this.multiSelectChipsChild.setAllMatchipsFalse();
     console.log("traits with boolean value:", this.traitsWithBooleanValue);
     console.log("trait with set of values:", this.traitsWithSetOfValues);
   }
 
   private deleteTraitsArrays() {
 
-    this.multiSelectChipsChild.setAllMatchipsFalse();
+    this.multiSelectChipsChild.traitChipSelections = [];
     this.traits_arr = [];
     this.traitsWithBooleanValue = [];
     this.traitsWithSetOfValues = [];
@@ -200,10 +209,27 @@ export class AddpetComponent
   }
 
   convertGMTtoUTC(date: Date): Date {
-    var now_utc =  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
-    date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    var now_utc = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(),
+      date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
 
     return new Date(now_utc);
+  }
+
+  openSuccessDialog() {
+    this._dialog.open(SuccessViewComponent, {
+      data: {
+        name: this.pet.name
+      },
+      disableClose: true,
+      scrollStrategy: new NoopScrollStrategy()
+    });
+  }
+
+  openErrorDialog() {
+    this._dialog.open(ErrorViewComponent, {
+      disableClose: true,
+      scrollStrategy: new NoopScrollStrategy()
+    });
   }
 
   AddPet() {
@@ -211,11 +237,11 @@ export class AddpetComponent
     this.pet.name = this.formArray?.get([1])?.get('petName')?.value;
     this.pet.description = this.formArray?.get([2])?.get('description')?.value;
     this.pet.birthday = this.formArray?.get([1])?.get('dob')?.value;
-    console.log("pet bd:", this.pet.birthday);
     this.pet.gender = this.formArray?.get([1])?.get('gender')?.value;
     this.pet.animalTypeId = this.formArray?.get([0])?.get('animalType')?.value;
     this.pet.userId = this.getCurrentUserId();
-    this.pet.images = this.imagesURLs;
+    //this.pet.images = this.imagesURLs;
+    this.pet.metaFileLinkIds = this.imagesIds;
     this.allSelectedTraits = this.traitSelections.concat(this.multiSelectChipsChild.traitChipSelections);
     console.log("allSelectedTraits: ", this.allSelectedTraits);
     this.pet.traits = this.allSelectedTraits.reduce((a, x) => ({ ...a, [x.traitId]: x.traitOptionId }), {})     //convert array to dictionary
@@ -223,24 +249,30 @@ export class AddpetComponent
     console.log("PET TO SEND INFO: ", this.pet);
 
     try {
-      this._petsService.addPet(this.pet);
-      this.formUploaded = true;
+      this._petsService.addPet(this.pet).subscribe
+      (response => {
+        console.log(response);
+        var petDbId = response['id'];
+        //this._uploadService.AttachFilesToPet(this.imagesIds, petDbId);  ??
+      });
       this.success = true;
+      this.openSuccessDialog();
     } catch (err) {
       this.success = false;
       console.log("Error, can't add pet!, success changed to false", err);
+      this.openErrorDialog();
     }
     this.loading = false;
   }
 
-  onSubmit(postData) {
+  onSubmit() {
 
-    //collect all files to upload (of FormDate type)
+    //upload files to db
     this.components.forEach(uploader => {
-      console.log("uploader.file.data is: ", uploader.file.data);
-      if (uploader.file.data) {  //check if there is a file in currentuploader
+      console.log("uploader.file.data is: ", uploader.file);
+      if (uploader.file) {
         this.formDataFile = new FormData();
-        this.formDataFile.set('formFile', uploader.file.data); //prepare FormData object from file
+        this.formDataFile.set('formFile', uploader.file); //prepare FormData object from file
         this.filesToUpload.push(this.formDataFile);
       }
     })
@@ -250,22 +282,19 @@ export class AddpetComponent
       console.log(f.get('formFile'));
     })
 
-    console.log(this.filesToUpload.length);
-
-    // upload pictures to db
     this._uploadService.uploadData(this.filesToUpload)
       .subscribe(res => {
         console.log(res);
         for (const element of res) {
           this.imagesURLs.push(element['path']);
+          this.imagesIds.push(element['id']);
         }
         console.log("THE IMAGES URLS:", this.imagesURLs);
-
+        console.log("THE IMAGES IDS:", this.imagesIds);
         this.AddPet();
+
       }, err => {
-        console.log("pet upload failed!", err);
-        this.formUploaded = true;
-        this.success = false;
+        console.log("pictures upload failed", err);
       });
   }
 }

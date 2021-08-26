@@ -1,13 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-  OnChanges
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild, OnChanges } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MatChip, MatChipList, MatChipSelectionChange } from '@angular/material/chips';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -84,23 +75,22 @@ export class MultiSelectChipsComponent
 
     console.log("in child: isMatChipsTraitsLoaded: " + this.isMatChipsTraitsLoaded);
 
-    this.setAllMatchipsFalse();
-
     console.log('all matchips selections', this.traitChipSelections);
   }
 
-  public setAllMatchipsFalse() {
+  // public setAllMatchipsFalse() {
 
-    this.traitChipSelections = [] as ITraitSelection[];
+  //   this.traitChipSelections = [] as ITraitSelection[];
 
-    this.options.forEach (op => {
-      this.traitChipSelection = {} as ITraitSelection;      
-      this.traitChipSelection.traitId = op.id;
-      this.traitChipSelection.traitOptionId = 
-      (op.traitOptions[0].option === "לא") ? op.traitOptions[0].id : op.traitOptions[1].id;
-      this.traitChipSelections.push(this.traitChipSelection);
-    })
-  }
+  //   this.options.forEach (op => {
+  //     console.log("current mat chip option: ", op);
+  //     this.traitChipSelection = {} as ITraitSelection;      
+  //     this.traitChipSelection.traitId = op.id;
+  //     this.traitChipSelection.traitOptionId = 
+  //     (op.traitOptions[0].option === "לא") ? op.traitOptions[0].id : op.traitOptions[1].id;
+  //     this.traitChipSelections.push(this.traitChipSelection);
+  //   })
+  // }
 
   ngAfterViewInit() {
     this.selectChips(this.value);
@@ -139,22 +129,28 @@ export class MultiSelectChipsComponent
 
   //value is of type iTrait
   toggleSelection(chip: MatChip) {
-    if (!this.disabled) chip.toggleSelected();
-    console.log("chip changed! : Property no. " + chip.value.id + " changed to : " + chip.selected);
-    console.log("CHIP DETAILS: name" + chip.value.name + " traitOptions: " + chip.value.traitOptions);
 
-    //strategy: all mats are "no" and then update to change
+    if (!this.disabled) chip.toggleSelected();
+    console.log("chip changed! : Property no. " + chip.value.id + " name: " + chip.value.name + " changed to : " + chip.selected);
+    
     var optionId;
+
+    if (chip.selected) {
+      optionId = (chip.value.traitOptions[0].option === "כן") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
+    } else {
+      optionId = (chip.value.traitOptions[0].option === "לא") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
+    }
+
     const item = this.traitChipSelections.find(i => i.traitId === chip.value.id);
     if (item) {
-      if (chip.selected) {
-        optionId = (chip.value.traitOptions[0].option === "כן") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
-      } else {
-        optionId = (chip.value.traitOptions[0].option === "לא") ? chip.value.traitOptions[0].id : chip.value.traitOptions[1].id;
-      }
-
       item.traitOptionId = optionId;
+    } else {        //add a new boolean value selection
+      this.traitChipSelection = {} as ITraitSelection;      
+      this.traitChipSelection.traitId = chip.value.id;
+      this.traitChipSelection.traitOptionId = optionId;
+      this.traitChipSelections.push(this.traitChipSelection);
     }
+
     console.log('all matchips selections', this.traitChipSelections);
   }
 }

@@ -27,8 +27,9 @@ namespace GetPet.Tests.Mocks
         }
 
         protected override string url => throw new NotImplementedException();
+        protected override string url2 => throw new NotImplementedException();
 
-        public override async Task Load(string url)
+        public override async Task Load(string url,string url2)
         {
             await Task.Delay(0);
             

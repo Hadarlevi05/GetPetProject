@@ -16,16 +16,17 @@ namespace GetPet.Crawler.Parsers
         public abstract PetSource Source { get; }
 
         public HtmlDocument Document { get; set; }
+        public HtmlDocument Document2 { get; set; }
 
-        public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes)
+        public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes, HtmlDocument document, DocumentType docType)
         {
             var results = new List<Pet>();
 
-            var nodes = GetNodes();
+            var nodes = GetNodes(document);
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits, animalTypes);                
+                var pet = ParseSingleNode(node, allTraits, animalTypes, docType);                
                 pet.User = user;
 
                 results.Add(pet);
@@ -34,13 +35,13 @@ namespace GetPet.Crawler.Parsers
             return results;
         }
 
-        public abstract HtmlNodeCollection GetNodes();
+        public abstract HtmlNodeCollection GetNodes(HtmlDocument document);
 
-        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes);
+        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType);
 
         public abstract string ParseName(HtmlNode node);
 
-        public abstract DateTime ParseAgeInYear(HtmlNode node);
+        public abstract DateTime ParseAgeInYear(HtmlNode node, DocumentType doctype);
 
         public Gender ParseGender(HtmlNode node, string name)
         {

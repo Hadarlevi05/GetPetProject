@@ -13,6 +13,7 @@ namespace GetPet.Crawler.Crawlers
     public class RehovotSpaCrawler : CrawlerBase<RehovotSpaParser>
     {
         protected override string url => @"http://rehovotspa.org.il/our-dogs/";
+        protected override string url2 => null;
 
         public RehovotSpaCrawler(
             IPetHandler petHandler,

@@ -20,6 +20,7 @@ namespace GetPet.Crawler.Crawlers
     public abstract class CrawlerBase<T> : ICrawler where T : IParser, new()
     {
         protected readonly HtmlDocument doc = new HtmlDocument();
+        protected readonly HtmlDocument doc2 = new HtmlDocument();
         protected readonly T parser = new T();
 
         protected readonly IPetHandler _petHandler;
@@ -35,6 +36,7 @@ namespace GetPet.Crawler.Crawlers
         //private List<User> _AllUsers;
 
         protected abstract string url { get; }
+        protected abstract string url2 { get; }
 
         public CrawlerBase(
             IPetHandler petHandler,
@@ -85,33 +87,51 @@ namespace GetPet.Crawler.Crawlers
             return results.ToList();
         }
 
-        public virtual async Task Load(string url)
+        public virtual async Task Load(string url, string url2)
         {
             string html = await new WebClient().DownloadStringTaskAsync(new Uri(url));
-
             doc.LoadHtml(html);
-
             parser.Document = doc;
+
+            if (url2 != null)
+            {
+                string html2 = await new WebClient().DownloadStringTaskAsync(new Uri(url2));
+                doc2.LoadHtml(html2);
+                parser.Document2 = doc2;
+            }
         }
 
         public virtual async Task Load()
         {
-            await Load(url);
+            await Load(url, url2);
         }
 
         public virtual async Task<IList<Pet>> Parse()
         {
             var traits = await GetAllTraits();
             var animalTypes = await GetAllAnimalTypes();
+            
+            IList<Pet> pets;
 
             var user = await CreateUser();
 
-            var pets = parser.Parse(traits, user, animalTypes);
+            var pets1 = parser.Parse(traits, user, animalTypes,doc,DocumentType.DOC_CATS);
 
+            if (doc2.ParsedText != null)
+            {
+                var pets2 = parser.Parse(traits, user, animalTypes, doc2, DocumentType.DOC_DOGS);
+                pets = pets1.Concat(pets2).ToList();
+            } 
+            else
+            {
+                pets = pets1;
+            }
+           
             foreach (var pet in pets)
             {
                 pet.ExternalId = _petRepository.GetPetHashed(pet);
             }
+
             return pets;
         }
 

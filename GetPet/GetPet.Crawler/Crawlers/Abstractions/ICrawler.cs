@@ -6,7 +6,7 @@ namespace GetPet.Crawler.Crawlers.Abstractions
 {
     public interface ICrawler
     {
-        Task Load(string url);
+        Task Load(string url, string url2);
 
         Task Load();
 

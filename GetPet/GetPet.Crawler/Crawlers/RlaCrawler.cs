@@ -12,7 +12,8 @@ namespace GetPet.Crawler.Crawlers
 {
     public class RlaCrawler : CrawlerBase<RlaParser>
     {
-        protected override string url => @"https://www.rla.org.il/adoption/cats/";
+        protected override string url => @"https://www.rla.org.il/adoption/cats/";  //cats
+        protected override string url2 => @"https://www.rla.org.il/adoption/dogs/"; //dogs
 
         public RlaCrawler(
             IPetHandler petHandler,

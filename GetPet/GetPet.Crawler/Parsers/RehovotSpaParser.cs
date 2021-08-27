@@ -13,11 +13,11 @@ namespace GetPet.Crawler.Parsers
     {
         public override PetSource Source => PetSource.RehovotSpa;
 
-        public override HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes(HtmlDocument document)
         {
             try
             {
-                var items = Document.DocumentNode.SelectNodes("//div[starts-with(@class, 'av-masonry-container')]/a");
+                var items = document.DocumentNode.SelectNodes("//div[starts-with(@class, 'av-masonry-container')]/a");
 
                 return items;
             }
@@ -29,7 +29,7 @@ namespace GetPet.Crawler.Parsers
             return null;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
+        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
             AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
             int animalTypeId = animalType.Id;
@@ -37,7 +37,7 @@ namespace GetPet.Crawler.Parsers
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
             string name = ParseName(node);
-            var birthday = ParseAgeInYear(node);
+            var birthday = ParseAgeInYear(node,docType);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
@@ -90,7 +90,7 @@ namespace GetPet.Crawler.Parsers
             return result;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
+        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
 
         public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
         {

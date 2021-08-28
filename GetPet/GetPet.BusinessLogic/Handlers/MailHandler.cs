@@ -1,10 +1,7 @@
 ﻿using GetPet.BusinessLogic.Model;
-using Microsoft.Extensions.Options;
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
-using System.Net.Mime;
 using System.Threading.Tasks;
 
 namespace GetPet.BusinessLogic.Handlers
@@ -21,9 +18,6 @@ namespace GetPet.BusinessLogic.Handlers
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
             MailAddress to = new MailAddress(mailRequest.To);
-
-            to = new MailAddress("hadarlevi05@gmail.com");
-
             MailAddress from = new MailAddress(_mailSettings.Mail);
 
             MailMessage message = new MailMessage(from, to);
@@ -58,9 +52,6 @@ namespace GetPet.BusinessLogic.Handlers
             {
                 Console.WriteLine(ex.ToString());
             }
-
         }
-
-
     }
 }

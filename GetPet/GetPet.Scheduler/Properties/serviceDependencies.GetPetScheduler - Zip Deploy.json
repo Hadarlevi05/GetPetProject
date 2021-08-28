@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/getpetserver/databases/GetPetD",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionStrings:HangfireConnection",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

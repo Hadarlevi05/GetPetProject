@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { IPet } from '../../models/ipet';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-pet-card',
@@ -11,9 +12,24 @@ export class PetCardComponent implements OnInit {
   @Input()
   pet: IPet = {} as IPet;
 
+  imageUrl = '';
+  taritsToDisplay = 3;
+
+  topTraits(): Array<string> {
+    if (!this.pet)
+      return [];
+
+    return [...Object.values(this.pet.traits), ...Object.keys(this.pet.booleanTraits)].slice(0, this.taritsToDisplay);
+  }
+
+  traitsHiddenCount(): number {
+    return Object.keys(this.pet.traits).length + Object.keys(this.pet.booleanTraits).length - this.taritsToDisplay;
+  }
+
   constructor() { }
 
   ngOnInit(): void {
+    this.imageUrl = environment.baseImageUrl;
   }
 
   getAge(birthday, gender) {
@@ -25,8 +41,6 @@ export class PetCardComponent implements OnInit {
     if (age === 0) {
       const oneDay = 24 * 60 * 60 * 1000;
       const diffMonth = Math.round(Math.abs((Date.now() - birthday) / oneDay) / 30);
-
-
       if (diffMonth === 1) return `, ${genderString} חודש`;
       if (diffMonth === 2) return `, ${genderString} חודשיים`;
       if (diffMonth == 0)

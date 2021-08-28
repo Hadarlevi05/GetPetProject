@@ -1,14 +1,20 @@
-﻿using GetPet.Data.Entities;
+﻿using GetPet.BusinessLogic.Azure;
+using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
     public class SpcaParser : ParserBase
      {
+        public SpcaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.Spca;
 
         public override HtmlNodeCollection GetNodes(HtmlDocument document)
@@ -17,7 +23,7 @@ namespace GetPet.Crawler.Parsers
             return items;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
+        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
             AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id; 
@@ -43,12 +49,13 @@ namespace GetPet.Crawler.Parsers
                 AnimalType = animalType,
                 AnimalTypeId = animalType.Id,
             };
-
+            
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink
                 {
-                    Path = image,
+                    Path = filePath,
                     MimeType = image.Substring(image.LastIndexOf(".")),
                     Size = 1000
                 }

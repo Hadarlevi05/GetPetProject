@@ -1,11 +1,10 @@
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Azure;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
-using GetPet.BusinessLogic.Handlers;
-using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.Common;
 using GetPet.Data;
 using GetPet.WebApi.Middlewares;
@@ -32,6 +31,8 @@ namespace GetPet.WebApi
         {
             Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
             Constants.Secret = Configuration.GetValue<string>("Secret");
+            Constants.AzureStorageConnectionString = Configuration.GetValue<string>("AzureStorageConnectionString");
+
         }
 
         public IConfiguration Configuration { get; }
@@ -86,7 +87,9 @@ namespace GetPet.WebApi
                 .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
                 .AddScoped<IPetHandler, PetHandler>()
-                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>();
+                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>()
+                .AddScoped<AzureBlobHelper>()
+                .AddScoped<ImageHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, GetPetDbContext getPetDbContext, IGetPetDbContextSeed getPetDbContextSeed)

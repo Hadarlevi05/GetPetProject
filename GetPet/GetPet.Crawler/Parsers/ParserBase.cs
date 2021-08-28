@@ -1,4 +1,4 @@
-﻿using GetPet.Common;
+﻿using GetPet.BusinessLogic.Azure;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
@@ -6,19 +6,29 @@ using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
     public abstract class ParserBase : IParser
     {
+        protected readonly AzureBlobHelper _azureBlobHelper;
+
+        public ParserBase(AzureBlobHelper azureBlobHelper)
+        {
+            _azureBlobHelper = azureBlobHelper;
+        }
+
         public abstract PetSource Source { get; }
 
         public HtmlDocument Document { get; set; }
         public HtmlDocument Document2 { get; set; }
 
-        public virtual IList<Pet> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes, HtmlDocument document, DocumentType docType)
+        public async virtual Task<IList<Pet>> Parse(List<Trait> allTraits, User user, List<AnimalType> animalTypes, HtmlDocument document, DocumentType docType)
         {
             var results = new List<Pet>();
 
@@ -26,7 +36,7 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits, animalTypes, docType);     
+                var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);     
       
                 if (pet != null) //some pets are not in the same template as the others and returns null
                 {
@@ -41,7 +51,7 @@ namespace GetPet.Crawler.Parsers
 
         public abstract HtmlNodeCollection GetNodes(HtmlDocument document);
 
-        public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType);
+        public abstract Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType);
 
         public abstract string ParseName(HtmlNode node, DocumentType docType);
 

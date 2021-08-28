@@ -1,4 +1,5 @@
 using GetPet.BusinessLogic;
+using GetPet.BusinessLogic.Azure;
 using GetPet.BusinessLogic.Handlers;
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.MappingProfiles;
@@ -6,7 +7,9 @@ using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Repositories;
 using GetPet.Common;
 using GetPet.Crawler.Crawlers;
+using GetPet.Crawler.Parsers;
 using GetPet.Data;
+using GetPet.Scheduler.Filters;
 using GetPet.Scheduler.Jobs;
 using Hangfire;
 using Hangfire.SqlServer;
@@ -33,6 +36,8 @@ namespace GetPet.Scheduler
         private void SetEnvironmentVariables()
         {
             Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
+            Constants.Secret = Configuration.GetValue<string>("Secret");
+            Constants.AzureStorageConnectionString = Configuration.GetValue<string>("AzureStorageConnectionString");
         }
 
         public IConfiguration Configuration { get; }
@@ -65,7 +70,7 @@ namespace GetPet.Scheduler
             var sqlStorage = new SqlServerStorage(sqlConnectionString);
             var options = new BackgroundJobServerOptions
             {
-                ServerName = "GetPet HangFire Server"
+                ServerName = "GetPet HangFire Server",                          
             };
             JobStorage.Current = sqlStorage;
 
@@ -73,6 +78,9 @@ namespace GetPet.Scheduler
             services.AddHangfireServer(options =>
             {
                 options.ServerName = "GetPet HangFire Server";
+                // options.a = new[] { new DashboardNoAuthorizationFilter() };
+
+
                 // options.WorkerCount = 1;
             });
 
@@ -101,7 +109,13 @@ namespace GetPet.Scheduler
                 .AddScoped<ITraitOptionRepository, TraitOptionRepository>()
                 .AddScoped(sp => Configuration.GetSection("MailSettings").Get<MailSettings>())
                 .AddTransient<IMailHandler, MailHandler>()
-                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>();
+                .AddScoped<IPetHistoryStatusRepository, PetHistoryStatusRepository>()
+                .AddScoped<AzureBlobHelper>()
+                .AddScoped<ImageHelper>()
+                .AddScoped<SpcaParser>()
+                .AddScoped<RlaParser>()
+                .AddScoped<RehovotSpaParser>();
+            
 
             SetBackgroundJobs();
         }
@@ -118,7 +132,10 @@ namespace GetPet.Scheduler
 
             app.UseHttpsRedirection();
 
-            app.UseHangfireDashboard();
+            app.UseHangfireDashboard("/getpethangfire", new DashboardOptions
+            {
+                Authorization = new[] { new DashboardNoAuthorizationFilter() }
+            });
 
             app.UseRouting();
 
@@ -133,15 +150,17 @@ namespace GetPet.Scheduler
 
         public void SetBackgroundJobs()
         {
-            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: "0 8,10,12,14,16,18,20 * * *");
-            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 7,9,11,13,15,17,19 * * *");
-            RecurringJob.AddOrUpdate<RlaJob>("RlaJob", job => job.Execute(), cronExpression: "30 7,9,11,13,15,17,19 * * *");
+            RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: "0 10 * * *");
+            RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 12 * * *");
+            RecurringJob.AddOrUpdate<RlaJob>("RlaJob", job => job.Execute(), cronExpression: "0 14 * * *");
 
-            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 8 * * *");
+            RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 12 * * *");
 
             //RecurringJob.Trigger("RehovotSpaJob");
             //RecurringJob.Trigger("SpcaJob");
-            RecurringJob.Trigger("RlaJob");
+            //RecurringJob.Trigger("RlaJob");
+
+            RecurringJob.Trigger("NotificationSenderJob");
         }
     }
 }

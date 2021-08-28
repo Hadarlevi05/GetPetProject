@@ -16,6 +16,8 @@ namespace GetPet.BusinessLogic.Repositories
     public interface IEmailHistoryRepository : IBaseRepository<EmailHistory>
     {
         Task<IEnumerable<EmailHistory>> SearchAsync(BaseFilter filter);
+
+        Task<bool> EmailExists(int userId, int notificationId, DateTime sentDate);
     }
 
     public class EmailHistoryRepository : BaseRepository<EmailHistory>, IEmailHistoryRepository
@@ -44,6 +46,12 @@ namespace GetPet.BusinessLogic.Repositories
             //query = query.OrderBy(c => c.Name);
 
             return await query.ToListAsync();
+        }
+
+        public async Task<bool> EmailExists(int userId, int notificationId, DateTime sentDate)
+        {
+            return await entities.Where(eh => eh.UserId == userId && eh.NotificationId == notificationId && eh.SentDate == sentDate.Date)
+                .AnyAsync();
         }
 
         public new async Task UpdateAsync(EmailHistory entity)

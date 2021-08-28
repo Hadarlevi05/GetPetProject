@@ -3,7 +3,6 @@
         <img mat-card-image [src]="imageUrl + pet.images[0]" [alt]="pet.name">
         <mat-card-title class="text-block">{{ pet.name }}</mat-card-title>
     </span>
-
     <p class="text-description">
         {{ pet.description }}
     </p>
@@ -16,21 +15,19 @@
         <span *ngIf="!pet?.user?.phoneNumber && pet?.user?.email">
             אימייל: {{ pet?.user?.email }}
         </span>
-
-
     </p>
-
     <h2>
         <a *ngIf="pet.sourceLink" [href]="pet.sourceLink" target="_blank">
             אמץ אותי
         </a>
-
-
     </h2>
     <p>
         <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">
             <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
-                {{ trait.key }}: {{ trait.value }}
+                {{ trait.value }}
+            </mat-chip>
+            <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.booleanTraits | keyvalue">
+                {{ trait.key }}
             </mat-chip>
         </mat-chip-list>
     </p>

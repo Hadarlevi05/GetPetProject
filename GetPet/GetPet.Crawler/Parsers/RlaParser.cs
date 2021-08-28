@@ -31,7 +31,7 @@ namespace GetPet.Crawler.Parsers
         {
             string petPage;
 
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id;
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
@@ -40,7 +40,12 @@ namespace GetPet.Crawler.Parsers
             HtmlNode detailsNode = GetDetailsNode(node, out petPage);
             string description = GetDescription(detailsNode, docType);
 
-            string name = ParseName(detailsNode);
+            if (description == null)
+            {
+                return null;
+            }
+
+            string name = ParseName(detailsNode, docType);
             var birthday = ParseAgeInYear(detailsNode, docType);
             var gender = ParseGender(description);
             var decodedDescription = ParseDescription(description);
@@ -89,36 +94,43 @@ namespace GetPet.Crawler.Parsers
 
         private string GetDescription(HtmlNode detailsNode, DocumentType docType)
         {
+            string description = null;
+
             if (docType == DocumentType.DOC_CATS)
             {
-                string description = detailsNode.SelectSingleNode(".//div[starts-with(@class, 'auto-format ui--animation')]/p").InnerText;
-                return description;
+                description = detailsNode.SelectSingleNode(".//div[starts-with(@class, 'auto-format ui--animation')]/p").InnerText;
             }
 
             if (docType == DocumentType.DOC_DOGS)
             {
-                return null;//get description from a different id="custom-title-h4-1"/p
+                var descriptionNode = detailsNode.SelectSingleNode(".//h4[@id='custom-title-h4-1']/p") ?? null;
+                if (descriptionNode != null)
+                { 
+                    description = descriptionNode.InnerText;
+                }
             }
 
-            return null;
+            return description;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
-            var result = node.SelectSingleNode(".//div[starts-with(@class, 'ui--title-holder')]/h1").InnerText;
+            string result = string.Empty;
+
+            if (docType == DocumentType.DOC_CATS) { result = node.SelectSingleNode(".//div[starts-with(@class, 'ui--title-holder')]/h1").InnerText; }
+            if (docType == DocumentType.DOC_DOGS) { result = node.SelectSingleNode(".//h2[@id='titlebar-title']").InnerText; }
 
             return result;
         }
 
         public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(GetDescription(node, docType));
 
-        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
+        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {
-            //if document -> חתול
-            //if document2 -> כלב
+            string animalType = string.Empty;
 
-            // Rla cat page
-            var animalType = "חתול";
+            if (docType == DocumentType.DOC_CATS) { animalType = "חתול"; }
+            if (docType == DocumentType.DOC_DOGS) { animalType = "כלב"; }
 
             return ParserUtils.ConvertAnimalType(animalType, animalTypes);
         }
@@ -136,7 +148,8 @@ namespace GetPet.Crawler.Parsers
                 detailsDoc = web.Load(petPage);
 
                 //details node
-                var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-content'])");
+                //var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-content'])");
+                var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-wrap'])");
 
                 return htmlNode;
             }

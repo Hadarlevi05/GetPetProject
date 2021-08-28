@@ -26,20 +26,24 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = ParseSingleNode(node, allTraits, animalTypes, docType);                
-                pet.User = user;
-
-                results.Add(pet);
+                var pet = ParseSingleNode(node, allTraits, animalTypes, docType);     
+      
+                if (pet != null) //some pets are not in the same template as the others and returns null
+                {
+                    pet.User = user;
+                    results.Add(pet);
+                }
             }
 
             return results;
+            //some pets are not in the similar template as the others.
         }
 
         public abstract HtmlNodeCollection GetNodes(HtmlDocument document);
 
         public abstract Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType);
 
-        public abstract string ParseName(HtmlNode node);
+        public abstract string ParseName(HtmlNode node, DocumentType docType);
 
         public abstract DateTime ParseAgeInYear(HtmlNode node, DocumentType doctype);
 
@@ -62,7 +66,7 @@ namespace GetPet.Crawler.Parsers
             return gender;
         }
 
-        public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
+        public virtual AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {
             var animalType = node.GetAttributeValue(name, "unknown");
 

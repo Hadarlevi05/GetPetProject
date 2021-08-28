@@ -19,12 +19,12 @@ namespace GetPet.Crawler.Parsers
 
         public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id; 
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
-            string name = ParseName(node);
+            string name = ParseName(node, docType);
             var birthday = ParseAgeInYear(node,docType);
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
@@ -69,7 +69,7 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }

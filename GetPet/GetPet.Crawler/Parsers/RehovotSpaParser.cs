@@ -31,12 +31,12 @@ namespace GetPet.Crawler.Parsers
 
         public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id;
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
-            string name = ParseName(node);
+            string name = ParseName(node, docType);
             var birthday = ParseAgeInYear(node,docType);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
@@ -84,7 +84,7 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
             var result = node.SelectNodes(".").FirstOrDefault().InnerText;
             return result;
@@ -92,7 +92,7 @@ namespace GetPet.Crawler.Parsers
 
         public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
 
-        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
+        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {
             // Rehovot API have 'dogs' stated within the url
             var animalType = "כלב";

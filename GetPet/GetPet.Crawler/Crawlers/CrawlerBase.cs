@@ -115,11 +115,11 @@ namespace GetPet.Crawler.Crawlers
 
             var user = await CreateUser();
 
-            var pets1 = parser.Parse(traits, user, animalTypes,doc,DocumentType.DOC_CATS);
+            var pets1 = parser.Parse(traits, user, animalTypes,doc,DocumentType.DOC_DOGS);
 
             if (doc2.ParsedText != null)
             {
-                var pets2 = parser.Parse(traits, user, animalTypes, doc2, DocumentType.DOC_DOGS);
+                var pets2 = parser.Parse(traits, user, animalTypes, doc2, DocumentType.DOC_CATS);
                 pets = pets1.Concat(pets2).ToList();
             } 
             else

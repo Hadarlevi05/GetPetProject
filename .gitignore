@@ -1,5 +1,5 @@
-﻿**/appsettings.json
-
+﻿/GetPet/GetPet.WebApi/appsettings.json
+/GetPet/GetPet.Scheduler/appsettings.json
 ################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################

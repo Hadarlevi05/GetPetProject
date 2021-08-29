@@ -20,7 +20,7 @@ namespace GetPet.Crawler.Crawlers
     {
         protected readonly HtmlDocument _doc = new HtmlDocument();
         protected readonly HtmlDocument _doc2 = new HtmlDocument();
-        protected readonly T _parser;
+        protected readonly T parser;
 
         protected readonly IPetHandler _petHandler;
         protected readonly IPetRepository _petRepository;
@@ -113,11 +113,11 @@ namespace GetPet.Crawler.Crawlers
 
             var user = await CreateUser();
 
-            var pets1 = await _parser.Parse(traits, user, animalTypes,_doc,DocumentType.DOC_DOGS);
+            var pets1 = await._parser.Parse(traits, user, animalTypes,doc,DocumentType.DOC_DOGS);
 
-            if (_doc2.ParsedText != null)
+            if (doc2.ParsedText != null)
             {
-                var pets2 = await _parser.Parse(traits, user, animalTypes, _doc2, DocumentType.DOC_CATS);
+                var pets2 = await._parser.Parse(traits, user, animalTypes, doc2, DocumentType.DOC_CATS);
                 pets = pets1.Concat(pets2).ToList();
             } 
             else

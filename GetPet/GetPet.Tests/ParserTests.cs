@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GetPet.BusinessLogic.Azure;
 
 namespace GetPet.Tests
 {
@@ -31,7 +32,8 @@ namespace GetPet.Tests
         private static IAnimalTypeRepository animalTypeRepository;
         private static IUserRepository userRepository;
         private static ITraitOptionRepository traitOptionRepository;
-        
+        private static AzureBlobHelper _azureBlobHelper;
+
 
         [SetUp]
         public void Setup()
@@ -48,16 +50,19 @@ namespace GetPet.Tests
             cityRepository = serviceProvider.GetService<ICityRepository>();
             animalTypeRepository = serviceProvider.GetService<IAnimalTypeRepository>();
             userRepository = serviceProvider.GetService<IUserRepository>();
+
+            _azureBlobHelper = new AzureBlobHelper(new Common.ImageHelper());
+
         }
 
         [Test]
         public async Task MockTest()
         {
             // ctrl r+t
-            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
+            var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new SpcaParser(_azureBlobHelper));
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
-            await crawler.Load(file);
+            await crawler.Load(file,null);
 
             var pets = await crawler.Parse();
 
@@ -83,8 +88,8 @@ namespace GetPet.Tests
         public async Task SpcaTest()
         {
             // ctrl r+t
-            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
-            await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
+            SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new SpcaParser(_azureBlobHelper));
+            await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/",null);
 
             var pets = spca.Parse();
 
@@ -95,8 +100,8 @@ namespace GetPet.Tests
         public void RehovotSpa()
         {
             // ctrl r+t
-            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository);
-            spca.Load(@"http://rehovotspa.org.il/our-dogs/");
+            RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new RehovotSpaParser(_azureBlobHelper));
+            spca.Load(@"http://rehovotspa.org.il/our-dogs/", null);
 
             var pets = spca.Parse();
 
@@ -107,7 +112,7 @@ namespace GetPet.Tests
         public void TestRehovotBirthday()
         {
             // ctrl r+t
-            RehovotSpaParser p = new RehovotSpaParser();
+            RehovotSpaParser p = new RehovotSpaParser(new AzureBlobHelper(new Common.ImageHelper()));
 
             DateTime now = DateTime.Now; // 10.7.21
 

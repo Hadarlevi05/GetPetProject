@@ -12,7 +12,8 @@ namespace GetPet.Crawler.Crawlers
 {
     public class RlaCrawler : CrawlerBase<RlaParser>
     {
-        protected override string url => @"https://www.rla.org.il/adoption/cats/";
+        protected override string url => @"https://www.rla.org.il/adoption/dogs/";  //dogs
+        protected override string url2 => @"https://www.rla.org.il/adoption/cats/"; //cats
 
         public RlaCrawler(
             IPetHandler petHandler,
@@ -22,9 +23,9 @@ namespace GetPet.Crawler.Crawlers
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository
-            ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository)
+            ITraitOptionRepository traitOptionRepository,
+            RlaParser parser) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, parser)
         { }
 
         public override async Task<User> CreateUser()

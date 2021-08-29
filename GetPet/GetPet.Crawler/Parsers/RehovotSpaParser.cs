@@ -1,4 +1,5 @@
-﻿using GetPet.Crawler.Utils;
+﻿using GetPet.BusinessLogic.Azure;
+using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
@@ -6,18 +7,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
     public class RehovotSpaParser : ParserBase
     {
+        public RehovotSpaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.RehovotSpa;
 
-        public override HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes(HtmlDocument document)
         {
             try
             {
-                var items = Document.DocumentNode.SelectNodes("//div[starts-with(@class, 'av-masonry-container')]/a");
+                var items = document.DocumentNode.SelectNodes("//div[starts-with(@class, 'av-masonry-container')]/a");
 
                 return items;
             }
@@ -29,22 +35,21 @@ namespace GetPet.Crawler.Parsers
             return null;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
+        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id;
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
-            string name = ParseName(node);
-            var birthday = ParseAgeInYear(node);
+            string name = ParseName(node, docType);
+            var birthday = ParseAgeInYear(node,docType);
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
             var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
             var sourceLink = "http://rehovotspa.org.il/our-dogs/";
-
 
             var pet = new Pet
             {
@@ -58,11 +63,12 @@ namespace GetPet.Crawler.Parsers
                 AnimalTypeId = animalTypeId,
             };
 
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink
                 {
-                    Path = image,
+                    Path = filePath,
                     MimeType = image.Substring(image.LastIndexOf(".")),
                     Size = 1000
                 }
@@ -84,15 +90,15 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
             var result = node.SelectNodes(".").FirstOrDefault().InnerText;
             return result;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
+        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("title", "0"));
 
-        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
+        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {
             // Rehovot API have 'dogs' stated within the url
             var animalType = "כלב";

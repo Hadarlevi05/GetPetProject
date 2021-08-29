@@ -1,31 +1,37 @@
-﻿using GetPet.Data.Entities;
+﻿using GetPet.BusinessLogic.Azure;
+using GetPet.Data.Entities;
 using GetPet.Data.Enums;
 using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Parsers
 {
     public class SpcaParser : ParserBase
      {
+        public SpcaParser(AzureBlobHelper azureBlobHelper) : base(azureBlobHelper)
+        {
+        }
+
         public override PetSource Source => PetSource.Spca;
 
-        public override HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes(HtmlDocument document)
         {
-            var items = Document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
+            var items = document.DocumentNode.SelectNodes("//li[starts-with(@class, 'grid-item')]");
             return items;
         }
 
-        public override Pet ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
+        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id; 
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
-            string name = ParseName(node);
-            var birthday = ParseAgeInYear(node);
+            string name = ParseName(node, docType);
+            var birthday = ParseAgeInYear(node,docType);
             var gender = ParseGender(node, "data-tag");
             var description = ParseDescription(node);
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
@@ -43,12 +49,13 @@ namespace GetPet.Crawler.Parsers
                 AnimalType = animalType,
                 AnimalTypeId = animalType.Id,
             };
-
+            
+            var filePath = await _azureBlobHelper.Upload(image);
             pet.MetaFileLinks = new List<MetaFileLink>
             {
                 new MetaFileLink
                 {
-                    Path = image,
+                    Path = filePath,
                     MimeType = image.Substring(image.LastIndexOf(".")),
                     Size = 1000
                 }
@@ -69,12 +76,12 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
+        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
 
         public override string ParseDescription(HtmlNode node, string name = "")
         {

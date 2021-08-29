@@ -13,6 +13,7 @@ namespace GetPet.Crawler.Crawlers
     public class RehovotSpaCrawler : CrawlerBase<RehovotSpaParser>
     {
         protected override string url => @"http://rehovotspa.org.il/our-dogs/";
+        protected override string url2 => null;
 
         public RehovotSpaCrawler(
             IPetHandler petHandler,
@@ -22,9 +23,9 @@ namespace GetPet.Crawler.Crawlers
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository
-            ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository)
+            ITraitOptionRepository traitOptionRepository,
+            RehovotSpaParser parser) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, parser)
         { }
 
         public override async Task<User> CreateUser()

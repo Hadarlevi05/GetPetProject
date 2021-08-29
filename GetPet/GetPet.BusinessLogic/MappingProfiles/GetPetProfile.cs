@@ -104,10 +104,9 @@ namespace GetPet.BusinessLogic.MappingProfiles
         {
             CreateMap<Pet, PetDto>()
                 .ForMember(dest => dest.Gender, opt => opt.MapFrom(src => (src.Gender)))
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.MetaFileLinks.Select(mfl => mfl.Path)))
-                //ask shlomi
-                .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.Where(pt=>pt.Trait.IsBoolean==false).ToDictionary(t => src.Gender == Data.Enums.Gender.Male ? t.Trait.FemaleName: t.Trait.FemaleName, t => t.TraitOption != null ? (src.Gender == Data.Enums.Gender.Male ? t.TraitOption.Option : t.TraitOption.FemaleOption) : t.Description)))
-                .ForMember(dest => dest.BooleanTraits, opt => opt.MapFrom(src => src.PetTraits.Where(pt => pt.Trait.IsBoolean == true).ToDictionary(t => src.Gender == Data.Enums.Gender.Male ? t.Trait.FemaleName : t.Trait.FemaleName, t => t.TraitOption != null ? (src.Gender == Data.Enums.Gender.Male ? t.TraitOption.Option : t.TraitOption.FemaleOption) : t.Description)))
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.MetaFileLinks.Select(mfl => mfl.Path)))                
+                .ForMember(dest => dest.Traits, opt => opt.MapFrom(src => src.PetTraits.Where(pt => !pt.Trait.IsBoolean).ToDictionary(t => src.Gender == Data.Enums.Gender.Male ? t.Trait.Name : t.Trait.FemaleName, t => t.TraitOption != null ? (src.Gender == Data.Enums.Gender.Male ? t.TraitOption.Option : t.TraitOption.FemaleOption) : t.Description)))
+                .ForMember(dest => dest.BooleanTraits, opt => opt.MapFrom(src => src.PetTraits.Where(pt => pt.Trait.IsBoolean).ToDictionary(t => src.Gender == Data.Enums.Gender.Male ? t.Trait.Name : t.Trait.FemaleName, t => t.TraitOption != null ? (src.Gender == Data.Enums.Gender.Male ? t.TraitOption.Option : t.TraitOption.FemaleOption) : t.Description)))
                 .ForMember(dest => dest.AnimalTypeId, opt => opt.MapFrom(src => src.AnimalType.Id))
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Birthday.ToLongDateString()));
 
@@ -126,7 +125,7 @@ namespace GetPet.BusinessLogic.MappingProfiles
 
         private void TraitMapping()
         {
-            CreateMap<Trait, TraitDto>();                
+            CreateMap<Trait, TraitDto>();
         }
 
         private void OrganizationMapping()

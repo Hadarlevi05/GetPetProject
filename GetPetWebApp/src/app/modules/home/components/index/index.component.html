@@ -3,7 +3,7 @@
     <section class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-6 order-2 order-md-1">
-                <img src="https://localhost:44345/images/index/animals1.png" class="img-fluid">
+                <img src="https://getpetstorage.blob.core.windows.net/images/animals1.png" class="img-fluid">
             </div>
             <div class="col-md-6 order-1 order-md-2">
                 <div class="row align-items-center">
@@ -12,7 +12,7 @@
                     </h1>
                 </div>
                 <div class="row align-items-center">
-                    <img src="https://localhost:44345/images/index/logo2.png" class="img-fluid">
+                    <img src="https://getpetstorage.blob.core.windows.net/images/logo2.png" class="img-fluid">
                 </div>
                 <div class="row align-items-center content">
                     <div *ngFor="let type of animaltypes" class="col-md-6 col-sm-6 align-items-center">
@@ -24,33 +24,13 @@
         </div>
     </section>
 
-
-
-
-
     <h2>עד כה אומצו
         {{ adoptedCount }}
         כלבים וחתולים!
         {{ waitingForAdoptionAnimation }}
         כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
     </h2>
-
-    <!-- <form [formGroup]="form">
-
-        <section class="row">
-            <mat-form-field appearance="outline">
-                <mat-label>סוג</mat-label>
-                <mat-select #typeSel placeholder="בחר סוג" name="animalType" formControlName="animalType">
-                    <mat-option *ngFor="let type of animaltypes" [value]="type.id">
-                        {{ type.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </section>
-    </form> -->
-
 </section>
-
 
 <section>
     <h2>מאמרים אחרונים</h2>
@@ -59,10 +39,12 @@
         <app-loader [Show]="articleLoading"></app-loader>
 
         <div class="content" *ngIf="!articleLoading">
-            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div fxLayout="row wrap" fxLayoutGap="24px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
                     fxFlex.xl="20%" fx *ngFor="let article of articles">
+
                     <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
+
                 </div>
             </div>
         </div>
@@ -78,8 +60,8 @@
                 <app-loader [Show]="petLoading"></app-loader>
                 <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
-                            fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                        <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
+                            fxFlex.md="33%" fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
                             <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                         </div>
                     </div>
@@ -91,8 +73,8 @@
                 <app-loader [Show]="petLoading"></app-loader>
                 <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
-                            fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                        <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
+                            fxFlex.md="33%" fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
                             <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                         </div>
                     </div>

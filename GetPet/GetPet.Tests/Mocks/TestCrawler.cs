@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GetPet.Tests.Mocks
 {
-    public class TestCrawler<T> : CrawlerBase<T> where T : IParser, new()
+    public class TestCrawler<T> : CrawlerBase<T> where T : IParser
     {
         public TestCrawler(
             IPetHandler petHandler,
@@ -20,15 +20,16 @@ namespace GetPet.Tests.Mocks
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository
-            ) :
-            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository)
+            ITraitOptionRepository traitOptionRepository,
+            T parser) :
+            base(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, parser)
         {
         }
 
         protected override string url => throw new NotImplementedException();
+        protected override string url2 => throw new NotImplementedException();
 
-        public override async Task Load(string url)
+        public override async Task Load(string url,string url2)
         {
             await Task.Delay(0);
             
@@ -39,8 +40,8 @@ namespace GetPet.Tests.Mocks
 
             using (var file = File.OpenRead(url))
             {
-                doc.Load(file);
-                parser.Document = doc;
+                _doc.Load(file);
+                _parser.Document = _doc;
             }
         }
 

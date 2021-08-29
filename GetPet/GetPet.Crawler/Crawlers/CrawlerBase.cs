@@ -2,7 +2,6 @@
 using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
-using GetPet.Common;
 using GetPet.Crawler.Crawlers.Abstractions;
 using GetPet.Crawler.Parsers.Abstractions;
 using GetPet.Crawler.Utils;
@@ -17,10 +16,11 @@ using System.Threading.Tasks;
 
 namespace GetPet.Crawler.Crawlers
 {
-    public abstract class CrawlerBase<T> : ICrawler where T : IParser, new()
+    public abstract class CrawlerBase<T> : ICrawler where T : IParser
     {
-        protected readonly HtmlDocument doc = new HtmlDocument();
-        protected readonly T parser = new T();
+        protected readonly HtmlDocument _doc = new HtmlDocument();
+        protected readonly HtmlDocument _doc2 = new HtmlDocument();
+        protected readonly T _parser;
 
         protected readonly IPetHandler _petHandler;
         protected readonly IPetRepository _petRepository;
@@ -31,10 +31,8 @@ namespace GetPet.Crawler.Crawlers
         protected readonly IUserRepository _userRepository;
         protected readonly ITraitOptionRepository _traitOptionRepository;
 
-        //private List<Pet> _AllPets;
-        //private List<User> _AllUsers;
-
         protected abstract string url { get; }
+        protected abstract string url2 { get; }
 
         public CrawlerBase(
             IPetHandler petHandler,
@@ -44,7 +42,8 @@ namespace GetPet.Crawler.Crawlers
             ICityRepository cityRepository,
             IAnimalTypeRepository animalTypeRepository,
             IUserRepository userRepository,
-            ITraitOptionRepository traitOptionRepository)
+            ITraitOptionRepository traitOptionRepository, 
+            T parser)
         {
             _petHandler = petHandler;
             _petRepository = petRepository;
@@ -54,6 +53,7 @@ namespace GetPet.Crawler.Crawlers
             _animalTypeRepository = animalTypeRepository;
             _userRepository = userRepository;
             _traitOptionRepository = traitOptionRepository;
+            _parser = parser;
         }
 
         protected virtual async Task<List<Trait>> GetAllTraits()
@@ -85,39 +85,57 @@ namespace GetPet.Crawler.Crawlers
             return results.ToList();
         }
 
-        public virtual async Task Load(string url)
+        public virtual async Task Load(string url, string url2)
         {
             string html = await new WebClient().DownloadStringTaskAsync(new Uri(url));
+            _doc.LoadHtml(html);
+            _parser.Document = _doc;
 
-            doc.LoadHtml(html);
-
-            parser.Document = doc;
+            if (url2 != null)
+            {
+                string html2 = await new WebClient().DownloadStringTaskAsync(new Uri(url2));
+                _doc2.LoadHtml(html2);
+                _parser.Document2 = _doc2;
+            }
         }
 
         public virtual async Task Load()
         {
-            await Load(url);
+            await Load(url, url2);
         }
 
         public virtual async Task<IList<Pet>> Parse()
         {
             var traits = await GetAllTraits();
             var animalTypes = await GetAllAnimalTypes();
+            
+            IList<Pet> pets;
 
             var user = await CreateUser();
 
-            var pets = parser.Parse(traits, user, animalTypes);
+            var pets1 = await _parser.Parse(traits, user, animalTypes,_doc,DocumentType.DOC_DOGS);
 
+            if (_doc2.ParsedText != null)
+            {
+                var pets2 = await _parser.Parse(traits, user, animalTypes, _doc2, DocumentType.DOC_CATS);
+                pets = pets1.Concat(pets2).ToList();
+            } 
+            else
+            {
+                pets = pets1;
+            }
+           
             foreach (var pet in pets)
             {
                 pet.ExternalId = _petRepository.GetPetHashed(pet);
             }
+
             return pets;
         }
 
         public virtual async Task InsertPets(IList<Pet> pets)
         {
-            var petsFromSource = await _petRepository.SearchAsync(new PetFilter { PetSource = parser.Source, PerPage = int.MaxValue });
+            var petsFromSource = await _petRepository.SearchAsync(new PetFilter { PetSource = _parser.Source, PerPage = int.MaxValue });
 
             var petsToInsert = pets
                 .Where(p => !petsFromSource.Any(pe => p.ExternalId == pe.ExternalId));
@@ -133,7 +151,7 @@ namespace GetPet.Crawler.Crawlers
             foreach (var pet in petsToInsert)
             {
                 pet.PetTraits ??= new List<PetTrait>();
-                pet.Source = parser.Source;
+                pet.Source = _parser.Source;
 
                 await AddAgeTrait(pet);
                 await AddGenderTrait(pet);

@@ -1,22 +1,19 @@
 <mat-card class="mat-elevation-z4">
-    <!-- <a [href]="pet.sourceLink" target="_blank"> -->
     <span class="image-container">
-        <img mat-card-image [src]="pet.images[0]" [alt]="pet.name">
+        <img mat-card-image [src]="imageUrl + pet.images[0]" [alt]="pet.name">
         <mat-card-title class="text-block">{{ pet.name }} {{getAge(pet.birthday,pet.gender)}}</mat-card-title>
     </span>
-    <!-- </a> -->
     <mat-card-content>
-
         <p class="text-description">
             {{ pet.description }}
         </p>
         <p>
             <mat-chip-list class="pet-chip" cdkDropList cdkDropListOrientation="horizontal">
-                <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.traits | keyvalue">
-                    {{ trait.value }}
+                <mat-chip class="pet-box" cdkDrag *ngFor="let trait of topTraits()">
+                    {{ trait }}
                 </mat-chip>
-                <mat-chip class="pet-box" cdkDrag *ngFor="let trait of pet.booleanTraits | keyvalue">
-                    {{ trait.key }}
+                <mat-chip class="pet-box" cdkDrag *ngIf="traitsHiddenCount() > 0">
+                    +{{traitsHiddenCount()}}
                 </mat-chip>
             </mat-chip-list>
         </p>

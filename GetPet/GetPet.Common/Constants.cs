@@ -6,5 +6,6 @@
 
         public static string Secret { get; set; }
 
+        public static string AzureStorageConnectionString { get; set; }
     }
 }

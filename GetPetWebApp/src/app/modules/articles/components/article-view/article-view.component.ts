@@ -5,6 +5,7 @@ import { AuthenticationService } from 'src/app/shared/services/authentication.se
 import { IArticle } from '../../models/iarticle';
 import { IComment } from '../../models/icomment';
 import { ArticleService } from '../../services/article.service';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-article-view',
@@ -19,6 +20,8 @@ export class ArticleViewComponent implements OnInit {
   @Input()
   article: IArticle = {} as IArticle;
 
+  imageUrl = '';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private articleService: ArticleService,
@@ -28,10 +31,11 @@ export class ArticleViewComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.imageUrl = environment.baseImageUrl;
   }
 
   getAvatarImage(num: number) {
-    return `url(https://localhost:44345/images/avatars/${num % 50}.png)`;
+    return `url(${environment.baseImageUrl}avatars/${num % 50}.png)`;
   }
 
   addComment() {

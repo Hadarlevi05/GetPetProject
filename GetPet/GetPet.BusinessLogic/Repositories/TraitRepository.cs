@@ -41,7 +41,7 @@ namespace GetPet.BusinessLogic.Repositories
             {
                 query = query.Where(t => t.AnimalTypeId == filter.AnimalTypeId);
             }
-            if (!string.IsNullOrWhiteSpace(filter.TraitName)) // shlomi
+            if (!string.IsNullOrWhiteSpace(filter.TraitName))
             {
                 query = query.Where(t => t.Name.Contains(filter.TraitName));
             }

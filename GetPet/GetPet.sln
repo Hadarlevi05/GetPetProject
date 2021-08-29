@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.WebApi", "GetPet.WebApi\GetPet.WebApi.csproj", "{E4CC17AF-4042-4069-9F27-096D492FC956}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.BusinessLogic", "GetPet.BusinessLogic\GetPet.BusinessLogic.csproj", "{884F3BDD-329F-4897-9905-4CD4728CF0E1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Data", "GetPet.Data\GetPet.Data.csproj", "{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Common", "GetPet.Common\GetPet.Common.csproj", "{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Crawler", "GetPet.Crawler\GetPet.Crawler.csproj", "{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Tests", "GetPet.Tests\GetPet.Tests.csproj", "{44D23D85-B5D0-434C-A793-9EECAAD244EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GetPet.Scheduler", "GetPet.Scheduler\GetPet.Scheduler.csproj", "{70F89BC4-40B3-4B8E-ADEB-DAB4F2AB913B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4CC17AF-4042-4069-9F27-096D492FC956}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4CC17AF-4042-4069-9F27-096D492FC956}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4CC17AF-4042-4069-9F27-096D492FC956}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4CC17AF-4042-4069-9F27-096D492FC956}.Release|Any CPU.Build.0 = Release|Any CPU
+		{884F3BDD-329F-4897-9905-4CD4728CF0E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{884F3BDD-329F-4897-9905-4CD4728CF0E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{884F3BDD-329F-4897-9905-4CD4728CF0E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{884F3BDD-329F-4897-9905-4CD4728CF0E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2D4E970-E1AB-4E6B-B00A-42BD70D4B8F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F84ACF9B-0422-462F-B8C0-29C12F3E65D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE57259A-D4EC-473D-8EB2-EC3AB5C84A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44D23D85-B5D0-434C-A793-9EECAAD244EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70F89BC4-40B3-4B8E-ADEB-DAB4F2AB913B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70F89BC4-40B3-4B8E-ADEB-DAB4F2AB913B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70F89BC4-40B3-4B8E-ADEB-DAB4F2AB913B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70F89BC4-40B3-4B8E-ADEB-DAB4F2AB913B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E568C7A1-E12B-4976-895B-77723C9A9035}
+	EndGlobalSection
+EndGlobal

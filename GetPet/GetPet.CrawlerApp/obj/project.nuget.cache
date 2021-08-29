@@ -1,0 +1,45 @@
+{
+  "version": 2,
+  "dgSpecHash": "HcM04l8nK6SHSb2V8wKeQI1ldYcGsctN8Lx8UH9D47h0hS81HNGuEF7SI8DpKX0po7TgT44FsU2rOdXZE1Fbng==",
+  "success": false,
+  "projectFilePath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.CrawlerApp\\GetPet.CrawlerApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Sedri\\.nuget\\packages\\automapper\\10.1.1\\automapper.10.1.1.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\8.1.1\\automapper.extensions.microsoft.dependencyinjection.8.1.1.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\5.0.1\\microsoft.extensions.dependencyinjection.5.0.1.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.extensions.options\\3.0.0\\microsoft.extensions.options.3.0.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.extensions.primitives\\3.0.0\\microsoft.extensions.primitives.3.0.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\system.reflection.emit\\4.7.0\\system.reflection.emit.4.7.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project GetPet.BusinessLogic is not compatible with netcoreapp3.1 (.NETCoreApp,Version=v3.1). Project GetPet.BusinessLogic supports: net5.0 (.NETCoreApp,Version=v5.0)",
+      "libraryId": "GetPet.BusinessLogic",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project GetPet.Data is not compatible with netcoreapp3.1 (.NETCoreApp,Version=v3.1). Project GetPet.Data supports: net5.0 (.NETCoreApp,Version=v5.0)",
+      "libraryId": "GetPet.Data",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    },
+    {
+      "code": "NU1201",
+      "level": "Error",
+      "message": "Project GetPet.Crawler is not compatible with netcoreapp3.1 (.NETCoreApp,Version=v3.1). Project GetPet.Crawler supports: net5.0 (.NETCoreApp,Version=v5.0)",
+      "libraryId": "GetPet.Crawler",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\bin\Debug\netcoreapp3.1\GetPet.Common.deps.json
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\bin\Debug\netcoreapp3.1\GetPet.Common.dll
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\bin\Debug\netcoreapp3.1\GetPet.Common.pdb
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.csprojAssemblyReference.cache
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.AssemblyInfoInputs.cache
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.AssemblyInfo.cs
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.csproj.CoreCompileInputs.cache
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.dll
+C:\Users\Sedri\GETPET\GetPetProject\GetPet\GetPet.Common\obj\Debug\netcoreapp3.1\GetPet.Common.pdb

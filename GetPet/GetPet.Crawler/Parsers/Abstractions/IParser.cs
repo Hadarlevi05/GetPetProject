@@ -11,11 +11,13 @@ namespace GetPet.Crawler.Parsers.Abstractions
     {
         PetSource Source { get; }
         HtmlDocument Document { get; set; }
-        Task<IList<Pet>> Parse(List<Trait> allTraits, User user, List<Data.Entities.AnimalType> animalTypes);
-        string ParseName(HtmlNode node);
-        DateTime ParseAgeInYear(HtmlNode node);
+        HtmlDocument Document2 { get; set; }
+
+        Task<IList<Pet>> Parse(List<Trait> allTraits, User user, List<Data.Entities.AnimalType> animalTypes, HtmlDocument document, DocumentType type);
+        string ParseName(HtmlNode node, DocumentType docType);
+        DateTime ParseAgeInYear(HtmlNode node, DocumentType docType);
         Gender ParseGender(HtmlNode node, string name);
-        AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes);
+        AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType);
         string ParseDescription(HtmlNode node, string name);
         Dictionary<Trait, TraitOption> ParseTraits(HtmlNode node, string name, List<Trait> allTraits = null);
     }

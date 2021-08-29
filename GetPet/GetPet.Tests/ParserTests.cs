@@ -62,7 +62,7 @@ namespace GetPet.Tests
             var crawler = new TestCrawler<SpcaParser>(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new SpcaParser(_azureBlobHelper));
             string file = Path.Combine(Environment.CurrentDirectory, "Files\\Spca.html");
 
-            await crawler.Load(file);
+            await crawler.Load(file,null);
 
             var pets = await crawler.Parse();
 
@@ -89,7 +89,7 @@ namespace GetPet.Tests
         {
             // ctrl r+t
             SpcaCrawler spca = new SpcaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new SpcaParser(_azureBlobHelper));
-            await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/");
+            await spca.Load(@"https://spca.co.il/%d7%90%d7%99%d7%9e%d7%95%d7%a6%d7%99%d7%9d/",null);
 
             var pets = spca.Parse();
 
@@ -101,7 +101,7 @@ namespace GetPet.Tests
         {
             // ctrl r+t
             RehovotSpaCrawler spca = new RehovotSpaCrawler(petHandler, petRepository, unitOfWork, traitRepository, cityRepository, animalTypeRepository, userRepository, traitOptionRepository, new RehovotSpaParser(_azureBlobHelper));
-            spca.Load(@"http://rehovotspa.org.il/our-dogs/");
+            spca.Load(@"http://rehovotspa.org.il/our-dogs/", null);
 
             var pets = spca.Parse();
 

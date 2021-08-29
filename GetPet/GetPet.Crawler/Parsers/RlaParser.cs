@@ -18,11 +18,11 @@ namespace GetPet.Crawler.Parsers
 
         public override PetSource Source => PetSource.Rla;
 
-        public override HtmlNodeCollection GetNodes()
+        public override HtmlNodeCollection GetNodes(HtmlDocument document)
         {
             try
             {
-                var items = Document.DocumentNode.SelectNodes("//div[starts-with(@class, 'ui-column')]");
+                var items = document.DocumentNode.SelectNodes("//div[starts-with(@class, 'ui-column')]");
 
                 return items;
             }
@@ -33,21 +33,26 @@ namespace GetPet.Crawler.Parsers
             }
         }
 
-        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes)
+        public async override Task<Pet> ParseSingleNode(HtmlNode node, List<Trait> allTraits, List<AnimalType> animalTypes, DocumentType docType)
         {
             string petPage;
 
-            AnimalType animalType = ParseAnimalType(node, "class", animalTypes);
+            AnimalType animalType = ParseAnimalType(node, "class", animalTypes, docType);
             int animalTypeId = animalType.Id;
 
             var allTraitsByAnimalType = allTraits.Where(x => x.AnimalTypeId == animalType.Id).ToList();
 
             //pet details is in a seperate page
             HtmlNode detailsNode = GetDetailsNode(node, out petPage);
-            string description = GetDescription(detailsNode);
+            string description = GetDescription(detailsNode, docType);
 
-            string name = ParseName(detailsNode);
-            var birthday = ParseAgeInYear(detailsNode); //check
+            if (description == null)
+            {
+                return null;
+            }
+
+            string name = ParseName(detailsNode, docType);
+            var birthday = ParseAgeInYear(detailsNode, docType);
             var gender = ParseGender(description);
             var decodedDescription = ParseDescription(description);
             var traits = ParseTraits(description, allTraitsByAnimalType);
@@ -94,26 +99,45 @@ namespace GetPet.Crawler.Parsers
             return pet;
         }
 
-        private string GetDescription(HtmlNode detailsNode)
+        private string GetDescription(HtmlNode detailsNode, DocumentType docType)
         {
-            string description = detailsNode.SelectSingleNode(".//div[starts-with(@class, 'auto-format ui--animation')]/p").InnerText;
+            string description = null;
+
+            if (docType == DocumentType.DOC_CATS)
+            {
+                description = detailsNode.SelectSingleNode(".//div[starts-with(@class, 'auto-format ui--animation')]/p").InnerText;
+            }
+
+            if (docType == DocumentType.DOC_DOGS)
+            {
+                var descriptionNode = detailsNode.SelectSingleNode(".//h4[@id='custom-title-h4-1']/p") ?? null;
+                if (descriptionNode != null)
+                { 
+                    description = descriptionNode.InnerText;
+                }
+            }
 
             return description;
         }
 
-        public override string ParseName(HtmlNode node)
+        public override string ParseName(HtmlNode node, DocumentType docType)
         {
-            var result = node.SelectSingleNode(".//div[starts-with(@class, 'ui--title-holder')]/h1").InnerText;
+            string result = string.Empty;
+
+            if (docType == DocumentType.DOC_CATS) { result = node.SelectSingleNode(".//div[starts-with(@class, 'ui--title-holder')]/h1").InnerText; }
+            if (docType == DocumentType.DOC_DOGS) { result = node.SelectSingleNode(".//h2[@id='titlebar-title']").InnerText; }
 
             return result;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node) => ParseAgeInYear(GetDescription(node));
+        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(GetDescription(node, docType));
 
-        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes)
+        public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {
-            // Rla cat page
-            var animalType = "חתול";
+            string animalType = string.Empty;
+
+            if (docType == DocumentType.DOC_CATS) { animalType = "חתול"; }
+            if (docType == DocumentType.DOC_DOGS) { animalType = "כלב"; }
 
             return ParserUtils.ConvertAnimalType(animalType, animalTypes);
         }
@@ -131,7 +155,8 @@ namespace GetPet.Crawler.Parsers
                 detailsDoc = web.Load(petPage);
 
                 //details node
-                var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-content'])");
+                //var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-content'])");
+                var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-wrap'])");
 
                 return htmlNode;
             }

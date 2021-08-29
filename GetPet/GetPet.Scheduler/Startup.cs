@@ -156,9 +156,15 @@ namespace GetPet.Scheduler
 
             RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 12 * * *");
 
+<<<<<<< HEAD
+            RecurringJob.Trigger("RehovotSpaJob");
+            RecurringJob.Trigger("SpcaJob");
+            RecurringJob.Trigger("RlaJob");
+=======
             //RecurringJob.Trigger("RehovotSpaJob");
             //RecurringJob.Trigger("SpcaJob");
             //RecurringJob.Trigger("RlaJob");
+>>>>>>> parent of 63752d5 (change picture size in pet view)
 
             RecurringJob.Trigger("NotificationSenderJob");
         }

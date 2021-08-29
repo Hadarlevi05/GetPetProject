@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "KBjlMeVpIUBuy80kLa3YcNXHCpdy3LDc2nHasOGGyvn9SF4VNG5+roEieUODQpilDNGXgLoDRhvkyIKVhnVHtw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\Sedri\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

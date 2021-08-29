@@ -1,0 +1,377 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Tests\\GetPet.Tests.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\GetPet.BusinessLogic.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\GetPet.BusinessLogic.csproj",
+        "projectName": "GetPet.BusinessLogic",
+        "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\GetPet.BusinessLogic.csproj",
+        "packagesPath": "C:\\Users\\Sedri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Sedri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj": {
+                "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj"
+              },
+              "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\GetPet.Data.csproj": {
+                "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\GetPet.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
+            },
+            "Azure.Storage.Blobs": {
+              "target": "Package",
+              "version": "[12.9.1, )"
+            },
+            "Microsoft.AspNetCore.Http.Features": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[2.15.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj",
+        "projectName": "GetPet.Common",
+        "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj",
+        "packagesPath": "C:\\Users\\Sedri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Sedri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\GetPet.Crawler.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\GetPet.Crawler.csproj",
+        "projectName": "GetPet.Crawler",
+        "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\GetPet.Crawler.csproj",
+        "packagesPath": "C:\\Users\\Sedri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Sedri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\GetPet.BusinessLogic.csproj": {
+                "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.BusinessLogic\\GetPet.BusinessLogic.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.36, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\GetPet.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\GetPet.Data.csproj",
+        "projectName": "GetPet.Data",
+        "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\GetPet.Data.csproj",
+        "packagesPath": "C:\\Users\\Sedri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Sedri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj": {
+                "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Common\\GetPet.Common.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.9, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.FileExtensions": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[5.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Tests\\GetPet.Tests.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Tests\\GetPet.Tests.csproj",
+        "projectName": "GetPet.Tests",
+        "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Tests\\GetPet.Tests.csproj",
+        "packagesPath": "C:\\Users\\Sedri\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Tests\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Sedri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net5.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net5.0": {
+            "targetAlias": "net5.0",
+            "projectReferences": {
+              "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\GetPet.Crawler.csproj": {
+                "projectPath": "C:\\Users\\Sedri\\GETPET\\GetPetProject\\GetPet\\GetPet.Crawler\\GetPet.Crawler.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net5.0": {
+          "targetAlias": "net5.0",
+          "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[5.0.2, )"
+            },
+            "Microsoft.NET.Test.Sdk": {
+              "target": "Package",
+              "version": "[16.11.0, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.2, )"
+            },
+            "NUnit3TestAdapter": {
+              "target": "Package",
+              "version": "[4.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

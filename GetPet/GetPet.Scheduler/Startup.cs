@@ -158,7 +158,7 @@ namespace GetPet.Scheduler
 
             //RecurringJob.Trigger("RehovotSpaJob");
             //RecurringJob.Trigger("SpcaJob");
-            //RecurringJob.Trigger("RlaJob");
+            RecurringJob.Trigger("RlaJob");
 
             RecurringJob.Trigger("NotificationSenderJob");
         }

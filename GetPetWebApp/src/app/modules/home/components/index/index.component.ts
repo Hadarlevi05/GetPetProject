@@ -70,9 +70,9 @@ export class IndexComponent implements OnInit {
     const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
     this.petsService.searchCount(filter).subscribe(counter => {
       this.waitingForAdoptionCount = counter.count;
-      
+
       var waitingForAdoptionStop: any = setInterval(() => {
-        console.log("waitfor count",this.waitingForAdoptionCount);
+        console.log("waitfor count", this.waitingForAdoptionCount);
         if (this.waitingForAdoptionCount <= 0) {
           clearInterval(waitingForAdoptionStop);
         } else {
@@ -81,7 +81,7 @@ export class IndexComponent implements OnInit {
             clearInterval(waitingForAdoptionStop);
           }
         }
-      },10);
+      }, 10);
 
 
     });
@@ -93,9 +93,9 @@ export class IndexComponent implements OnInit {
   }
 
   onAdpotButtonClick(animalTypeId: number) {
-      const urlTree = this.router.parseUrl('pets/search');
-      urlTree.queryParams['animalType'] = animalTypeId;
-      this.router.navigateByUrl(urlTree);
+    const urlTree = this.router.parseUrl('pets/search');
+    urlTree.queryParams['animalType'] = animalTypeId;
+    this.router.navigateByUrl(urlTree);
   }
 
   // setFormSubscribers() {
@@ -133,7 +133,7 @@ export class IndexComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new BaseFilter(1, 100, date);
+    let filter = new BaseFilter(1, 4, date);
 
     this.articleService.search(filter).subscribe(articles => {
       this.articles = articles;
@@ -144,7 +144,7 @@ export class IndexComponent implements OnInit {
 
   loadPets() {
 
-    this.petLoading = false;
+    this.petLoading = true;
 
     const date = new Date();
     date.setDate(date.getDate() - 14);
@@ -160,7 +160,9 @@ export class IndexComponent implements OnInit {
 
   openArticleDialog(article: IArticle) {
     this.dialog.open(ArticleViewComponent, {
-      data: { article }
+      data: { article },
+      height: '70%',
+      width: '70%',
     });
   }
 

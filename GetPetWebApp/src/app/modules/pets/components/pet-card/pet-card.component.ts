@@ -13,7 +13,7 @@ export class PetCardComponent implements OnInit {
   pet: IPet = {} as IPet;
 
   imageUrl = '';
-  taritsToDisplay = 3;
+  taritsToDisplay = 2;
 
   topTraits(): Array<string> {
     if (!this.pet)

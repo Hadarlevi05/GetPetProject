@@ -44,7 +44,9 @@ export class ArticlesComponent implements OnInit {
 
   openArticleDialog(article: IArticle) {
     this.dialog.open(ArticleViewComponent, {
-      data: { article }
+      data: { article },
+      height: '70%',
+      width: '70%',
     });
   }
 }

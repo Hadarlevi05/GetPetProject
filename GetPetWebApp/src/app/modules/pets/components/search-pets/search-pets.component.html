@@ -36,6 +36,8 @@
     </aside>
     <main>
 
+        <app-loader [Show]="loading"></app-loader>
+
         <div class="no-pets-found" *ngIf="pets.length === 0 && !loading">
             <h2>
                 לא נמצאו בעליי חיים.<br />
@@ -48,7 +50,7 @@
             <div fxLayout="row wrap" fxLayoutGap="16px grid">
                 <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
                     fxFlex.xl="20%" fx *ngFor="let pet of pets">
-                    <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
+                    <app-pet-card class="pet-card" [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                 </div>
             </div>
         </div>

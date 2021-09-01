@@ -46,8 +46,8 @@
 
         <div class="content" *ngIf="!loading">
             <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
-                    fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="33%"
+                    fxFlex.xl="33%" fx *ngFor="let pet of pets">
                     <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                 </div>
             </div>

@@ -51,6 +51,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SuccessViewComponent } from './modules/pets/components/addpet/success-view/success-view.component';
 import { ErrorViewComponent } from './modules/pets/components/addpet/error-view/error-view.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -109,14 +110,15 @@ import { ErrorViewComponent } from './modules/pets/components/addpet/error-view/
     MatProgressBarModule,
     MatSidenavModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ],
   providers: [
     DatePipe,
     AuthGuard,
     AuthenticationService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
-    bootstrap: [AppComponent]
-  })
-  
-  export class AppModule { }
+  bootstrap: [AppComponent]
+})
+
+export class AppModule { }

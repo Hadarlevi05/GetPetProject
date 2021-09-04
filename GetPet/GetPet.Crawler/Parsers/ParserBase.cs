@@ -36,9 +36,9 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);     
-      
-                if (IsValidPetDetails(pet)) 
+                var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);
+
+                if (IsValidPetDetails(pet))
                 {
                     pet.User = user;
                     results.Add(pet);
@@ -67,7 +67,7 @@ namespace GetPet.Crawler.Parsers
 
             return (nameRegex.IsMatch(pet.Name) &&
                     pet.MetaFileLinks.Count > 0 &&
-                    pet.PetTraits.Count > 0);
+                    pet.Description != string.Empty);
         }
 
         public Gender ParseGender(HtmlNode node, string name)

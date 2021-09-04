@@ -38,7 +38,7 @@ namespace GetPet.Crawler.Parsers
             {
                 var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);     
       
-                if (pet != null) //some pets are not in the same template as the others and returns null
+                if (IsValidPetDetails(pet)) 
                 {
                     pet.User = user;
                     results.Add(pet);
@@ -55,6 +55,20 @@ namespace GetPet.Crawler.Parsers
         public abstract string ParseName(HtmlNode node, DocumentType docType);
 
         public abstract DateTime? ParseAgeInYear(HtmlNode node, DocumentType doctype);
+
+        public bool IsValidPetDetails(Pet pet)
+        {
+            if (pet == null)
+            {
+                return false;
+            }
+
+            var nameRegex = new Regex("^[א-ת ']*$");
+
+            return (nameRegex.IsMatch(pet.Name) &&
+                    pet.MetaFileLinks.Count > 0 &&
+                    pet.PetTraits.Count > 0);
+        }
 
         public Gender ParseGender(HtmlNode node, string name)
         {

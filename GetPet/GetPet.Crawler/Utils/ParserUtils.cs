@@ -16,8 +16,8 @@ namespace GetPet.Crawler.Utils
         private static string _male = "(זכר|בן|male)";
         private static string _female = "(נקבה|בת|female)";
 
-        private static string _femaleWordPool = "(היא|לה|שלה|היתה|הייתה|אחת|גורה|חתולה|כלבה|הגיעה|נולדה|אותה|ניצלה|קיבלה|כולה|מחפשת|אוהבת)";
-        private static string _maleWordPool = "(הוא|לו|שלו|היה|אחד|גור|חתול|כלב|הגיע|נולד|אותו|ניצל|קיבל|כולו|מחפש|אוהב)";
+        private static string _femaleWordPool = "(היא|לה|שלה|היתה|הייתה|גורה|חתולה|כלבה|הגיעה|נולדה|אותה|ניצלה|קיבלה|כולה|מחפשת|אוהבת)";
+        private static string _maleWordPool = "(הוא|לו|שלו|היה|גור|חתול|כלב|הגיע|נולד|אותו|ניצל|קיבל|כולו|מחפש|אוהב)";
 
         public static Gender ConvertGender(string input)
         {

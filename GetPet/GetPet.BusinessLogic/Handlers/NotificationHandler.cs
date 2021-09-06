@@ -3,6 +3,7 @@ using GetPet.BusinessLogic.Handlers.Abstractions;
 using GetPet.BusinessLogic.Model;
 using GetPet.BusinessLogic.Model.Filters;
 using GetPet.BusinessLogic.Repositories;
+using GetPet.Common;
 using GetPet.Data.Entities;
 using Newtonsoft.Json;
 using System;
@@ -116,7 +117,7 @@ namespace GetPet.BusinessLogic.Handlers
 
                     using (var client = new WebClient())
                     {
-                        var content = client.DownloadData(pet.MetaFileLinks.First().Path);
+                        var content = client.DownloadData(Path.Combine(Constants.StorageUrl, pet.MetaFileLinks.First().Path));
                         using (var ms = new MemoryStream(content))
                         {
                             string imageName = $"image{fileCount++}.jpg";

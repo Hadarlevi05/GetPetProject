@@ -29,7 +29,8 @@ namespace GetPet.WebApi
 
         private void SetEnvironmentVariables()
         {
-            Constants.WEBAPI_URL = Configuration.GetValue<string>("WebApiUrl");
+            Constants.WebApiUrl = Configuration.GetValue<string>("WebApiUrl");
+            Constants.StorageUrl = Configuration.GetValue<string>("StorageUrl");
             Constants.Secret = Configuration.GetValue<string>("Secret");
             Constants.AzureStorageConnectionString = Configuration.GetValue<string>("AzureStorageConnectionString");
 

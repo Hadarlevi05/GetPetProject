@@ -86,7 +86,7 @@ namespace GetPet.WebApi.Controllers
                 {
                     await formFile.CopyToAsync(fileStream);
                 }
-                return $"{Constants.WEBAPI_URL}/upload-content/{fileName}";
+                return $"{Constants.WebApiUrl}/upload-content/{fileName}";
             }
             return null;
         }

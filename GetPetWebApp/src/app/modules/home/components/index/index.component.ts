@@ -58,6 +58,34 @@ export class IndexComponent implements OnInit {
     this.loadAnimalTypes();
     //this.setFormSubscribers();
     this.setCounters();
+    this.imageSlider();
+  }
+
+  imageSlider() {
+
+    function nextImage() {
+      let element = document.getElementById("slideimg" + curImage);
+
+      if (!element) {
+        clearInterval(timer);
+      }
+
+      element?.classList.remove('show');
+
+      curImage++;
+      if (curImage > numImages - 1) {
+        curImage = 0;
+      }
+
+      element = document.getElementById("slideimg" + curImage);
+      element?.classList.add('show');
+    }
+
+    let timer = setInterval(() => {
+      nextImage();
+    }, 4000);
+    let curImage = 0;
+    let numImages = 3;
   }
 
   setCounters() {
@@ -163,37 +191,3 @@ export class IndexComponent implements OnInit {
     });
   }
 }
-
-// var timer = setInterval(nextImage, 4000);
-// var curImage = 0;
-// var numImages = 3;
-
-// function nextImage() {
-//   var e;
-//   // remove show class from current image
-//   e = document.getElementById("slideimg" + curImage);
-//   removeClass(e, "show");
-
-//   // compute next image
-//   //try change to curImage = (curImage+1) % numImages
-//   curImage++;
-//   if (curImage > numImages - 1) {
-//     curImage = 0;
-//   }
-
-//   // add show class to next image
-//   e = document.getElementById("slideimg" + curImage);
-//   addClass(e, "show");
-// }
-
-// function addClass(elem, name) {
-//   var c = elem.className;
-//   if (c) c += " ";  // if not blank, add a space separator
-//   c += name;
-//   elem.className = c;
-// }
-
-// function removeClass(elem, name) {
-//   var c = elem.className;
-//   elem.className = c.replace(name, "").replace(/   /g, " ").replace(/^ | $/g, "");  // remove name and extra blanks
-// }

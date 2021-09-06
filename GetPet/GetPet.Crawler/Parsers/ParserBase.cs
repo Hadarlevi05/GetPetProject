@@ -36,9 +36,9 @@ namespace GetPet.Crawler.Parsers
 
             foreach (var node in nodes)
             {
-                var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);     
-      
-                if (pet != null) //some pets are not in the same template as the others and returns null
+                var pet = await ParseSingleNode(node, allTraits, animalTypes, docType);
+
+                if (IsValidPetDetails(pet))
                 {
                     pet.User = user;
                     results.Add(pet);
@@ -46,7 +46,6 @@ namespace GetPet.Crawler.Parsers
             }
 
             return results;
-            //some pets are not in the similar template as the others.
         }
 
         public abstract HtmlNodeCollection GetNodes(HtmlDocument document);
@@ -55,7 +54,21 @@ namespace GetPet.Crawler.Parsers
 
         public abstract string ParseName(HtmlNode node, DocumentType docType);
 
-        public abstract DateTime ParseAgeInYear(HtmlNode node, DocumentType doctype);
+        public abstract DateTime? ParseAgeInYear(HtmlNode node, DocumentType doctype);
+
+        public bool IsValidPetDetails(Pet pet)
+        {
+            if (pet == null)
+            {
+                return false;
+            }
+
+            var nameRegex = new Regex("^[א-ת ']*$");
+
+            return (nameRegex.IsMatch(pet.Name) &&
+                    pet.MetaFileLinks.Count > 0 &&
+                    pet.Description != string.Empty);
+        }
 
         public Gender ParseGender(HtmlNode node, string name)
         {
@@ -187,7 +200,7 @@ namespace GetPet.Crawler.Parsers
             return results;
         }
 
-        public virtual DateTime ParseAgeInYear(string inputAge)
+        public virtual DateTime? ParseAgeInYear(string inputAge)
         {
             int year = 0;
             int month = 0;
@@ -231,13 +244,18 @@ namespace GetPet.Crawler.Parsers
                 //age given in year (e.g. 2017)
                 year = ParserUtils.ConvertYear(Regex.Match(inputAge, @"\b\d{4}\b").Value);
             }
-            else
+            else 
             {
                 //age include only years
                 year = ParserUtils.ConvertYear(age);
-
             }
-            //problem- maybe add a general else that will assign Date.now birthday(alissa)
+
+            //in case of unvalid date of birth
+            if ((year == 0 && month == 0)  || year > 25)
+            {
+                return null;
+            }
+
             return DateTime.Now.AddYears(-year).AddMonths(-month).Date;
         }
     }

@@ -153,7 +153,10 @@ namespace GetPet.Crawler.Crawlers
                 pet.PetTraits ??= new List<PetTrait>();
                 pet.Source = _parser.Source;
 
-                await AddAgeTrait(pet);
+                if (pet.Birthday != null)
+                {
+                    await AddAgeTrait(pet);
+                }
                 await AddGenderTrait(pet);
             }
 
@@ -179,7 +182,10 @@ namespace GetPet.Crawler.Crawlers
                 TraitName = "גיל"
             });
 
-            var age = new Age(animal.Birthday);
+            //animal.Birthday is not null.
+            DateTime animalBd = (DateTime)animal.Birthday;
+
+            var age = new Age(animalBd);
             var ageInMonth = age.Years * 12 + age.Months;
 
             // גור עד 9 חודשים

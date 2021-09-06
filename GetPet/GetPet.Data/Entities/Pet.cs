@@ -10,7 +10,7 @@ namespace GetPet.Data.Entities
     {
         [StringLength(400)]
         public string Name { get; set; }
-        public DateTime Birthday { get; set; }
+        public DateTime? Birthday { get; set; }
         public Gender Gender { get; set; }
         public PetStatus Status { get; set; }
         public string Description { get; set; }

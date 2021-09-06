@@ -81,7 +81,7 @@ namespace GetPet.Crawler.Parsers
             return node.SelectNodes("./a/h2/b").FirstOrDefault().InnerText;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
+        public override DateTime? ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(node.GetAttributeValue("data-type", "none"));
 
         public override string ParseDescription(HtmlNode node, string name = "")
         {

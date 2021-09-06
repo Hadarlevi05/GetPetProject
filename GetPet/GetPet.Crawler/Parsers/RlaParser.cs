@@ -130,7 +130,7 @@ namespace GetPet.Crawler.Parsers
             return result;
         }
 
-        public override DateTime ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(GetDescription(node, docType));
+        public override DateTime? ParseAgeInYear(HtmlNode node, DocumentType docType) => ParseAgeInYear(GetDescription(node, docType));
 
         public override AnimalType ParseAnimalType(HtmlNode node, string name, List<AnimalType> animalTypes, DocumentType docType)
         {

@@ -124,7 +124,7 @@ export class IndexComponent implements OnInit {
     let date = new Date();
     date.setDate(date.getDate() - 14);
 
-    let filter = new BaseFilter(1, 100, date);
+    let filter = new BaseFilter(1, 4, date);
 
     this.articleService.search(filter).subscribe(articles => {
       this.articles = articles;
@@ -135,7 +135,7 @@ export class IndexComponent implements OnInit {
 
   loadPets() {
 
-    this.petLoading = false;
+    this.petLoading = true;
 
     const date = new Date();
     date.setDate(date.getDate() - 14);
@@ -151,7 +151,9 @@ export class IndexComponent implements OnInit {
 
   openArticleDialog(article: IArticle) {
     this.dialog.open(ArticleViewComponent, {
-      data: { article }
+      data: { article },
+      height: '70%',
+      width: '70%',
     });
   }
 

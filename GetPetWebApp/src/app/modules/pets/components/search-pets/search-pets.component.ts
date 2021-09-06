@@ -27,7 +27,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
   showFiller = true;
 
-  loading = false;
+  loading = true;
 
   animalTypeId = 1;
   animaltypes: IAnimalType[] = [];
@@ -130,7 +130,7 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
   loadPets() {
 
-    this.loading = false;
+    this.loading = true;
 
     let date = new Date();
     date.setDate(date.getDate() - 14);

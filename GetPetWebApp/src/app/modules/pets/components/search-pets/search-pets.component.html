@@ -36,6 +36,8 @@
     </aside>
     <main>
 
+        <app-loader [Show]="loading"></app-loader>
+
         <div class="no-pets-found" *ngIf="pets.length === 0 && !loading">
             <h2>
                 לא נמצאו בעליי חיים.<br />

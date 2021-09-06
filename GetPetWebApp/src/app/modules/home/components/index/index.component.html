@@ -49,8 +49,8 @@
 
         <div class="content" *ngIf="!articleLoading">
             <div fxLayout="row wrap" fxLayoutGap="24px grid">
-                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="20%"
-                    fxFlex.xl="20%" fx *ngFor="let article of articles">
+                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%"
+                    fxFlex.xl="25%" fx *ngFor="let article of articles">
 
                     <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
 
@@ -90,18 +90,6 @@
                 </div>
             </div>
         </mat-tab>
-        <!-- <mat-tab label="מכרסמים">
-            <div class="pets-container">
-                <app-loader [Show]="petLoading"></app-loader>
-                <div class="content" *ngIf="!petLoading">
-                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                        <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
-                            fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
-                            <app-pet-card [pet]="pet"></app-pet-card>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </mat-tab> -->
+
     </mat-tab-group>
 </section>

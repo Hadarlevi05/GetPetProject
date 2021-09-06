@@ -52,6 +52,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SuccessViewComponent } from './modules/pets/components/addpet/success-view/success-view.component';
 import { ErrorViewComponent } from './modules/pets/components/addpet/error-view/error-view.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -117,7 +118,9 @@ import { MatMenuModule } from '@angular/material/menu';
     DatePipe,
     AuthGuard,
     AuthenticationService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true }],
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
+  ],
   bootstrap: [AppComponent]
 })
 

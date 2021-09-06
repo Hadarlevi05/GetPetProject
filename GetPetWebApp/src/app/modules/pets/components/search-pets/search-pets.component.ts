@@ -18,6 +18,7 @@ import { PetViewComponent } from '../pet-view/pet-view.component';
 import { MatDialog } from '@angular/material/dialog';
 import { NotificationService } from 'src/app/shared/services/notification.service';
 import { PetStatus } from 'src/app/shared/enums/pet-status';
+import { Subject } from 'rxjs';
 @Component({
   selector: 'app-search-pets',
   templateUrl: './search-pets.component.html',
@@ -43,6 +44,28 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
   searchTraitValues: {} = {};
   searchBooleanTraits: number[] = [];
 
+  clearSubject: Subject<void> = new Subject<void>();
+
+
+  get hasParameters(): boolean {
+    if (Object.keys(this.searchTraitValues).length > 0)
+      return true;
+
+    if (this.searchBooleanTraits.length > 0)
+      return true;
+
+    return false;
+  }
+
+  clearParameters() {
+
+    this.searchTraitValues = {};
+    this.searchBooleanTraits = [];
+
+    this.clearSubject.next();
+
+    this.search();
+  }
 
   form: FormGroup = new FormGroup({
     animalType: new FormControl('')
@@ -139,7 +162,6 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
 
     this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
-
       this.loading = false;
     });
   }
@@ -159,16 +181,17 @@ export class SearchPetsComponent implements OnInit, OnDestroy {
   }
 
   search() {
+
+    this.loading = true;
+
     const date = new Date();
     date.setDate(date.getDate() - 14);
 
     const filter = new PetFilter(1, 100, date, [this.animalTypeId], this.searchTraitValues, this.searchBooleanTraits);
 
-    console.log(filter);
-
     this.petsService.search(filter).subscribe(pets => {
       this.pets = pets;
-
+      this.loading = false;
     });
   }
 

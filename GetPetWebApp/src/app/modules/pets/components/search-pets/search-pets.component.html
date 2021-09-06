@@ -15,16 +15,20 @@
             </section>
             <section class="row">
                 <app-search-criteria *ngFor="let trait of nonBooleanTraits" [trait]="trait"
-                    (changed)="onOptionsChanged($event)">
+                    (changed)="onOptionsChanged($event)" [clearEvents]="clearSubject.asObservable()">
                 </app-search-criteria>
             </section>
             <section class="row filter-list">
                 <app-search-criteria *ngFor="let trait of booleanTraits" [trait]="trait"
-                    (changed)="onOptionsChanged($event)"></app-search-criteria>
+                    (changed)="onOptionsChanged($event)" [clearEvents]="clearSubject.asObservable()">
+                </app-search-criteria>
             </section>
 
             <section class="row">
                 <button mat-raised-button color="primary" (click)="search()">חפש</button>
+            </section>
+            <section class="row">
+                <a href="javascript:void(0);" (click)="clearParameters()" *ngIf="hasParameters">נקה</a>
             </section>
             <section class="row">
                 <button mat-raised-button color="accent" (click)="addSearchNotification()">
@@ -48,8 +52,8 @@
 
         <div class="content" *ngIf="!loading">
             <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="33%"
-                    fxFlex.xl="33%" fx *ngFor="let pet of pets">
+                <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
+                    fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
                     <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                 </div>
             </div>

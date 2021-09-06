@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { ITrait } from 'src/app/shared/models/itrait';
 
 @Component({
@@ -11,7 +12,11 @@ export class SearchCriteriaComponent implements OnInit {
   @Input()
   trait: ITrait = {} as ITrait;
 
+  @Input() clearEvents: Observable<void> = {} as Observable<void>;
+
   @Output() changed = new EventEmitter<{ traitId: number, options: number[] | boolean }>();
+
+  private clearSubscription: Subscription = {} as Subscription;
 
   optionsSelected: number[] = [];
 
@@ -20,6 +25,17 @@ export class SearchCriteriaComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+
+    this.clearSubscription = this.clearEvents.subscribe(() => this.clear());
+
+  }
+
+  clear() {
+
+    this.optionsSelected = [];
+    this.traitChecked = false;
+
+    console.log('clear!');
   }
 
   selectOption(value: number) {

@@ -51,6 +51,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SuccessViewComponent } from './modules/pets/components/addpet/success-view/success-view.component';
 import { ErrorViewComponent } from './modules/pets/components/addpet/error-view/error-view.component';
+import { MatMenuModule } from '@angular/material/menu';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
@@ -110,7 +111,8 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     MatProgressBarModule,
     MatSidenavModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ],
   providers: [
     DatePipe,

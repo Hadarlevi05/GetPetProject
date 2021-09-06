@@ -1,9 +1,16 @@
 <section dir="rtl" class="adopt-pet">
 
-    <section class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-6 order-2 order-md-1">
-                <img src="https://getpetstorage.blob.core.windows.net/images/animals1.png" class="img-fluid">
+    <section class="container-fluid main-section">
+        <div class="row">
+            <div id="cf" class="col-md-6 order-2 order-md-1">
+                <img id="slideimg0" src="https://getpetstorage.blob.core.windows.net/images/animals1.png"
+                    class="img-fluid slide show">
+                <img id="slideimg1"
+                    src="https://getpetstorage.blob.core.windows.net/upload-content/5457eac0-8bdc-4184-a866-310ccf8cfc1d.jfif"
+                    class="img-fluid slide">
+                <img id="slideimg2"
+                    src="https://getpetstorage.blob.core.windows.net/upload-content/4f7b21ee-cc45-4933-8acb-c52b4e7e5ceb.jfif"
+                    class="img-fluid slide">
             </div>
             <div class="col-md-6 order-1 order-md-2">
                 <div class="row align-items-center">
@@ -24,12 +31,14 @@
         </div>
     </section>
 
-    <h2>עד כה אומצו
-        {{ adoptedCount }}
-        כלבים וחתולים!
-        {{ waitingForAdoptionAnimation }}
-        כלבים לאימוץ מחכים לכם עכשיו בהתרגשות!
-    </h2>
+    <section id="counter">
+        <h2>עד כה אומצו
+            {{ adoptedCount }}
+            כלבים וחתולים!
+            {{ waitingForAdoptionAnimation }}
+            כלבים וחתולים לאימוץ מחכים לכם עכשיו בהתרגשות!
+        </h2>
+    </section>
 </section>
 
 <section>
@@ -61,7 +70,7 @@
                 <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
                         <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
-                            fxFlex.md="33%" fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                            fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
                             <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                         </div>
                     </div>
@@ -74,7 +83,7 @@
                 <div class="content" *ngIf="!petLoading">
                     <div fxLayout="row wrap" fxLayoutGap="16px grid">
                         <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
-                            fxFlex.md="33%" fxFlex.lg="20%" fxFlex.xl="20%" fx *ngFor="let pet of pets">
+                            fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
                             <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                         </div>
                     </div>

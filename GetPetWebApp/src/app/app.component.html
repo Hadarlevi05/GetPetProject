@@ -1,8 +1,16 @@
+<div class="adopt-info align-items-center">
+  עד כה אומצו
+  {{ adoptedCount }}
+  כלבים וחתולים!
+  {{ waitingForAdoptionAnimation }}
+  כלבים וחתולים לאימוץ מחכים לכם עכשיו בהתרגשות!
+</div>
+
 <mat-toolbar fxLayout="row">
   <mat-toolbar-row>
     <span fxHide.xs>
       <img width="32" src="/assets/images/dog-paw.png" alt="GetPet icon" />
-      <a mat-button routerLink="/">גט-פט</a>
+      <a mat-button routerLink="/" routerLinkActive="active">גט-פט</a>
     </span>
 
     <button mat-icon-button [matMenuTriggerFor]="dropMenu" fxHide fxShow.xs>
@@ -12,11 +20,11 @@
     <span class="spacer"></span>
 
     <span fxHide.xs>
-      <a id="search" mat-button routerLink="/pets/search">חיפוש</a>
-      <a mat-button routerLink="/pets/add">הוסף בעל-חיים</a>
+      <a mat-button routerLink="/pets/search" routerLinkActive="active">חיפוש</a>
+      <a mat-button routerLink="/pets/add" routerLinkActive="active">הוסף בעל-חיים</a>
       <!-- <a mat-button routerLink="/articles">מאמרים</a> -->
-      <a mat-button routerLink="/about-us">מי אנחנו</a>
-      <a mat-button routerLink="/donations">תרומות</a>
+      <a mat-button routerLink="/about-us" routerLinkActive="active">מי אנחנו</a>
+      <a mat-button routerLink="/donations" routerLinkActive="active">תרומות</a>
     </span>
 
     <span class="spacer"></span>

@@ -1,4 +1,4 @@
-<section style="max-width: 800px">
+<section>
     <span class="image-container">
         <img mat-card-image [src]="imageUrl + pet.images[0]" [alt]="pet.name">
         <mat-card-title class="text-block">{{ pet.name }}</mat-card-title>
@@ -18,7 +18,10 @@
     </p>
     <h2>
         <a *ngIf="pet.sourceLink" [href]="pet.sourceLink" target="_blank">
-            אמץ אותי
+            <button mat-raised-button color="accent">
+                <mat-icon>pets</mat-icon>
+                אמץ אותי
+            </button>
         </a>
     </h2>
     <p>

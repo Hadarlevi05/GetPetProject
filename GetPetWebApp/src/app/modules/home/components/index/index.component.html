@@ -2,7 +2,7 @@
 
     <section class="container-fluid main-section">
         <div class="row">
-            <div id="cf" class="col-md-6 order-2 order-md-1 d-none d-sm-inline">
+            <div id="cf" class="col-md-6 order-2 order-md-1">
                 <img id="slideimg0" src="https://getpetstorage.blob.core.windows.net/images/animals1.png"
                     class="img-fluid slide show">
                 <img id="slideimg1"
@@ -21,7 +21,7 @@
                 <div class="row align-items-center">
                     <img src="https://getpetstorage.blob.core.windows.net/images/logo2.png" class="img-fluid">
                 </div>
-                <div class="row align-items-center justify-content-center content">
+                <div class="row align-items-center content">
                     <div *ngFor="let type of animaltypes" class="col-md-6 col-sm-6 align-items-center">
                         <button (click)="onAdpotButtonClick(type.id)">אמצו {{type.name}}</button>
                     </div>
@@ -29,72 +29,67 @@
             </div>
 
         </div>
-
-        <!-- <div class="row">
-            <section id="counter">
-                <h2>עד כה אומצו
-                    {{ adoptedCount }}
-                    כלבים וחתולים!
-                    {{ waitingForAdoptionAnimation }}
-                    כלבים וחתולים לאימוץ מחכים לכם עכשיו בהתרגשות!
-                </h2>
-            </section>
-        </div> -->
     </section>
 
+    <section id="counter">
+        <h2>עד כה אומצו
+            {{ adoptedCount }}
+            כלבים וחתולים!
+            {{ waitingForAdoptionAnimation }}
+            כלבים וחתולים לאימוץ מחכים לכם עכשיו בהתרגשות!
+        </h2>
+    </section>
+</section>
 
+<section>
+    <h2>מאמרים אחרונים</h2>
+    <div class="pets-container">
 
+        <app-loader [Show]="articleLoading"></app-loader>
 
-    <div class="row">
-        <h2>מאמרים אחרונים</h2>
-        <div class="pets-container">
+        <div class="content" *ngIf="!articleLoading">
+            <div fxLayout="row wrap" fxLayoutGap="24px grid">
+                <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%" fxFlex.lg="25%"
+                    fxFlex.xl="25%" fx *ngFor="let article of articles">
 
-            <app-loader [Show]="articleLoading"></app-loader>
+                    <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
 
-            <div class="content" *ngIf="!articleLoading">
-                <div fxLayout="row wrap" fxLayoutGap="24px grid">
-                    <div [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%" fxFlex.md="33%"
-                        fxFlex.lg="25%" fxFlex.xl="25%" fx *ngFor="let article of articles">
+                </div>
+            </div>
+        </div>
 
-                        <app-article-card [article]="article" (click)="openArticleDialog(article)"></app-article-card>
+    </div>
+</section>
 
+<section>
+    <h2>בעלי-חיים חדשים לאימוץ</h2>
+    <mat-tab-group mat-align-tabs="start" mat-stretch-tabs (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="כלבים">
+            <div class="pets-container">
+                <app-loader [Show]="petLoading"></app-loader>
+                <div class="content" *ngIf="!petLoading">
+                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                        <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
+                            fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
+                            <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-
-    <div class="row">
-        <h2>בעלי-חיים חדשים לאימוץ</h2>
-        <mat-tab-group mat-align-tabs="start" mat-stretch-tabs (selectedTabChange)="tabChanged($event)">
-            <mat-tab label="כלבים">
-                <div class="pets-container">
-                    <app-loader [Show]="petLoading"></app-loader>
-                    <div class="content" *ngIf="!petLoading">
-                        <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                            <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
-                                fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
-                                <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
-                            </div>
+        </mat-tab>
+        <mat-tab label="חתולים">
+            <div class="pets-container">
+                <app-loader [Show]="petLoading"></app-loader>
+                <div class="content" *ngIf="!petLoading">
+                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                        <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
+                            fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
+                            <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
                         </div>
                     </div>
                 </div>
-            </mat-tab>
-            <mat-tab label="חתולים">
-                <div class="pets-container">
-                    <app-loader [Show]="petLoading"></app-loader>
-                    <div class="content" *ngIf="!petLoading">
-                        <div fxLayout="row wrap" fxLayoutGap="16px grid">
-                            <div class="pet-card" [fxFlex]="(100/gridColumns) + '%'" fxFlex.xs="100%" fxFlex.sm="50%"
-                                fxFlex.md="33%" fxFlex.lg="33%" fxFlex.xl="33%" fx *ngFor="let pet of pets">
-                                <app-pet-card [pet]="pet" (click)="openPetDialog(pet)"></app-pet-card>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
+            </div>
+        </mat-tab>
 
-        </mat-tab-group>
-    </div>
+    </mat-tab-group>
 </section>

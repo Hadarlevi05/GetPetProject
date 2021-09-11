@@ -57,7 +57,7 @@ export class IndexComponent implements OnInit {
     this.loadArticles();
     this.loadAnimalTypes();
     //this.setFormSubscribers();
-    //this.setCounters();
+    this.setCounters();
     this.imageSlider();
   }
 
@@ -88,40 +88,37 @@ export class IndexComponent implements OnInit {
     let numImages = 3;
   }
 
-  // setCounters() {
-  //   this.petLoading = false;
+  setCounters() {
+    this.petLoading = false;
 
-  //   const date = new Date();
-  //   date.setDate(date.getDate() - 1000);
-
-
-  //   const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
-  //   this.petsService.searchCount(filter).subscribe(counter => {
-  //     this.waitingForAdoptionCount = counter.count;
-
-  //     console.log("WAITING FOR ADOPTION: ", this.waitingForAdoptionCount);
-
-  //     var waitingForAdoptionStop: any = setInterval(() => {
-  //       console.log("waitfor count", this.waitingForAdoptionCount);
-  //       if (this.waitingForAdoptionCount <= 0) {
-  //         clearInterval(waitingForAdoptionStop);
-  //       } else {
-  //         this.waitingForAdoptionAnimation++;
-  //         console.log("counting:", this.waitingForAdoptionAnimation);
-  //         if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
-  //           clearInterval(waitingForAdoptionStop);
-  //         }
-  //       }
-  //     }, 10);
+    const date = new Date();
+    date.setDate(date.getDate() - 1000);
 
 
-  //   });
+    const filter = new PetFilter(1, 100, date, [], undefined, undefined, PetStatus.WaitingForAdoption);
+    this.petsService.searchCount(filter).subscribe(counter => {
+      this.waitingForAdoptionCount = counter.count;
 
-  //   filter.petStatus = PetStatus.Adopted;
-  //   this.petsService.searchCount(filter).subscribe(counter => {
-  //     this.adoptedCount = counter.count;
-  //   });
-  // }
+      var waitingForAdoptionStop: any = setInterval(() => {
+        console.log("waitfor count", this.waitingForAdoptionCount);
+        if (this.waitingForAdoptionCount <= 0) {
+          clearInterval(waitingForAdoptionStop);
+        } else {
+          this.waitingForAdoptionAnimation++;
+          if (this.waitingForAdoptionAnimation == this.waitingForAdoptionCount) {
+            clearInterval(waitingForAdoptionStop);
+          }
+        }
+      }, 10);
+
+
+    });
+
+    filter.petStatus = PetStatus.Adopted;
+    this.petsService.searchCount(filter).subscribe(counter => {
+      this.adoptedCount = counter.count;
+    });
+  }
 
   onAdpotButtonClick(animalTypeId: number) {
     const urlTree = this.router.parseUrl('pets/search');

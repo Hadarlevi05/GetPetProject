@@ -70,6 +70,13 @@ namespace GetPet.Crawler.Parsers
                     pet.Description != string.Empty);
         }
 
+        public Gender ParseGender(HtmlNode node)
+        {
+            var gender = node.SelectSingleNode(".//table[starts-with(@class, 'gladtoknow__table')]/tbody/tr[4]/td[2]").InnerText;
+
+            return ParserUtils.ConvertGender(gender);
+        }
+
         public Gender ParseGender(HtmlNode node, string name)
         {
             var gender = node.GetAttributeValue(name, "unknown");

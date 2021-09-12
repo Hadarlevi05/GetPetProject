@@ -13,6 +13,7 @@ namespace GetPet.Data.Enums
         Internal,
         Spca, 
         Rla,
-        RehovotSpa
+        RehovotSpa,
+        Jspca
     }
 }

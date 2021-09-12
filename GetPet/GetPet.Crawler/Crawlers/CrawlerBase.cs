@@ -182,7 +182,16 @@ namespace GetPet.Crawler.Crawlers
                 TraitName = "גיל"
             });
 
-            //animal.Birthday is not null.
+            //in case pet has date of birth, remove previous given age trait
+            //because we want to set age trait according to the date of birth
+            var traitAgeId = traitAge.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
+            var traitToRemove = animal.PetTraits.FirstOrDefault(p => p.Trait.Id == traitAgeId);
+            if (traitToRemove != null)
+            {
+                animal.PetTraits.Remove(traitToRemove);
+            }
+
+            //animal.Birthday != null.
             DateTime animalBd = (DateTime)animal.Birthday;
 
             var age = new Age(animalBd);
@@ -209,7 +218,6 @@ namespace GetPet.Crawler.Crawlers
             {
                 option = "מבוגר";
             }
-            var traitAgeId = traitAge.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
 
             var options = await _traitOptionRepository.SearchAsync(new TraitOptionFilter
             {
@@ -220,13 +228,13 @@ namespace GetPet.Crawler.Crawlers
                 .Where(o => o.Option == option)
                 .FirstOrDefault().Id;
 
-            if (animal.PetTraits.Any(pt => pt.TraitId == traitAgeId || pt.Trait?.Id == traitAgeId))
-                return;
+            //if (animal.PetTraits.Any(pt => pt.TraitId == traitAgeId || pt.Trait?.Id == traitAgeId))
+            //    return;
 
             animal.PetTraits.Add(new PetTrait
             {
                 TraitId = traitAgeId,
-                TraitOptionId = optionId
+                TraitOptionId = optionId,
             });
         }
 

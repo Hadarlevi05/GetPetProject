@@ -1,4 +1,5 @@
 ﻿using GetPet.BusinessLogic.Azure;
+using GetPet.BusinessLogic.Model.Filters;
 using GetPet.Crawler.Utils;
 using GetPet.Data.Entities;
 using GetPet.Data.Enums;
@@ -56,7 +57,7 @@ namespace GetPet.Crawler.Parsers
             var gender = ParseGender(detailsNode);
             var decodedDescription = ParseDescription(description);
             var traits = ParseTraits(description, allTraitsByAnimalType);
-            //var image = detailsNode.SelectSingleNode(".//img").Attributes["src"].Value;
+            ParseColor(detailsNode, allTraitsByAnimalType, traits, docType);
             var image = node.SelectSingleNode(".//div[starts-with(@class, 'elementor-post__thumbnail')]/img").Attributes["src"].Value;
             var sourceLink = petPage;
 
@@ -98,6 +99,23 @@ namespace GetPet.Crawler.Parsers
             }
 
             return pet;
+        }
+
+        private void ParseColor(HtmlNode node, List<Trait> allTraits, Dictionary<Trait, TraitOption> petTraits, DocumentType docType)
+        {
+            var petColor = string.Empty;
+
+            if (docType == DocumentType.DOC_DOGS) { petColor = node.SelectSingleNode(".//table[starts-with(@class, 'gladtoknow__table')]/tbody/tr[6]/td[2]").InnerText; }
+            if (docType == DocumentType.DOC_CATS) { petColor = node.SelectSingleNode(".//table[starts-with(@class, 'gladtoknow__table')]/tbody/tr[5]/td[2]").InnerText; }
+
+            var traitColor = allTraits.Where(x => x.Name == "צבע").FirstOrDefault();
+            var optionColor = traitColor.TraitOptions.FirstOrDefault(t => petColor.Contains(t.Option) || petColor.Contains(t.FemaleOption));
+
+
+            if (optionColor != null)
+            {
+                petTraits[traitColor] = optionColor;
+            }
         }
 
         private string GetDescription(HtmlNode detailsNode, DocumentType docType)

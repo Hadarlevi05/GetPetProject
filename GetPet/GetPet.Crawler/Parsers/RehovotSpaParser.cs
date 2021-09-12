@@ -47,7 +47,7 @@ namespace GetPet.Crawler.Parsers
             var gender = ParseGender(node, "title");
             var description = ParseDescription(node, "title");
             var traits = ParseTraits(node, name, allTraitsByAnimalType);
-          var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
+            var imageStyle = node.SelectSingleNode(".//div[@class='av-masonry-image-container']").Attributes["style"].Value;
             var image = new Regex(@"url\((.*)\)").Match(imageStyle).Groups[1].Value;
             var sourceLink = "http://rehovotspa.org.il/our-dogs/";
 

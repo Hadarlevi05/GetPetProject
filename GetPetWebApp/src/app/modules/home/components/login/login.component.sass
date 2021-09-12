@@ -13,9 +13,6 @@
   display: flex
   justify-content: center
 
-.mat-card
-  width: 30%
-
 .error
   padding: 16px
   width: 300px
@@ -25,3 +22,17 @@
 .button
   display: flex
   justify-content: center
+
+.mat-card
+  width: 30%
+  @media (min-width: 100px)
+    width: 100%
+
+  @media (min-width: 400px)
+    width: 60%
+
+  @media (min-width: 700px)
+    width: 50%
+
+  @media (min-width: 900px)
+    width: 30%

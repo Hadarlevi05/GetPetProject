@@ -1,6 +1,7 @@
 ﻿/GetPet/GetPet.WebApi/appsettings.json
-/GetPet/GetPet.WebApi/appsettings.Development.json
 /GetPet/GetPet.Scheduler/appsettings.json
+
+/GetPet/GetPet.WebApi/appsettings.Development.json
 /GetPet/GetPet.Scheduler/appsettings.Development.json
 
 ################################################################################

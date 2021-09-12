@@ -102,6 +102,7 @@ namespace GetPet.Scheduler
                 .AddScoped<RehovotSpaCrawler, RehovotSpaCrawler>()
                 .AddScoped<SpcaCrawler, SpcaCrawler>()
                 .AddScoped<RlaCrawler, RlaCrawler>()
+                .AddScoped<JspcaCrawler, JspcaCrawler>()
                 .AddScoped<IUserHandler, UserHandler>()
                 .AddScoped<IUnitOfWork, UnitOfWork>()
                 .AddScoped<IEmailHistoryRepository, EmailHistoryRepository>()
@@ -115,7 +116,9 @@ namespace GetPet.Scheduler
                 .AddScoped<ImageHelper>()
                 .AddScoped<SpcaParser>()
                 .AddScoped<RlaParser>()
-                .AddScoped<RehovotSpaParser>();
+                .AddScoped<RehovotSpaParser>()
+                .AddScoped<JspcaParser>();
+                
             
 
             SetBackgroundJobs();
@@ -154,12 +157,14 @@ namespace GetPet.Scheduler
             RecurringJob.AddOrUpdate<RehovotSpaJob>("RehovotSpaJob", job => job.Execute(), cronExpression: "0 10 * * *");
             RecurringJob.AddOrUpdate<SpcaJob>("SpcaJob", job => job.Execute(), cronExpression: "0 12 * * *");
             RecurringJob.AddOrUpdate<RlaJob>("RlaJob", job => job.Execute(), cronExpression: "0 14 * * *");
+            RecurringJob.AddOrUpdate<JspcaJob>("JspcaJob", job => job.Execute(), cronExpression: "0 16 * * *");
 
             RecurringJob.AddOrUpdate<NotificationSenderJob>("NotificationSenderJob", job => job.Execute(), cronExpression: "0 12 * * *");
 
             //RecurringJob.Trigger("RehovotSpaJob");
-            RecurringJob.Trigger("SpcaJob");
-            RecurringJob.Trigger("RlaJob");
+            //RecurringJob.Trigger("SpcaJob");
+            //RecurringJob.Trigger("RlaJob");
+            RecurringJob.Trigger("JspcaJob");
 
             //RecurringJob.Trigger("NotificationSenderJob");
         }

@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   apiUrl: 'https://localhost:44345/api/',
-  baseImageUrl: 'https://getpetstorage.blob.core.windows.net/'
+  baseImageUrl: 'https://getpet.blob.core.windows.net/',
 };
 
 /*

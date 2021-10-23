@@ -143,10 +143,10 @@ namespace GetPet.Data
             var traitOptionBig = context.TraitOptions.Add(new TraitOption { Option = "גדול", FemaleOption = "גדול", TraitId = size.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "ענק", FemaleOption = "ענקית", TraitId = size.Entity.Id });
 
-            // גור עד 9 חודשים
-            // צעיר - 9-24 חודשים
-            // בוגר 2-7 שנים
-            // מבוגר - מעל 7 שנים
+            //Baby - 0-9 months old
+            //Young - 9-24 months old
+            //Adult - 2-7 years old
+            //Senior - 7+ years old
             context.TraitOptions.Add(new TraitOption { Option = "גור", FemaleOption = "גורה", TraitId = age.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "צעיר", FemaleOption = "צעירה", TraitId = age.Entity.Id });
             context.TraitOptions.Add(new TraitOption { Option = "בוגר", FemaleOption = "בוגרת", TraitId = age.Entity.Id });

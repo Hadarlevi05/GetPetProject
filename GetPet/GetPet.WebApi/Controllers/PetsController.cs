@@ -131,7 +131,6 @@ namespace GetPet.WebApi.Controllers
                 petToInsert.PetTraits = new List<PetTrait>();
                 foreach (KeyValuePair<string, string> entry in pet.Traits)
                 {
-                    //Use entry.Value & entry.Key
                     var foundTrait = traitsByAnimal.FirstOrDefault(traitItem => traitItem.Id == int.Parse(entry.Key));
                     var foundTraitOption = foundTrait.TraitOptions.FirstOrDefault(op => op.Id == int.Parse(entry.Value));
 

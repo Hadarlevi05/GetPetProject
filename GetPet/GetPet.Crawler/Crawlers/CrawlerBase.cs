@@ -18,6 +18,7 @@ namespace GetPet.Crawler.Crawlers
 {
     public abstract class CrawlerBase<T> : ICrawler where T : IParser
     {
+        //HtmlDocument objects for dogs page and cats page
         protected readonly HtmlDocument _doc = new HtmlDocument();
         protected readonly HtmlDocument _doc2 = new HtmlDocument();
         protected readonly T _parser;
@@ -182,8 +183,8 @@ namespace GetPet.Crawler.Crawlers
                 TraitName = "גיל"
             });
 
-            //in case pet has date of birth, remove previous given age trait
-            //because we want to set age trait according to the date of birth
+            //in case pet has date of birth, remove previous given age trait (from description)
+            //and set it according to date of birth.
             var traitAgeId = traitAge.Where(t => t.AnimalTypeId == animal.AnimalTypeId).FirstOrDefault().Id;
             var traitToRemove = animal.PetTraits.FirstOrDefault(p => p.Trait.Id == traitAgeId);
             if (traitToRemove != null)
@@ -197,10 +198,10 @@ namespace GetPet.Crawler.Crawlers
             var age = new Age(animalBd);
             var ageInMonth = age.Years * 12 + age.Months;
 
-            // גור עד 9 חודשים
-            // צעיר - 9-24 חודשים
-            // בוגר 2-7 שנים
-            // מבוגר - מעל 7 שנים
+            //Baby - 0-9 months old
+            //Young - 9-24 months old
+            //Adult - 2-7 years old
+            //Senior - 7+ years old
             string option = string.Empty;
             if (ageInMonth <= 9)
             {
@@ -227,9 +228,6 @@ namespace GetPet.Crawler.Crawlers
             var optionId = options
                 .Where(o => o.Option == option)
                 .FirstOrDefault().Id;
-
-            //if (animal.PetTraits.Any(pt => pt.TraitId == traitAgeId || pt.Trait?.Id == traitAgeId))
-            //    return;
 
             animal.PetTraits.Add(new PetTrait
             {
@@ -261,18 +259,6 @@ namespace GetPet.Crawler.Crawlers
             var optionId = options
                 .Where(o => o.Option == gender)
                 .FirstOrDefault().Id;
-
-            //var genderTraitAlreadyExist = animal.PetTraits.Any(pt => pt.TraitId == id);
-            //var pet = await _petRepository.GetByIdAsync(animal.Id);
-            //if (pet != null)
-            //{
-            //    genderTraitAlreadyExist = genderTraitAlreadyExist || pet.PetTraits.Any(pt => pt.TraitId == id);
-            //    if (genderTraitAlreadyExist)
-            //    {
-            //        return;
-            //    }
-
-            //}
 
             if (animal.PetTraits.Any(pt => pt.TraitId == id || pt.Trait?.Id == id))
                 return;

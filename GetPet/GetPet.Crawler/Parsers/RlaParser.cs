@@ -155,7 +155,6 @@ namespace GetPet.Crawler.Parsers
                 detailsDoc = web.Load(petPage);
 
                 //details node
-                //var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-content'])");
                 var htmlNode = detailsDoc.DocumentNode.SelectSingleNode("(.//div[@id='page-wrap'])");
 
                 return htmlNode;

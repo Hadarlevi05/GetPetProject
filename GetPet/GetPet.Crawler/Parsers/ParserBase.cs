@@ -67,7 +67,8 @@ namespace GetPet.Crawler.Parsers
 
             return (nameRegex.IsMatch(pet.Name) &&
                     pet.MetaFileLinks.Count > 0 &&
-                    pet.Description != string.Empty);
+                    pet.Description != string.Empty &&
+                    pet.Birthday != null);
         }
 
         public Gender ParseGender(HtmlNode node)
